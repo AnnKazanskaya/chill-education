@@ -41,9 +41,10 @@
 
     /* (3) horizontal card carousel — teachers & plans */
     .h-scroll{display:flex!important;grid-template-columns:none!important;gap:14px;
-              overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
-              margin:0 -24px 0 0;padding:4px 0;scrollbar-width:none}
+              overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:24px;
+              -webkit-overflow-scrolling:touch;margin:0 -24px;padding:4px 0;scrollbar-width:none}
     .h-scroll::-webkit-scrollbar{display:none}
+    .h-scroll::before,.h-scroll::after{content:'';flex:0 0 24px}
     .h-scroll>*{scroll-snap-align:start;flex:0 0 80%}
     .dots{display:flex}
 
@@ -184,7 +185,7 @@
 
       <div style="flex:1;min-width:300px;max-width:660px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;align-content:start">
         <div style="background:#fff;border-radius:22px;padding:24px 26px;box-shadow:0 24px 50px -38px rgba(36,64,217,.35)">
-          <h3 class="h-nunito" style="font-weight:800;font-size:18px;margin-bottom:12px">Что хотела ученица</h3>
+          <h3 class="h-nunito" id="story-wanted-title" style="font-weight:800;font-size:18px;margin-bottom:12px">Что хотела ученица</h3>
           <p id="story-wanted" style="font-size:15px;line-height:1.6;color:#3A3F5C"></p>
         </div>
         <div style="background:#fff;border-radius:22px;padding:24px 26px;box-shadow:0 24px 50px -38px rgba(36,64,217,.35)">
@@ -313,7 +314,7 @@ const PLANS = [
 
 const STORIES = [
   {
-    name: 'Сергей', photo: 'img/student-sergey.jpg', caption: 'Прошёл собеседование на английском и вышел на новую работу!',
+    name: 'Сергей', male: true, photo: 'img/student-sergey.jpg', caption: 'Прошёл собеседование на английском и вышел на новую работу!',
     wanted: '«Хотел свободно общаться с иностранными коллегами и перестать стесняться ошибок прямо посреди разговора.»',
     teacher: 'Демид', teacherPhoto: 'img/teacher-demid.jpg', teacherExp: 'Стаж — 7 лет',
     teacherText: 'Начали с разговорной практики дважды в неделю. Много говорили на уроке, разбирали реальные рабочие диалоги и убирали страх ошибки.',
@@ -440,6 +441,7 @@ function renderReview() {
   document.getElementById('story-portrait').src = s.photo;
   document.getElementById('story-portrait').alt = s.name;
   document.getElementById('story-name').textContent = s.name;
+  document.getElementById('story-wanted-title').textContent = s.male ? 'Что хотел ученик' : 'Что хотела ученица';
   document.getElementById('story-caption').textContent = s.caption;
   document.getElementById('story-wanted').textContent = s.wanted;
   document.getElementById('story-teacherText').textContent = s.teacherText;
