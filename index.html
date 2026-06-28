@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chat &amp; Chill — английский без стресса</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Nunito:wght@800;900&display=swap" rel="stylesheet">
+
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Manrope',sans-serif;color:#1A1E33;background:#EEF0FB;-webkit-font-smoothing:antialiased}
+  img{display:block}
+  a{color:inherit}
+  ::selection{background:#FF7A1A;color:#fff}
+  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+  .floaty{animation:floaty 5s ease-in-out infinite}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 24px}
+  .h-nunito{font-family:'Nunito',sans-serif}
+  @media(max-width:760px){[data-nav]{display:none!important}[data-cta-cat]{display:none!important}}
+  @media(max-width:520px){.leadform{flex-wrap:wrap}.leadform button{width:100%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============ HEADER ============ -->
+  <header style="position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:4px 24px 7px;margin:0 -24px;background:rgba(238,240,251,.82);backdrop-filter:blur(12px)">
+    <a href="#top" style="display:flex;align-items:center;text-decoration:none">
+      <img src="img/logo.png" alt="Chat and Chill" style="height:64px;width:auto">
+    </a>
+    <nav data-nav style="display:flex;align-items:center;gap:30px">
+      <a href="#teachers" style="font-weight:600;font-size:15px;color:#42476A;text-decoration:none">Преподаватели</a>
+      <a href="#pricing" style="font-weight:600;font-size:15px;color:#42476A;text-decoration:none">Тарифы</a>
+      <a href="#reviews" style="font-weight:600;font-size:15px;color:#42476A;text-decoration:none">Отзывы</a>
+      <a href="#demo" style="font-weight:600;font-size:15px;color:#42476A;text-decoration:none">Демо-урок</a>
+    </nav>
+    <a href="#lead" style="display:inline-flex;align-items:center;gap:8px;background:#FF7A1A;color:#fff;font-weight:700;font-size:15px;padding:12px 22px;border-radius:14px;text-decoration:none;box-shadow:0 8px 20px rgba(255,122,26,.32)">Записаться</a>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section id="top" style="position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:36px;align-items:center;padding:54px 0 30px">
+    <div style="position:relative;z-index:2">
+      <span style="display:inline-flex;align-items:center;gap:8px;background:#fff;color:#2440D9;font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase;padding:8px 14px;border-radius:999px;box-shadow:0 4px 14px rgba(36,64,217,.12)">✦ Английский без стресса</span>
+      <h1 class="h-nunito" style="font-weight:900;font-size:clamp(40px,5.4vw,72px);line-height:.98;letter-spacing:-1.5px;margin:18px 0 0">Говори без напряга<br><span style="color:#2440D9">на английском</span></h1>
+      <p style="max-width:440px;margin:20px 0 28px;font-size:18px;line-height:1.55;color:#5A5F7D">Определим уровень, разберём слабые места и покажем, как учиться без выгорания. Первый урок — бесплатно.</p>
+
+      <!-- lead form -->
+      <form class="leadform" data-leadform style="display:flex;gap:10px;background:#fff;padding:8px;border-radius:18px;box-shadow:0 14px 34px -18px rgba(36,64,217,.35);max-width:480px">
+        <input name="name" placeholder="Имя" required style="flex:1;min-width:0;border:none;outline:none;font-family:'Manrope';font-size:15px;font-weight:500;padding:13px 16px;border-radius:12px;background:#F4F5FC;color:#1A1E33">
+        <input name="contact" placeholder="Телефон / telegram" required style="flex:1.2;min-width:0;border:none;outline:none;font-family:'Manrope';font-size:15px;font-weight:500;padding:13px 16px;border-radius:12px;background:#F4F5FC;color:#1A1E33">
+        <button type="submit" style="flex-shrink:0;border:none;cursor:pointer;background:#FF7A1A;color:#fff;font-family:'Manrope';font-weight:700;font-size:15px;padding:13px 22px;border-radius:12px;box-shadow:0 8px 18px rgba(255,122,26,.32)">Отправить</button>
+      </form>
+
+      <div style="display:flex;align-items:center;gap:18px;margin-top:18px">
+        <div style="display:flex">
+          <img src="img/avatar-1.jpg" alt="" style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid #EEF0FB">
+          <img src="img/avatar-3.jpg" alt="" style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid #EEF0FB;margin-left:-10px">
+          <img src="img/avatar-2.jpg" alt="" style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid #EEF0FB;margin-left:-10px">
+        </div>
+        <span style="font-size:14px;font-weight:600;color:#5A5F7D;line-height:1.3">Уже сотни учеников<br>заговорили с нами</span>
+      </div>
+    </div>
+
+    <div style="position:relative;height:100%;min-height:460px;display:flex;align-items:center;justify-content:center">
+      <div style="position:absolute;width:80%;aspect-ratio:1/1;border-radius:50%;background:radial-gradient(circle,rgba(47,80,230,.18),rgba(47,80,230,0) 66%)"></div>
+      <img src="img/hero-mascot.png" alt="Маскот Chill" class="floaty" style="position:relative;z-index:2;width:82%;max-width:460px">
+      <img src="img/deco-0.png" alt="" class="floaty" style="position:absolute;top:8%;left:8%;width:62px;animation-duration:4.2s;animation-delay:.3s;z-index:3">
+      <img src="img/deco-5.png" alt="" class="floaty" style="position:absolute;bottom:12%;left:2%;width:78px;animation-duration:5.4s;animation-delay:.6s;z-index:3">
+      <img src="img/deco-2.png" alt="" class="floaty" style="position:absolute;top:18%;right:4%;width:40px;animation-duration:4.6s;animation-delay:.2s;z-index:3">
+      <img src="img/deco-3.png" alt="" class="floaty" style="position:absolute;bottom:24%;right:8%;width:34px;animation-duration:5s;animation-delay:1s;z-index:3">
+      <span style="position:absolute;top:6%;right:14%;z-index:4;background:#FF7A1A;color:#fff;font-weight:800;font-size:14px;padding:9px 14px;border-radius:14px 14px 14px 4px;box-shadow:0 10px 22px rgba(255,122,26,.4)">Hello!</span>
+    </div>
+  </section>
+
+  <!-- ============ FEATURES ============ -->
+  <section style="padding:48px 0 20px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px">
+      <div style="background:#fff;border-radius:26px;padding:30px 28px;box-shadow:0 24px 50px -34px rgba(36,64,217,.35)">
+        <div style="display:grid;place-items:center;width:74px;height:74px;border-radius:20px;background:#EEF0FB;margin-bottom:18px"><img src="img/feature-1.png" alt="" style="width:52px;height:52px;object-fit:contain"></div>
+        <h3 class="h-nunito" style="font-weight:800;font-size:21px;margin-bottom:8px;letter-spacing:-.3px">Преподаватели с энергией</h3>
+        <p style="font-size:15px;line-height:1.5;color:#5A5F7D">Работают не больше нормы — приходят на уроки полными сил и желания помочь.</p>
+      </div>
+      <div style="background:#fff;border-radius:26px;padding:30px 28px;box-shadow:0 24px 50px -34px rgba(36,64,217,.35)">
+        <div style="display:grid;place-items:center;width:74px;height:74px;border-radius:20px;background:#EEF0FB;margin-bottom:18px"><img src="img/feature-3.png" alt="" style="width:52px;height:52px;object-fit:contain"></div>
+        <h3 class="h-nunito" style="font-weight:800;font-size:21px;margin-bottom:8px;letter-spacing:-.3px">Интерактивная платформа</h3>
+        <p style="font-size:15px;line-height:1.5;color:#5A5F7D">Материалы, задания и прогресс — всё в одном месте. Удобно и наглядно.</p>
+      </div>
+      <div style="background:#fff;border-radius:26px;padding:30px 28px;box-shadow:0 24px 50px -34px rgba(36,64,217,.35)">
+        <div style="display:grid;place-items:center;width:74px;height:74px;border-radius:20px;background:#EEF0FB;margin-bottom:18px"><img src="img/feature-2.png" alt="" style="width:52px;height:52px;object-fit:contain"></div>
+        <h3 class="h-nunito" style="font-weight:800;font-size:21px;margin-bottom:8px;letter-spacing:-.3px">Живые уроки 1-на-1</h3>
+        <p style="font-size:15px;line-height:1.5;color:#5A5F7D">50 минут только на тебя. Говоришь большую часть урока и видишь результат сразу.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FORMAT / STEPS ============ -->
+  <section style="padding:64px 0">
+    <div style="text-align:center;max-width:620px;margin:0 auto 40px">
+      <span style="font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#2440D9">Формат обучения</span>
+      <h2 class="h-nunito" style="font-weight:900;font-size:clamp(30px,4vw,46px);line-height:1.02;letter-spacing:-1px;margin-top:12px">Как проходят уроки,<br>которые дают результат</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:20px" id="steps"></div>
+  </section>
+
+  <!-- ============ TEACHERS ============ -->
+  <section id="teachers" style="padding:64px 0">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:40px">
+      <div style="max-width:560px">
+        <span style="font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#2440D9">Преподаватели</span>
+        <h2 class="h-nunito" style="font-weight:900;font-size:clamp(30px,4vw,46px);line-height:1.02;letter-spacing:-1px;margin-top:12px">Учитесь у людей,<br>которым интересно</h2>
+        <p style="font-size:17px;line-height:1.5;color:#5A5F7D;margin-top:14px">Наши преподаватели выбирают Chat &amp; Chill надолго — здесь комфортно работать, и это чувствуется на уроке.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:20px" id="teachers-grid"></div>
+  </section>
+
+  <!-- ============ PRICING ============ -->
+  <section id="pricing" style="padding:64px 0">
+    <div style="display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:40px">
+      <span style="font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#2440D9">Тарифы</span>
+      <h2 class="h-nunito" style="font-weight:900;font-size:clamp(30px,4vw,46px);line-height:1.02;letter-spacing:-1px;margin:12px 0 22px">Выбери свой ритм</h2>
+      <div id="currency-switch" style="display:inline-flex;gap:4px;background:#fff;padding:5px;border-radius:14px;box-shadow:0 10px 26px -16px rgba(36,64,217,.3)"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:20px;align-items:stretch" id="plans"></div>
+  </section>
+
+  <!-- ============ REVIEWS ============ -->
+  <section id="reviews" style="padding:64px 0">
+    <div style="text-align:center;max-width:620px;margin:0 auto 44px">
+      <span style="font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#2440D9">Отзывы</span>
+      <h2 class="h-nunito" style="font-weight:900;font-size:clamp(30px,4vw,46px);line-height:1.02;letter-spacing:-1px;margin-top:12px">Истории наших учеников</h2>
+    </div>
+    <div style="display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start;justify-content:center">
+      <div style="display:flex;gap:20px;align-items:flex-start">
+        <div style="display:flex;flex-direction:column;gap:16px;padding-top:6px" id="review-avatars"></div>
+        <div style="position:relative;width:300px;flex-shrink:0">
+          <img id="story-portrait" src="" alt="" style="display:block;width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:26px;background:#E4E7F8">
+          <div style="position:absolute;left:18px;right:-14px;bottom:-22px;background:#fff;border:2px solid #DCE6FF;border-radius:20px;padding:16px 20px;box-shadow:0 20px 40px -22px rgba(36,64,217,.35)">
+            <div class="h-nunito" id="story-name" style="font-weight:800;font-size:19px"></div>
+            <div id="story-caption" style="font-size:14px;line-height:1.4;color:#5A5F7D;margin-top:4px"></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="flex:1;min-width:300px;max-width:660px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;align-content:start">
+        <div style="background:#fff;border-radius:22px;padding:24px 26px;box-shadow:0 24px 50px -38px rgba(36,64,217,.35)">
+          <h3 class="h-nunito" style="font-weight:800;font-size:18px;margin-bottom:12px">Что хотела ученица</h3>
+          <p id="story-wanted" style="font-size:15px;line-height:1.6;color:#3A3F5C"></p>
+        </div>
+        <div style="background:#fff;border-radius:22px;padding:24px 26px;box-shadow:0 24px 50px -38px rgba(36,64,217,.35)">
+          <h3 class="h-nunito" style="font-weight:800;font-size:18px;margin-bottom:12px">О работе с преподавателем</h3>
+          <p id="story-teacherText" style="font-size:15px;line-height:1.6;color:#3A3F5C;margin-bottom:18px"></p>
+          <div style="display:flex;align-items:center;gap:12px">
+            <img id="story-teacherPhoto" src="" alt="" style="width:46px;height:46px;border-radius:13px;object-fit:cover">
+            <div>
+              <div id="story-teacher" style="font-weight:700;font-size:15px"></div>
+              <div id="story-teacherExp" style="font-size:13px;color:#8C90AC"></div>
+            </div>
+          </div>
+        </div>
+        <div style="background:#fff;border-radius:22px;padding:24px 26px;box-shadow:0 24px 50px -38px rgba(36,64,217,.35)">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+            <span style="background:#EEF0FB;color:#5A5F7D;font-weight:700;font-size:13px;padding:6px 12px;border-radius:999px">точка А</span>
+            <span class="h-nunito" style="font-weight:800;font-size:18px">Что болело</span>
+          </div>
+          <p id="story-a" style="font-size:15px;line-height:1.6;color:#3A3F5C"></p>
+        </div>
+        <div style="background:#E4ECFF;border-radius:22px;padding:24px 26px">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+            <span style="background:#2440D9;color:#fff;font-weight:700;font-size:13px;padding:6px 12px;border-radius:999px">точка Б</span>
+            <span class="h-nunito" style="font-weight:800;font-size:18px">Чего достигли</span>
+          </div>
+          <p id="story-b" style="font-size:15px;line-height:1.6;color:#2E3358"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DEMO / CTA ============ -->
+  <section id="demo" style="padding:40px 0 80px">
+    <div id="lead" style="position:relative;overflow:hidden;background:linear-gradient(150deg,#2F50E6,#2440D9);border-radius:40px;padding:60px clamp(28px,5vw,72px);box-shadow:0 50px 90px -40px rgba(36,64,217,.6)">
+      <div style="position:absolute;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,.08);top:-90px;right:-60px"></div>
+      <div style="position:absolute;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.06);bottom:-80px;left:30%"></div>
+      <div data-cta-cat style="position:absolute;right:clamp(16px,4vw,64px);top:50%;transform:translateY(-50%);width:clamp(252px,31vw,420px);z-index:1"><img src="img/cta-mascot.png" alt="" class="floaty" style="width:100%;animation-duration:6s"></div>
+      <img src="img/deco-0.png" alt="" class="floaty" style="position:absolute;bottom:54px;left:38px;width:40px;animation-duration:5.2s;animation-delay:.4s;z-index:2">
+      <img src="img/deco-5.png" alt="" class="floaty" style="position:absolute;top:30px;left:30%;width:30px;animation-duration:4.8s;animation-delay:.7s;z-index:2">
+      <img src="img/deco-3.png" alt="" class="floaty" style="position:absolute;bottom:30px;right:38%;width:26px;animation-duration:5.6s;animation-delay:.2s;z-index:2">
+      <img src="img/deco-8.png" alt="" class="floaty" style="position:absolute;top:120px;right:40%;width:36px;animation-duration:4.4s;animation-delay:.5s;z-index:2">
+      <img src="img/deco-0.png" alt="" class="floaty" style="position:absolute;bottom:40px;right:6%;width:38px;animation-duration:5s;animation-delay:.8s;z-index:2">
+      <div style="position:relative;z-index:3;max-width:540px">
+        <span style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.16);color:#fff;font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase;padding:8px 14px;border-radius:999px">Демо-урок · бесплатно</span>
+        <h2 class="h-nunito" style="font-weight:900;font-size:clamp(32px,4.6vw,54px);line-height:1;letter-spacing:-1px;color:#fff;margin:18px 0 14px">Почувствуй, как<br>проходят уроки</h2>
+        <p style="font-size:18px;line-height:1.5;color:rgba(255,255,255,.82);margin-bottom:28px">Определим уровень и покажем формат без стресса. Никакой оплаты — просто знакомство.</p>
+        <form class="leadform" data-leadform style="display:flex;gap:10px;background:#fff;padding:8px;border-radius:18px;box-shadow:0 14px 34px -18px rgba(36,64,217,.35);max-width:480px">
+          <input name="name" placeholder="Имя" required style="flex:1;min-width:0;border:none;outline:none;font-family:'Manrope';font-size:15px;font-weight:500;padding:13px 16px;border-radius:12px;background:#F4F5FC;color:#1A1E33">
+          <input name="contact" placeholder="Телефон / telegram" required style="flex:1.2;min-width:0;border:none;outline:none;font-family:'Manrope';font-size:15px;font-weight:500;padding:13px 16px;border-radius:12px;background:#F4F5FC;color:#1A1E33">
+          <button type="submit" style="flex-shrink:0;border:none;cursor:pointer;background:#FF7A1A;color:#fff;font-family:'Manrope';font-weight:700;font-size:15px;padding:13px 22px;border-radius:12px;box-shadow:0 8px 18px rgba(255,122,26,.32)">Отправить</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer style="padding:50px 0 60px;border-top:1px solid #E2E5F4">
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:32px;margin-bottom:36px">
+      <div style="max-width:300px">
+        <img src="img/logo.png" alt="Chat and Chill" style="height:64px;width:auto;margin-bottom:16px">
+        <p style="font-size:14px;line-height:1.5;color:#8C90AC">Онлайн-школа английского. Заговори с первого занятия — без стресса и выгорания.</p>
+      </div>
+      <div style="display:flex;gap:56px;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <span style="font-weight:800;font-size:14px;margin-bottom:2px">Разделы</span>
+          <a href="#teachers" style="font-size:14px;color:#5A5F7D;text-decoration:none">Преподаватели</a>
+          <a href="#pricing" style="font-size:14px;color:#5A5F7D;text-decoration:none">Тарифы</a>
+          <a href="#reviews" style="font-size:14px;color:#5A5F7D;text-decoration:none">Отзывы</a>
+          <a href="#demo" style="font-size:14px;color:#5A5F7D;text-decoration:none">Демо-урок</a>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <span style="font-weight:800;font-size:14px;margin-bottom:2px">Контакты</span>
+          <a href="mailto:support@chill.education" style="font-size:14px;color:#5A5F7D;text-decoration:none">support@chill.education</a>
+          <a href="https://t.me/chilleducation" style="font-size:14px;color:#5A5F7D;text-decoration:none">Telegram: @chilleducation</a>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;padding-top:24px;border-top:1px solid #E2E5F4">
+      <div style="display:flex;gap:20px;flex-wrap:wrap">
+        <a href="#" style="font-size:13px;color:#8C90AC;text-decoration:none">Политика конфиденциальности</a>
+        <a href="#" style="font-size:13px;color:#8C90AC;text-decoration:none">Публичная оферта</a>
+        <a href="#" style="font-size:13px;color:#8C90AC;text-decoration:none">Согласие на обработку данных</a>
+      </div>
+      <span style="font-size:13px;color:#B0B3C9">ИП Кувшинов А. В. · БИН 001009551336</span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+// ---------- DATA ----------
+const STEPS = [
+  { n: '50', unit: 'минут', title: 'Персонального внимания', text: 'Всё занятие посвящено тебе и твоим целям. Без группы — только живое общение и практика.' },
+  { n: '80%', unit: 'урока', title: 'Практики говорения', text: 'Никаких упражнений «в стол». Говоришь большую часть урока и сразу применяешь язык.' },
+  { n: '5ч', unit: 'в день', title: 'Только позитивный вайб', text: 'Преподаватели работают не больше 5 часов в день — приходят с энергией и фокусом.' },
+  { n: '∞', unit: 'доступ', title: 'Всё в одном месте', text: 'Материалы, домашка и твой прогресс собраны на удобной платформе.' },
+];
+
+const TEACHERS = [
+  { photo: 'img/teacher-demid.jpg', name: 'Демид', bio: 'Преподаю 7+ лет. Жил и учился в США, работаю синхронным переводчиком. Английский — мой образ жизни.' },
+  { photo: 'img/teacher-violetta.jpg', name: 'Виолетта', bio: 'Объясняю сложное простым языком. Со мной заговоришь быстрее, чем ожидаешь — без стресса, но с результатом.' },
+  { photo: 'img/teacher-sofa.jpg', name: 'Софа', bio: 'Преподаю 5 лет. Сделаю учёбу увлекательной: сленг, фишки и живая практика с носителями.' },
+  { photo: 'img/teacher-violetta2.jpg', name: 'Виолетта', bio: '7+ лет веду студентов от A1 до C1. Живая коммуникация и работа над ошибками прямо на уроке.' },
+];
+
+const CURRENCIES = [
+  { code: 'RUB', label: '₽ RUB' },
+  { code: 'KZT', label: '₸ KZT' },
+  { code: 'USD', label: '$ USD' },
+];
+const POPULAR = 'Chill Plus';
+const PLANS = [
+  { name: 'Find your Chill', lessons: 'Пробный урок', note: 'Знакомство и план обучения', price: { RUB: 'Бесплатно', KZT: 'Бесплатно', USD: 'Бесплатно' } },
+  { name: 'Chill Basic', lessons: '4 урока', note: 'Попробовать формат', price: { RUB: '10 000 ₽', KZT: '65 000 ₸', USD: '130 $' } },
+  { name: 'Chill Plus', lessons: '8 уроков', note: 'Стабильный ритм', price: { RUB: '18 500 ₽', KZT: '120 000 ₸', USD: '240 $' } },
+  { name: 'Chill Pro', lessons: '12 уроков', note: 'Быстрый прогресс', price: { RUB: '24 000 ₽', KZT: '155 000 ₸', USD: '310 $' } },
+];
+
+const STORIES = [
+  {
+    name: 'Сергей', photo: 'img/student-sergey.jpg', caption: 'Прошёл собеседование на английском и вышел на новую работу!',
+    wanted: '«Хотел свободно общаться с иностранными коллегами и перестать стесняться ошибок прямо посреди разговора.»',
+    teacher: 'Демид', teacherPhoto: 'img/teacher-demid.jpg', teacherExp: 'Стаж — 7 лет',
+    teacherText: 'Начали с разговорной практики дважды в неделю. Много говорили на уроке, разбирали реальные рабочие диалоги и убирали страх ошибки.',
+    a: 'Уровень A2 — боялся говорить, путался во временах и плохо понимал речь на слух.',
+    b: 'Уровень B2. Прошёл интервью на английском и получил оффер — small talk дался легко.',
+  },
+  {
+    name: 'Мария', photo: 'img/student-maria.jpg', caption: 'Заговорила бегло и понимает носителей 🥰',
+    wanted: '«Хотела наконец заговорить, а не просто учить правила, и подтянуть устную речь до уверенного уровня.»',
+    teacher: 'Виолетта', teacherPhoto: 'img/teacher-violetta.jpg', teacherExp: 'Стаж — 7 лет',
+    teacherText: 'Сделали упор на устную речь и расширение словарного запаса. Сложное объясняли простым языком и закрепляли на практике.',
+    a: 'Уровень A2 — маленький словарный запас и путаница во временах.',
+    b: 'Уровень B2. Бегло говорит, понимает англоговорящих и кайфует от каждого урока.',
+  },
+  {
+    name: 'Катя', photo: 'img/student-katya.jpg', caption: 'Болтает на английском и не боится ошибаться 😆',
+    wanted: '«Со школы ненавидела английский — хотела говорить без страха, что меня осудят за ошибку.»',
+    teacher: 'Софа', teacherPhoto: 'img/teacher-sofa.jpg', teacherExp: 'Стаж — 5 лет',
+    teacherText: 'Создали лёгкую атмосферу без давления: живые диалоги, сленг и фишки носителей. Ошибки — часть процесса, а не повод стесняться.',
+    a: 'Уровень A1 — полный языковой барьер и страх сказать что-то не так.',
+    b: 'Уровень B1. Свободно болтает на любые темы и рассказывает истории на английском.',
+  },
+];
+
+// ---------- RENDER: STEPS ----------
+document.getElementById('steps').innerHTML = STEPS.map(s => `
+  <div style="background:#fff;border-radius:26px;padding:28px 24px;box-shadow:0 24px 50px -36px rgba(36,64,217,.35)">
+    <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:14px">
+      <span class="h-nunito" style="font-weight:900;font-size:40px;color:#2440D9;letter-spacing:-1px;line-height:1">${s.n}</span>
+      <span style="font-weight:700;font-size:14px;color:#FF7A1A">${s.unit}</span>
+    </div>
+    <h3 class="h-nunito" style="font-weight:800;font-size:18px;margin-bottom:8px;letter-spacing:-.2px">${s.title}</h3>
+    <p style="font-size:14px;line-height:1.5;color:#5A5F7D">${s.text}</p>
+  </div>`).join('');
+
+// ---------- RENDER: TEACHERS ----------
+document.getElementById('teachers-grid').innerHTML = TEACHERS.map(t => `
+  <div style="background:#fff;border-radius:26px;padding:18px;box-shadow:0 24px 50px -36px rgba(36,64,217,.35)">
+    <img src="${t.photo}" alt="${t.name}" style="display:block;width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:20px;background:#EEF0FB;margin-bottom:16px">
+    <h3 class="h-nunito" style="font-weight:800;font-size:20px;margin-bottom:8px">${t.name}</h3>
+    <p style="font-size:14px;line-height:1.5;color:#5A5F7D">${t.bio}</p>
+  </div>`).join('');
+
+// ---------- RENDER: PRICING + CURRENCY ----------
+let curCurrency = 'RUB';
+function renderPricing() {
+  document.getElementById('currency-switch').innerHTML = CURRENCIES.map(c => {
+    const active = c.code === curCurrency;
+    return `<button data-cur="${c.code}" style="border:none;cursor:pointer;font-family:'Manrope';font-weight:700;font-size:14px;padding:9px 18px;border-radius:10px;transition:all .15s;background:${active ? '#2440D9' : 'transparent'};color:${active ? '#fff' : '#5A5F7D'}">${c.label}</button>`;
+  }).join('');
+
+  document.getElementById('plans').innerHTML = PLANS.map(p => {
+    const pop = p.name === POPULAR;
+    const cardBg = pop ? '#2440D9' : '#fff';
+    const titleColor = pop ? '#fff' : '#1A1E33';
+    const noteColor = pop ? 'rgba(255,255,255,.7)' : '#8C90AC';
+    const lessonColor = pop ? 'rgba(255,255,255,.85)' : '#2440D9';
+    const btnBg = pop ? '#FF7A1A' : '#EEF0FB';
+    const btnColor = pop ? '#fff' : '#2440D9';
+    return `
+    <div style="position:relative;display:flex;flex-direction:column;background:${cardBg};border-radius:26px;padding:30px 26px;box-shadow:0 28px 56px -34px rgba(36,64,217,.4)">
+      ${pop ? '<span style="position:absolute;top:22px;right:24px;background:#FF7A1A;color:#fff;font-weight:800;font-size:12px;padding:5px 12px;border-radius:999px">★ Хит</span>' : ''}
+      <h3 class="h-nunito" style="font-weight:800;font-size:22px;color:${titleColor};letter-spacing:-.3px">${p.name}</h3>
+      <p style="font-size:14px;color:${noteColor};margin-top:4px">${p.note}</p>
+      <div class="h-nunito" style="font-weight:900;font-size:34px;color:${titleColor};letter-spacing:-1px;margin:22px 0 4px">${p.price[curCurrency]}</div>
+      <div style="font-weight:700;font-size:15px;color:${lessonColor};margin-bottom:24px">${p.lessons}</div>
+      <a href="#lead" style="margin-top:auto;text-align:center;text-decoration:none;font-weight:700;font-size:15px;padding:13px;border-radius:14px;background:${btnBg};color:${btnColor}">Записаться</a>
+    </div>`;
+  }).join('');
+
+  document.querySelectorAll('#currency-switch button').forEach(b => {
+    b.addEventListener('click', () => { curCurrency = b.dataset.cur; renderPricing(); });
+  });
+}
+renderPricing();
+
+// ---------- RENDER: REVIEWS ----------
+let storyIdx = 0;
+function renderReview() {
+  const s = STORIES[storyIdx];
+  document.getElementById('review-avatars').innerHTML = STORIES.map((st, i) => `
+    <button data-idx="${i}" title="${st.name}" style="cursor:pointer;padding:3px;border:none;background:transparent;border-radius:50%;outline:${i === storyIdx ? '3px solid #2440D9' : '3px solid transparent'};outline-offset:2px">
+      <img src="${st.photo}" alt="${st.name}" style="display:block;width:58px;height:58px;border-radius:50%;object-fit:cover;opacity:${i === storyIdx ? '1' : '.5'}">
+    </button>`).join('');
+
+  document.getElementById('story-portrait').src = s.photo;
+  document.getElementById('story-portrait').alt = s.name;
+  document.getElementById('story-name').textContent = s.name;
+  document.getElementById('story-caption').textContent = s.caption;
+  document.getElementById('story-wanted').textContent = s.wanted;
+  document.getElementById('story-teacherText').textContent = s.teacherText;
+  document.getElementById('story-teacherPhoto').src = s.teacherPhoto;
+  document.getElementById('story-teacher').textContent = 'Преподаватель ' + s.teacher;
+  document.getElementById('story-teacherExp').textContent = s.teacherExp;
+  document.getElementById('story-a').textContent = s.a;
+  document.getElementById('story-b').textContent = s.b;
+
+  document.querySelectorAll('#review-avatars button').forEach(b => {
+    b.addEventListener('click', () => { storyIdx = +b.dataset.idx; renderReview(); });
+  });
+}
+renderReview();
+
+// ---------- LEAD FORM ----------
+document.querySelectorAll('form[data-leadform]').forEach(form => {
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    form.outerHTML = `
+      <div style="display:flex;align-items:center;gap:14px;background:#fff;border-radius:18px;padding:18px 22px;box-shadow:0 12px 30px -16px rgba(36,64,217,.3);max-width:480px">
+        <span style="display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:#E9F7EE;color:#1FA85A;font-size:22px;flex-shrink:0">✓</span>
+        <div>
+          <div class="h-nunito" style="font-weight:800;font-size:17px;color:#1A1E33">Заявка отправлена!</div>
+          <div style="font-size:14px;color:#5A5F7D">Преподаватель свяжется с тобой в течение дня 🙌</div>
+        </div>
+      </div>`;
+  });
+});
+</script>
+</body>
+</html>
