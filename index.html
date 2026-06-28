@@ -42,7 +42,7 @@
     /* (3) horizontal card carousel — teachers & plans */
     .h-scroll{display:flex!important;grid-template-columns:none!important;gap:14px;
               overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
-              margin:0 -24px;padding:4px 24px;scrollbar-width:none}
+              margin:0 -24px 0 0;padding:4px 0;scrollbar-width:none}
     .h-scroll::-webkit-scrollbar{display:none}
     .h-scroll>*{scroll-snap-align:start;flex:0 0 80%}
     .dots{display:flex}
@@ -340,7 +340,7 @@ const STORIES = [
 
 // ---------- RENDER: STEPS ----------
 document.getElementById('steps').innerHTML = STEPS.map(s => `
-  <div class="stack-card" style="background:#fff;border-radius:26px;padding:28px 24px;box-shadow:0 24px 50px -36px rgba(36,64,217,.35)">
+  <div class="stack-card" style="background:#fff;border:1px solid rgba(36,64,217,.35);border-radius:26px;padding:28px 24px;box-shadow:0 24px 50px -36px rgba(36,64,217,.35)">
     <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:14px">
       <span class="h-nunito" style="font-weight:900;font-size:40px;color:#2440D9;letter-spacing:-1px;line-height:1">${s.n}</span>
       <span style="font-weight:700;font-size:14px;color:#FF7A1A">${s.unit}</span>
@@ -393,13 +393,13 @@ function renderPricing() {
   document.getElementById('plans').innerHTML = PLANS.map(p => {
     const pop = p.name === POPULAR;
     const c = pop ? {
-      cardBg: 'linear-gradient(165deg,#10204A,#1B2E63)', title: '#fff', feat: 'rgba(255,255,255,.88)',
-      check: '#C77DFF', pill1: '#A435E8', pill2Bg: 'rgba(255,255,255,.16)', pill2: '#fff',
-      divider: 'rgba(255,255,255,.16)', note: 'rgba(255,255,255,.6)', btnBg: '#FF7A1A', btnColor: '#fff',
-      shadow: '0 30px 60px -30px rgba(16,32,74,.7)'
+      cardBg: 'linear-gradient(160deg,#16236B,#2D4BE6)', title: '#fff', feat: 'rgba(255,255,255,.9)',
+      check: '#FF9A47', pill1: '#FF7A1A', pill2Bg: 'rgba(255,255,255,.18)', pill2: '#fff',
+      divider: 'rgba(255,255,255,.22)', note: 'rgba(255,255,255,.7)', btnBg: '#FF7A1A', btnColor: '#fff',
+      shadow: '0 30px 60px -30px rgba(36,64,217,.6)'
     } : {
-      cardBg: '#fff', title: '#1A1E33', feat: '#3A3F5C', check: '#A435E8', pill1: '#A435E8',
-      pill2Bg: '#EDEFF5', pill2: '#5A5F7D', divider: '#ECEEF5', note: '#8C90AC',
+      cardBg: '#fff', title: '#1A1E33', feat: '#3A3F5C', check: '#FF7A1A', pill1: '#2440D9',
+      pill2Bg: '#EEF0FB', pill2: '#5A6080', divider: '#ECEEF5', note: '#8C90AC',
       btnBg: '#EEF0FB', btnColor: '#2440D9', shadow: '0 24px 50px -36px rgba(36,64,217,.35)'
     };
     return `
