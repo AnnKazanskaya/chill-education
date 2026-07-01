@@ -12,6 +12,7 @@
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
+  [id]{scroll-margin-top:88px}
   body{font-family:'Manrope',sans-serif;color:#1A1E33;background:#EEF0FB;-webkit-font-smoothing:antialiased}
   img{display:block}
   a{color:inherit}
@@ -28,6 +29,17 @@
   @media(max-width:760px){
     [data-nav]{display:none!important}
     [data-cta-cat]{display:none!important}
+
+    /* compact header so logo + two buttons fit */
+    header a img{height:46px!important}
+    .btn-pay,.btn-signup{padding:9px 13px!important;font-size:13px!important;border-radius:12px!important}
+
+    /* hero: small mascot tucked top-right beside the heading */
+    #top{grid-template-columns:1fr!important;padding-top:14px!important}
+    .hero-visual{position:absolute!important;top:34px;right:-6px;width:100px;min-height:0!important;height:auto!important;z-index:0}
+    .hero-mascot{width:96px!important;max-width:96px!important}
+    .hero-deco,.hero-hello,.hero-glow{display:none!important}
+    .hero-text{position:relative;z-index:1}
 
     /* (1) tighter spacing between blocks */
     .sec{padding-top:30px!important;padding-bottom:30px!important}
@@ -73,14 +85,17 @@
       <a href="#reviews" style="font-weight:600;font-size:15px;color:#42476A;text-decoration:none">Отзывы</a>
       <a href="#demo" style="font-weight:600;font-size:15px;color:#42476A;text-decoration:none">Демо-урок</a>
     </nav>
-    <a href="#lead" style="display:inline-flex;align-items:center;gap:8px;background:#FF7A1A;color:#fff;font-weight:700;font-size:15px;padding:12px 22px;border-radius:14px;text-decoration:none;box-shadow:0 8px 20px rgba(255,122,26,.32)">Записаться</a>
+    <div style="display:flex;align-items:center;gap:10px">
+      <a href="pay.html" class="btn-pay" style="display:inline-flex;align-items:center;background:#2440D9;color:#fff;font-weight:700;font-size:15px;padding:12px 20px;border-radius:14px;text-decoration:none;box-shadow:0 8px 20px rgba(36,64,217,.28)">Оплатить</a>
+      <a href="#lead" class="btn-signup" style="display:inline-flex;align-items:center;gap:8px;background:#FF7A1A;color:#fff;font-weight:700;font-size:15px;padding:12px 22px;border-radius:14px;text-decoration:none;box-shadow:0 8px 20px rgba(255,122,26,.32)">Записаться</a>
+    </div>
   </header>
 
   <!-- ============ HERO ============ -->
   <section id="top" style="position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:36px;align-items:center;padding:54px 0 30px">
-    <div style="position:relative;z-index:2">
+    <div class="hero-text" style="position:relative;z-index:2">
       <span style="display:inline-flex;align-items:center;gap:8px;background:#fff;color:#2440D9;font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase;padding:8px 14px;border-radius:999px;box-shadow:0 4px 14px rgba(36,64,217,.12)">✦ Английский без стресса</span>
-      <h1 class="h-nunito" style="font-weight:900;font-size:clamp(40px,5.4vw,72px);line-height:.98;letter-spacing:-1.5px;margin:18px 0 0">Говори без напряга<br><span style="color:#2440D9">на английском</span></h1>
+      <h1 class="h-nunito" style="font-weight:900;font-size:clamp(40px,5.4vw,72px);line-height:.98;letter-spacing:-1.5px;margin:18px 0 0">Говори <span style="color:#2440D9">на английском</span><br>без напряга</h1>
       <p style="max-width:440px;margin:20px 0 28px;font-size:18px;line-height:1.55;color:#5A5F7D">Определим уровень, разберём слабые места и покажем, как учиться без выгорания. Первый урок — бесплатно.</p>
 
       <!-- lead form -->
@@ -100,14 +115,14 @@
       </div>
     </div>
 
-    <div style="position:relative;height:100%;min-height:460px;display:flex;align-items:center;justify-content:center">
-      <div style="position:absolute;width:80%;aspect-ratio:1/1;border-radius:50%;background:radial-gradient(circle,rgba(47,80,230,.18),rgba(47,80,230,0) 66%)"></div>
-      <img src="img/hero-mascot.png" alt="Маскот Chill" class="floaty" style="position:relative;z-index:2;width:82%;max-width:460px">
-      <img src="img/deco-0.png" alt="" class="floaty" style="position:absolute;top:8%;left:8%;width:62px;animation-duration:4.2s;animation-delay:.3s;z-index:3">
-      <img src="img/deco-5.png" alt="" class="floaty" style="position:absolute;bottom:12%;left:2%;width:78px;animation-duration:5.4s;animation-delay:.6s;z-index:3">
-      <img src="img/deco-2.png" alt="" class="floaty" style="position:absolute;top:18%;right:4%;width:40px;animation-duration:4.6s;animation-delay:.2s;z-index:3">
-      <img src="img/deco-3.png" alt="" class="floaty" style="position:absolute;bottom:24%;right:8%;width:34px;animation-duration:5s;animation-delay:1s;z-index:3">
-      <span style="position:absolute;top:6%;right:14%;z-index:4;background:#FF7A1A;color:#fff;font-weight:800;font-size:14px;padding:9px 14px;border-radius:14px 14px 14px 4px;box-shadow:0 10px 22px rgba(255,122,26,.4)">Hello!</span>
+    <div class="hero-visual" style="position:relative;height:100%;min-height:460px;display:flex;align-items:center;justify-content:center">
+      <div class="hero-glow" style="position:absolute;width:80%;aspect-ratio:1/1;border-radius:50%;background:radial-gradient(circle,rgba(47,80,230,.18),rgba(47,80,230,0) 66%)"></div>
+      <img src="img/hero-mascot.png" alt="Маскот Chill" class="floaty hero-mascot" style="position:relative;z-index:2;width:82%;max-width:460px">
+      <img src="img/deco-0.png" alt="" class="floaty hero-deco" style="position:absolute;top:8%;left:8%;width:62px;animation-duration:4.2s;animation-delay:.3s;z-index:3">
+      <img src="img/deco-5.png" alt="" class="floaty hero-deco" style="position:absolute;bottom:12%;left:2%;width:78px;animation-duration:5.4s;animation-delay:.6s;z-index:3">
+      <img src="img/deco-2.png" alt="" class="floaty hero-deco" style="position:absolute;top:18%;right:4%;width:40px;animation-duration:4.6s;animation-delay:.2s;z-index:3">
+      <img src="img/deco-3.png" alt="" class="floaty hero-deco" style="position:absolute;bottom:24%;right:8%;width:34px;animation-duration:5s;animation-delay:1s;z-index:3">
+      <span class="hero-hello" style="position:absolute;top:6%;right:14%;z-index:4;background:#FF7A1A;color:#fff;font-weight:800;font-size:14px;padding:9px 14px;border-radius:14px 14px 14px 4px;box-shadow:0 10px 22px rgba(255,122,26,.4)">Hello!</span>
     </div>
   </section>
 
@@ -116,7 +131,7 @@
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px">
       <div style="background:#fff;border-radius:26px;padding:30px 28px;box-shadow:0 24px 50px -34px rgba(36,64,217,.35)">
         <div style="display:grid;place-items:center;width:74px;height:74px;border-radius:20px;background:#EEF0FB;margin-bottom:18px"><img src="img/feature-1.png" alt="" style="width:52px;height:52px;object-fit:contain"></div>
-        <h3 class="h-nunito" style="font-weight:800;font-size:21px;margin-bottom:8px;letter-spacing:-.3px">Преподаватели с энергией</h3>
+        <h3 class="h-nunito" style="font-weight:800;font-size:21px;margin-bottom:8px;letter-spacing:-.3px">Заряженные преподаватели</h3>
         <p style="font-size:15px;line-height:1.5;color:#5A5F7D">Работают не больше нормы — приходят на уроки полными сил и желания помочь.</p>
       </div>
       <div style="background:#fff;border-radius:26px;padding:30px 28px;box-shadow:0 24px 50px -34px rgba(36,64,217,.35)">
@@ -139,6 +154,17 @@
       <h2 class="h-nunito" style="font-weight:900;font-size:clamp(30px,4vw,46px);line-height:1.02;letter-spacing:-1px;margin-top:12px">Как проходят уроки,<br>которые дают результат</h2>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:20px" id="steps"></div>
+  </section>
+
+  <!-- ============ VIDEO ============ -->
+  <section id="video" class="sec" style="padding:64px 0">
+    <div class="shead" style="text-align:center;max-width:620px;margin:0 auto 40px">
+      <span style="font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#2440D9">Вводный урок</span>
+      <h2 class="h-nunito" style="font-weight:900;font-size:clamp(30px,4vw,46px);line-height:1.02;letter-spacing:-1px;margin-top:12px">Посмотри, как проходит урок</h2>
+    </div>
+    <div style="max-width:900px;margin:0 auto;position:relative;padding-top:56.25%;border-radius:26px;overflow:hidden;box-shadow:0 30px 60px -30px rgba(36,64,217,.4);background:#000">
+      <iframe src="https://rutube.ru/play/embed/3c9f62c5b0b67401e6c8f848195d6b61" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="clipboard-write; autoplay; fullscreen" allowfullscreen loading="lazy" title="Вводный урок Chat &amp; Chill"></iframe>
+    </div>
   </section>
 
   <!-- ============ TEACHERS ============ -->
@@ -202,7 +228,7 @@
         <div style="background:#fff;border-radius:22px;padding:24px 26px;box-shadow:0 24px 50px -38px rgba(36,64,217,.35)">
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
             <span style="background:#EEF0FB;color:#5A5F7D;font-weight:700;font-size:13px;padding:6px 12px;border-radius:999px">точка А</span>
-            <span class="h-nunito" style="font-weight:800;font-size:18px">Что болело</span>
+            <span class="h-nunito" style="font-weight:800;font-size:18px">С чего начали</span>
           </div>
           <p id="story-a" style="font-size:15px;line-height:1.6;color:#3A3F5C"></p>
         </div>
@@ -280,7 +306,7 @@
 const STEPS = [
   { n: '50', unit: 'минут', title: 'Персонального внимания', text: 'Всё занятие посвящено тебе и твоим целям. Без группы — только живое общение и практика.' },
   { n: '80%', unit: 'урока', title: 'Практики говорения', text: 'Никаких упражнений «в стол». Говоришь большую часть урока и сразу применяешь язык.' },
-  { n: '5ч', unit: 'в день', title: 'Только позитивный вайб', text: 'Преподаватели работают не больше 5 часов в день — приходят с энергией и фокусом.' },
+  { n: '5ч', unit: 'в день', title: 'Только позитивный вайб', text: 'Преподаватели работают не больше 5 часов в день — чтобы каждый студент получал максимум.' },
   { n: '∞', unit: 'доступ', title: 'Всё в одном месте', text: 'Материалы, домашка и твой прогресс собраны на удобной платформе.' },
 ];
 
@@ -298,18 +324,18 @@ const CURRENCIES = [
 ];
 const POPULAR = 'Chill Plus';
 const PLANS = [
-  { name: 'Find your Chill', lessons: 'Пробный урок', note: 'Знакомство и план обучения',
+  { name: 'Find your Chill', lessons: 'Пробный урок', sub: 'Первый шаг · знакомство', free: true, pay: '#lead',
     tags: ['пробный', 'бесплатно'], price: { RUB: 'Бесплатно', KZT: 'Бесплатно', USD: 'Бесплатно' },
     features: ['Знакомство с преподавателем', 'Определение уровня по CEFR', 'Персональный план обучения'] },
-  { name: 'Chill Basic', lessons: '4 урока', note: 'Попробовать формат',
+  { name: 'Chill Basic', lessons: '4 урока', sub: '1 урок в неделю · поддержание уровня', pay: 'https://chill10k.tb.ru/',
     tags: ['базовый', '1-на-1'], price: { RUB: '10 000 ₽', KZT: '65 000 ₸', USD: '130 $' },
-    features: ['Живые уроки 1-на-1, 50 минут', 'Доступ к онлайн-платформе', 'Материалы и домашка', 'Прогресс-тесты'] },
-  { name: 'Chill Plus', lessons: '8 уроков', note: 'Стабильный ритм',
+    features: ['Уроки 1-на-1, 50 минут', 'Материалы и домашка с проверкой', 'Чат с преподавателем', 'Прогресс-тесты'] },
+  { name: 'Chill Plus', lessons: '8 уроков', sub: '2 урока в неделю · стабильный прогресс', pay: 'https://chill18500.tb.ru/',
     tags: ['популярный', '1-на-1'], price: { RUB: '18 500 ₽', KZT: '120 000 ₸', USD: '240 $' },
-    features: ['Всё из тарифа Basic', 'Разговорные клубы', 'Гибкий график занятий', 'Проверка домашки преподавателем', 'Чат с преподавателем между уроками'] },
-  { name: 'Chill Pro', lessons: '12 уроков', note: 'Быстрый прогресс',
+    features: ['Всё из тарифа Basic', 'Гибкий график занятий'] },
+  { name: 'Chill Pro', lessons: '12 уроков', sub: '3 урока в неделю · подготовка к экзамену или собесу', pay: 'https://chill24k.tb.ru/',
     tags: ['продвинутый', '1-на-1'], price: { RUB: '24 000 ₽', KZT: '155 000 ₸', USD: '310 $' },
-    features: ['Всё из тарифа Plus', 'Практика с носителем языка', 'Подготовка к экзаменам и собеседованиям', 'Приоритетный выбор времени'] },
+    features: ['Всё из тарифа Plus', 'Приоритетный выбор времени'] },
 ];
 
 const STORIES = [
@@ -319,7 +345,7 @@ const STORIES = [
     teacher: 'Демид', teacherPhoto: 'img/teacher-demid.jpg', teacherExp: 'Стаж — 7 лет',
     teacherText: 'Начали с разговорной практики дважды в неделю. Много говорили на уроке, разбирали реальные рабочие диалоги и убирали страх ошибки.',
     a: 'Уровень A2 — боялся говорить, путался во временах и плохо понимал речь на слух.',
-    b: 'Уровень B2. Прошёл интервью на английском и получил оффер — small talk дался легко.',
+    b: 'Уровень B2. Прошёл интервью на английском и получил оффер — говорит уверенно даже вне интервью.',
   },
   {
     name: 'Мария', photo: 'img/student-maria.jpg', caption: 'Заговорила бегло и понимает носителей 🥰',
@@ -336,6 +362,14 @@ const STORIES = [
     teacherText: 'Создали лёгкую атмосферу без давления: живые диалоги, сленг и фишки носителей. Ошибки — часть процесса, а не повод стесняться.',
     a: 'Уровень A1 — полный языковой барьер и страх сказать что-то не так.',
     b: 'Уровень B1. Свободно болтает на любые темы и рассказывает истории на английском.',
+  },
+  {
+    name: 'Игорь', male: true, photo: 'img/student-igor.jpg', caption: 'Переехал в Европу и общается без переводчика 🌍',
+    wanted: '«Готовился к переезду — нужно было заговорить на бытовые и рабочие темы без словаря под рукой.»',
+    teacher: 'Виолетта', teacherPhoto: 'img/teacher-violetta2.jpg', teacherExp: 'Стаж — 7 лет',
+    teacherText: 'Собрали программу под реальные ситуации: аренда жилья, банк, работа. Много живой практики и разбор ошибок прямо на уроке.',
+    a: 'Уровень A2 — знал грамматику, но терялся в живом разговоре.',
+    b: 'Уровень B2. Спокойно решает бытовые вопросы и работает в международной команде.',
   },
 ];
 
@@ -391,6 +425,14 @@ function renderPricing() {
     return `<button data-cur="${c.code}" style="border:none;cursor:pointer;font-family:'Manrope';font-weight:700;font-size:14px;padding:9px 18px;border-radius:10px;transition:all .15s;background:${active ? '#2440D9' : 'transparent'};color:${active ? '#fff' : '#5A5F7D'}">${c.label}</button>`;
   }).join('');
 
+  const symbols = { RUB: '₽', KZT: '₸', USD: '$' };
+  const perLesson = (p) => {
+    if (p.free) return '';
+    const n = parseInt(p.price[curCurrency].replace(/[^\d]/g, ''), 10);
+    const cnt = parseInt(p.lessons, 10);
+    if (!n || !cnt) return '';
+    return Math.round(n / cnt).toLocaleString('ru-RU') + ' ' + symbols[curCurrency] + '/урок';
+  };
   document.getElementById('plans').innerHTML = PLANS.map(p => {
     const pop = p.name === POPULAR;
     const c = pop ? {
@@ -403,21 +445,26 @@ function renderPricing() {
       pill2Bg: '#EEF0FB', pill2: '#5A6080', divider: '#ECEEF5', note: '#8C90AC',
       btnBg: '#EEF0FB', btnColor: '#2440D9', shadow: '0 24px 50px -36px rgba(36,64,217,.35)'
     };
+    const pl = perLesson(p);
+    const btn = p.free
+      ? `<a href="#lead" style="display:block;text-align:center;text-decoration:none;font-weight:700;font-size:15px;padding:13px;border-radius:14px;background:${c.btnBg};color:${c.btnColor}">Записаться</a>`
+      : `<a href="${p.pay}" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none;font-weight:700;font-size:15px;padding:13px;border-radius:14px;background:${c.btnBg};color:${c.btnColor}">Оплатить</a>`;
     return `
     <div style="position:relative;display:flex;flex-direction:column;background:${c.cardBg};border-radius:26px;padding:26px 22px;box-shadow:${c.shadow}">
-      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+      <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
         <span style="background:${c.pill1};color:#fff;font-weight:700;font-size:13px;padding:6px 13px;border-radius:999px">${p.tags[0]}</span>
         <span style="background:${c.pill2Bg};color:${c.pill2};font-weight:700;font-size:13px;padding:6px 13px;border-radius:999px">${p.tags[1]}</span>
       </div>
-      <h3 class="h-nunito" style="font-weight:800;font-size:20px;line-height:1.15;letter-spacing:-.3px;color:${c.title};margin-bottom:18px">${p.name}</h3>
+      <h3 class="h-nunito" style="font-weight:800;font-size:20px;line-height:1.15;letter-spacing:-.3px;color:${c.title}">${p.name}</h3>
+      <p style="font-style:italic;font-size:13px;line-height:1.35;color:${c.note};margin:5px 0 18px">${p.sub}</p>
       <ul style="list-style:none;display:flex;flex-direction:column;gap:11px;margin:0 0 24px">
         ${p.features.map(f => `<li style="display:flex;gap:10px;font-size:14px;line-height:1.4;color:${c.feat}"><span style="flex-shrink:0;color:${c.check};font-weight:900">✓</span><span>${f}</span></li>`).join('')}
       </ul>
       <div style="margin-top:auto">
         <div style="height:1px;background:${c.divider};margin-bottom:16px"></div>
         <div class="h-nunito" style="font-weight:900;font-size:26px;letter-spacing:-.5px;color:${c.title}">${p.price[curCurrency]}</div>
-        <div style="font-weight:600;font-size:14px;color:${c.note};margin:2px 0 18px">${p.lessons}</div>
-        <a href="#lead" style="display:block;text-align:center;text-decoration:none;font-weight:700;font-size:15px;padding:13px;border-radius:14px;background:${c.btnBg};color:${c.btnColor}">Записаться</a>
+        <div style="font-weight:600;font-size:14px;color:${c.note};margin:2px 0 18px">${p.lessons}${pl ? ' · ' + pl : ''}</div>
+        ${btn}
       </div>
     </div>`;
   }).join('');
