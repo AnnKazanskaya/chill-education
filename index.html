@@ -21,6 +21,7 @@
   .floaty{animation:floaty 5s ease-in-out infinite}
   .wrap{max-width:1280px;margin:0 auto;padding:0 24px}
   .h-nunito{font-family:'Nunito',sans-serif}
+  .lbl-short{display:none}
   /* dots indicator (shown only on mobile carousels) */
   .dots{display:none;justify-content:center;gap:8px;margin-top:20px}
   .dots button{width:8px;height:8px;padding:0;border:none;border-radius:50%;background:#C7CCE6;cursor:pointer;transition:all .25s}
@@ -30,9 +31,11 @@
     [data-nav]{display:none!important}
     [data-cta-cat]{display:none!important}
 
-    /* compact header so logo + two buttons fit */
+    /* compact header */
     header a img{height:46px!important}
-    .btn-pay,.btn-signup{padding:9px 13px!important;font-size:13px!important;border-radius:12px!important}
+    .btn-signup{padding:9px 14px!important;font-size:13px!important;border-radius:12px!important}
+    .lbl-full{display:none}
+    .lbl-short{display:inline}
 
     /* hero: small mascot tucked top-right beside the heading */
     #top{grid-template-columns:1fr!important;padding-top:14px!important}
@@ -84,11 +87,9 @@
       <a href="#pricing" style="font-weight:600;font-size:15px;color:#42476A;text-decoration:none">Тарифы</a>
       <a href="#reviews" style="font-weight:600;font-size:15px;color:#42476A;text-decoration:none">Отзывы</a>
       <a href="#demo" style="font-weight:600;font-size:15px;color:#42476A;text-decoration:none">Демо-урок</a>
+      <a href="pay.html" style="font-weight:600;font-size:15px;color:#42476A;text-decoration:none">Оплата</a>
     </nav>
-    <div style="display:flex;align-items:center;gap:10px">
-      <a href="pay.html" class="btn-pay" style="display:inline-flex;align-items:center;background:#2440D9;color:#fff;font-weight:700;font-size:15px;padding:12px 20px;border-radius:14px;text-decoration:none;box-shadow:0 8px 20px rgba(36,64,217,.28)">Оплатить</a>
-      <a href="#lead" class="btn-signup" style="display:inline-flex;align-items:center;gap:8px;background:#FF7A1A;color:#fff;font-weight:700;font-size:15px;padding:12px 22px;border-radius:14px;text-decoration:none;box-shadow:0 8px 20px rgba(255,122,26,.32)">Записаться</a>
-    </div>
+    <a href="#lead" class="btn-signup" style="display:inline-flex;align-items:center;gap:8px;background:#FF7A1A;color:#fff;font-weight:700;font-size:15px;padding:12px 22px;border-radius:14px;text-decoration:none;box-shadow:0 8px 20px rgba(255,122,26,.32)"><span class="lbl-full">Записаться на бесплатный урок</span><span class="lbl-short">Бесплатный урок</span></a>
   </header>
 
   <!-- ============ HERO ============ -->
@@ -96,7 +97,7 @@
     <div class="hero-text" style="position:relative;z-index:2">
       <span style="display:inline-flex;align-items:center;gap:8px;background:#fff;color:#2440D9;font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase;padding:8px 14px;border-radius:999px;box-shadow:0 4px 14px rgba(36,64,217,.12)">✦ Английский без стресса</span>
       <h1 class="h-nunito" style="font-weight:900;font-size:clamp(40px,5.4vw,72px);line-height:.98;letter-spacing:-1.5px;margin:18px 0 0">Говори <span style="color:#2440D9">на английском</span><br>без напряга</h1>
-      <p style="max-width:440px;margin:20px 0 28px;font-size:18px;line-height:1.55;color:#5A5F7D">Определим уровень, разберём слабые места и покажем, как учиться без выгорания. Первый урок — бесплатно.</p>
+      <p style="max-width:440px;margin:20px 0 28px;font-size:18px;line-height:1.55;color:#5A5F7D">Определим уровень, разберём слабые места и покажем, как учиться без выгорания. Первый урок — <span style="color:#FF7A1A;font-weight:700">бесплатно</span>.</p>
 
       <!-- lead form -->
       <form class="leadform" data-leadform style="display:flex;gap:10px;background:#fff;padding:8px;border-radius:18px;box-shadow:0 14px 34px -18px rgba(36,64,217,.35);max-width:480px">
@@ -159,8 +160,7 @@
   <!-- ============ VIDEO ============ -->
   <section id="video" class="sec" style="padding:64px 0">
     <div class="shead" style="text-align:center;max-width:620px;margin:0 auto 40px">
-      <span style="font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#2440D9">Вводный урок</span>
-      <h2 class="h-nunito" style="font-weight:900;font-size:clamp(30px,4vw,46px);line-height:1.02;letter-spacing:-1px;margin-top:12px">Посмотри, как проходит урок</h2>
+      <h2 class="h-nunito" style="font-weight:900;font-size:clamp(30px,4vw,46px);line-height:1.02;letter-spacing:-1px">Посмотри, как проходит урок</h2>
     </div>
     <div style="max-width:640px;margin:0 auto;position:relative;padding-top:min(56.25%,360px);border-radius:26px;overflow:hidden;box-shadow:0 30px 60px -30px rgba(36,64,217,.4);background:#000">
       <iframe src="https://rutube.ru/play/embed/3c9f62c5b0b67401e6c8f848195d6b61" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="clipboard-write; autoplay; fullscreen" allowfullscreen loading="lazy" title="Вводный урок Chat &amp; Chill"></iframe>
@@ -281,6 +281,7 @@
           <a href="#pricing" style="font-size:14px;color:#5A5F7D;text-decoration:none">Тарифы</a>
           <a href="#reviews" style="font-size:14px;color:#5A5F7D;text-decoration:none">Отзывы</a>
           <a href="#demo" style="font-size:14px;color:#5A5F7D;text-decoration:none">Демо-урок</a>
+          <a href="pay.html" style="font-size:14px;color:#5A5F7D;text-decoration:none">Оплата</a>
         </div>
         <div style="display:flex;flex-direction:column;gap:12px">
           <span style="font-weight:800;font-size:14px;margin-bottom:2px">Контакты</span>
@@ -312,7 +313,7 @@ const STEPS = [
 
 const TEACHERS = [
   { photo: 'img/teacher-demid.jpg', name: 'Демид', bio: 'Преподаю 7+ лет. Жил и учился в США, работаю синхронным переводчиком. Английский — мой образ жизни.' },
-  { photo: 'img/teacher-violetta.jpg', name: 'Виолетта', bio: 'Объясняю сложное простым языком. Со мной заговоришь быстрее, чем ожидаешь — без стресса, но с результатом.' },
+  { photo: 'img/teacher-violetta.jpg', name: 'Вета', bio: 'Объясняю сложное простым языком. Со мной заговоришь быстрее, чем ожидаешь — без стресса, но с результатом.' },
   { photo: 'img/teacher-sofa.jpg', name: 'Софа', bio: 'Преподаю 5 лет. Сделаю учёбу увлекательной: сленг, фишки и живая практика с носителями.' },
   { photo: 'img/teacher-violetta2.jpg', name: 'Виолетта', bio: '7+ лет веду студентов от A1 до C1. Живая коммуникация и работа над ошибками прямо на уроке.' },
 ];
@@ -324,24 +325,24 @@ const CURRENCIES = [
 ];
 const POPULAR = 'Chill Plus';
 const PLANS = [
-  { name: 'Find your Chill', lessons: 'Пробный урок', sub: 'Первый шаг · знакомство', free: true, pay: '#lead',
+  { name: 'Find your Chill', lessons: 'Пробный урок', free: true, pay: '#lead',
     tags: ['пробный', 'бесплатно'], price: { RUB: 'Бесплатно', KZT: 'Бесплатно', USD: 'Бесплатно' },
     features: ['Знакомство с преподавателем', 'Определение уровня по CEFR', 'Персональный план обучения'] },
-  { name: 'Chill Basic', lessons: '4 урока', sub: '1 урок в неделю · поддержание уровня', pay: 'https://chill10k.tb.ru/',
+  { name: 'Chill Basic', lessons: '4 урока', pay: 'https://chill10k.tb.ru/',
     tags: ['базовый', '1-на-1'], price: { RUB: '10 000 ₽', KZT: '65 000 ₸', USD: '130 $' },
-    features: ['Уроки 1-на-1, 50 минут', 'Материалы и домашка с проверкой', 'Чат с преподавателем', 'Прогресс-тесты'] },
-  { name: 'Chill Plus', lessons: '8 уроков', sub: '2 урока в неделю · стабильный прогресс', pay: 'https://chill18500.tb.ru/',
+    features: ['Один урок в неделю', 'Поддержание уровня', 'Материалы и домашка с проверкой', 'Прогресс-тесты'] },
+  { name: 'Chill Plus', lessons: '8 уроков', pay: 'https://chill18500.tb.ru/',
     tags: ['популярный', '1-на-1'], price: { RUB: '18 500 ₽', KZT: '120 000 ₸', USD: '240 $' },
-    features: ['Всё из тарифа Basic', 'Гибкий график занятий'] },
-  { name: 'Chill Pro', lessons: '12 уроков', sub: '3 урока в неделю · подготовка к экзамену или собесу', pay: 'https://chill24k.tb.ru/',
+    features: ['Два урока в неделю', 'Стабильный прогресс', 'Всё из тарифа Basic', 'Гибкий график занятий'] },
+  { name: 'Chill Pro', lessons: '12 уроков', pay: 'https://chill24k.tb.ru/',
     tags: ['продвинутый', '1-на-1'], price: { RUB: '24 000 ₽', KZT: '155 000 ₸', USD: '310 $' },
-    features: ['Всё из тарифа Plus', 'Приоритетный выбор времени'] },
+    features: ['Три урока в неделю', 'Подготовка к экзамену или собесу', 'Всё из тарифа Plus'] },
 ];
 
 const STORIES = [
   {
     name: 'Сергей', male: true, photo: 'img/student-sergey.jpg', caption: 'Прошёл собеседование на английском и вышел на новую работу!',
-    wanted: '«Хотел свободно общаться с иностранными коллегами и перестать стесняться ошибок прямо посреди разговора.»',
+    wanted: '«До уроков я не мог свободно общаться с иностранными коллегами и жутко стеснялся ошибок прямо посреди разговора.»',
     teacher: 'Демид', teacherPhoto: 'img/teacher-demid.jpg', teacherExp: 'Стаж — 7 лет',
     teacherText: 'Начали с разговорной практики дважды в неделю. Много говорили на уроке, разбирали реальные рабочие диалоги и убирали страх ошибки.',
     a: 'Уровень A2 — боялся говорить, путался во временах и плохо понимал речь на слух.',
@@ -349,15 +350,15 @@ const STORIES = [
   },
   {
     name: 'Мария', photo: 'img/student-maria.jpg', caption: 'Заговорила бегло и понимает носителей 🥰',
-    wanted: '«Хотела наконец заговорить, а не просто учить правила, и подтянуть устную речь до уверенного уровня.»',
-    teacher: 'Виолетта', teacherPhoto: 'img/teacher-violetta.jpg', teacherExp: 'Стаж — 7 лет',
+    wanted: '«Я только зубрила правила, но заговорить не могла — устная речь совсем проседала.»',
+    teacher: 'Вета', teacherPhoto: 'img/teacher-violetta.jpg', teacherExp: 'Стаж — 7 лет',
     teacherText: 'Сделали упор на устную речь и расширение словарного запаса. Сложное объясняли простым языком и закрепляли на практике.',
     a: 'Уровень A2 — маленький словарный запас и путаница во временах.',
     b: 'Уровень B2. Бегло говорит, понимает англоговорящих и кайфует от каждого урока.',
   },
   {
     name: 'Катя', photo: 'img/student-katya.jpg', caption: 'Болтает на английском и не боится ошибаться 😆',
-    wanted: '«Со школы ненавидела английский — хотела говорить без страха, что меня осудят за ошибку.»',
+    wanted: '«Со школы терпеть не могла английский и боялась открыть рот — казалось, что за любую ошибку меня осудят.»',
     teacher: 'Софа', teacherPhoto: 'img/teacher-sofa.jpg', teacherExp: 'Стаж — 5 лет',
     teacherText: 'Создали лёгкую атмосферу без давления: живые диалоги, сленг и фишки носителей. Ошибки — часть процесса, а не повод стесняться.',
     a: 'Уровень A1 — полный языковой барьер и страх сказать что-то не так.',
@@ -365,7 +366,7 @@ const STORIES = [
   },
   {
     name: 'Игорь', male: true, photo: 'img/student-igor.jpg', caption: 'Переехал в Европу и общается без переводчика 🌍',
-    wanted: '«Готовился к переезду — нужно было заговорить на бытовые и рабочие темы без словаря под рукой.»',
+    wanted: '«Готовился к переезду, но без словаря под рукой не мог поговорить ни на бытовые, ни на рабочие темы.»',
     teacher: 'Виолетта', teacherPhoto: 'img/teacher-violetta2.jpg', teacherExp: 'Стаж — 7 лет',
     teacherText: 'Собрали программу под реальные ситуации: аренда жилья, банк, работа. Много живой практики и разбор ошибок прямо на уроке.',
     a: 'Уровень A2 — знал грамматику, но терялся в живом разговоре.',
@@ -455,8 +456,7 @@ function renderPricing() {
         <span style="background:${c.pill1};color:#fff;font-weight:700;font-size:13px;padding:6px 13px;border-radius:999px">${p.tags[0]}</span>
         <span style="background:${c.pill2Bg};color:${c.pill2};font-weight:700;font-size:13px;padding:6px 13px;border-radius:999px">${p.tags[1]}</span>
       </div>
-      <h3 class="h-nunito" style="font-weight:800;font-size:20px;line-height:1.15;letter-spacing:-.3px;color:${c.title}">${p.name}</h3>
-      <p style="font-style:italic;font-size:13px;line-height:1.35;color:${c.note};margin:5px 0 18px">${p.sub}</p>
+      <h3 class="h-nunito" style="font-weight:800;font-size:20px;line-height:1.15;letter-spacing:-.3px;color:${c.title};margin-bottom:18px">${p.name}</h3>
       <ul style="list-style:none;display:flex;flex-direction:column;gap:11px;margin:0 0 24px">
         ${p.features.map(f => `<li style="display:flex;gap:10px;font-size:14px;line-height:1.4;color:${c.feat}"><span style="flex-shrink:0;color:${c.check};font-weight:900">✓</span><span>${f}</span></li>`).join('')}
       </ul>
