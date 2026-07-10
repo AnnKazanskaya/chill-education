@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from "react";
 
 /* Заявки уходят в Telegram-группу «Заявки» через бота @chill_education_leads_bot */
 const TG_TOKEN = "7777868493:AAED1sSl-K1M63_h8urrS5F2bR6OvuwvX3A";
-const TG_CHAT_ID = "-5200081608";
+const TG_CHAT_ID = "-1004289091014";
 
 /* ============================================================
    Chill Education — тест на уровень английского (CEFR)
