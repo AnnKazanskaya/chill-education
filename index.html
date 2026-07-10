@@ -528,6 +528,30 @@ renderReview();
 // ---------- LEAD FORM ----------
 const TG_TOKEN = '7777868493:AAED1sSl-K1M63_h8urrS5F2bR6OvuwvX3A';
 const TG_CHAT_ID = '-1004289091014';
+// UTM-метки: запоминаем при заходе (7 дней), добавляем в каждую заявку
+const UTM_KEYS = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
+(function(){
+  try{
+    const q = new URLSearchParams(location.search);
+    if (UTM_KEYS.some(k => q.get(k))) {
+      const utm = {};
+      UTM_KEYS.forEach(k => { const v = q.get(k); if (v) utm[k] = v; });
+      localStorage.setItem('chill_utm', JSON.stringify({ utm, ts: Date.now() }));
+    }
+  }catch(e){}
+})();
+function utmLines(){
+  try{
+    const saved = JSON.parse(localStorage.getItem('chill_utm') || 'null');
+    if (saved && Date.now() - saved.ts < 7*24*3600*1000) {
+      return UTM_KEYS.filter(k => saved.utm[k]).map(k => 'UTM ' + k.slice(4) + ': ' + saved.utm[k]).join('\n');
+    }
+  }catch(e){}
+  try{
+    if (document.referrer && new URL(document.referrer).host !== location.host) return 'Переход с: ' + document.referrer;
+  }catch(e){}
+  return '';
+}
 function sendLeadToTelegram(text){
   return fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
     method: 'POST',
@@ -540,7 +564,8 @@ document.querySelectorAll('form[data-leadform]').forEach(form => {
     e.preventDefault();
     const name = (form.elements.namedItem('name')?.value || '').trim();
     const phone = (form.elements.namedItem('phone')?.value || '').trim();
-    sendLeadToTelegram('🔔 Новая заявка с сайта\n👤 Имя: ' + (name || '—') + '\n📞 Телефон: ' + phone + '\n📍 Источник: ' + (form.dataset.source || 'Главная'));
+    const utm = utmLines();
+    sendLeadToTelegram('🔔 Новая заявка с сайта\n👤 Имя: ' + (name || '—') + '\n📞 Телефон: ' + phone + '\n📍 Источник: ' + (form.dataset.source || 'Главная') + (utm ? '\n' + utm : ''));
     form.outerHTML = `
       <div style="display:flex;align-items:center;gap:14px;background:#fff;border-radius:18px;padding:18px 22px;box-shadow:0 12px 30px -16px rgba(36,64,217,.3);max-width:480px">
         <span style="display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:#E9F7EE;color:#1FA85A;font-size:22px;flex-shrink:0">✓</span>

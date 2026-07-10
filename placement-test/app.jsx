@@ -4,6 +4,31 @@ import React, { useState, useEffect, useRef, useMemo } from "react";
 const TG_TOKEN = "7777868493:AAED1sSl-K1M63_h8urrS5F2bR6OvuwvX3A";
 const TG_CHAT_ID = "-1004289091014";
 
+/* UTM-метки: подхватываем из ссылки или из localStorage (сохранены главной, 7 дней) */
+const UTM_KEYS = ["utm_source","utm_medium","utm_campaign","utm_content","utm_term"];
+(function(){
+  try{
+    const q = new URLSearchParams(location.search);
+    if (UTM_KEYS.some(k => q.get(k))) {
+      const utm = {};
+      UTM_KEYS.forEach(k => { const v = q.get(k); if (v) utm[k] = v; });
+      localStorage.setItem("chill_utm", JSON.stringify({ utm, ts: Date.now() }));
+    }
+  }catch(e){}
+})();
+function utmLines(){
+  try{
+    const saved = JSON.parse(localStorage.getItem("chill_utm") || "null");
+    if (saved && Date.now() - saved.ts < 7*24*3600*1000) {
+      return UTM_KEYS.filter(k => saved.utm[k]).map(k => "UTM " + k.slice(4) + ": " + saved.utm[k]).join("\n");
+    }
+  }catch(e){}
+  try{
+    if (document.referrer && new URL(document.referrer).host !== location.host) return "Переход с: " + document.referrer;
+  }catch(e){}
+  return "";
+}
+
 /* ============================================================
    Chill Education — тест на уровень английского (CEFR)
    Формат: многоступенчатый / ветвящийся (routing test) с рандомизацией.
@@ -816,7 +841,7 @@ function Result({ answers, speaking, name, booked, setBooked, restart, openRepor
               fetch("https://api.telegram.org/bot" + TG_TOKEN + "/sendMessage", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({ chat_id: TG_CHAT_ID, text: "🔔 Новая заявка с сайта\n👤 Имя: " + (lead.name.trim() || "—") + "\n📞 Телефон: " + lead.contact.trim() + "\n📍 Источник: Тест на уровень (" + info.code + ")" })
+                body: JSON.stringify({ chat_id: TG_CHAT_ID, text: "🔔 Новая заявка с сайта\n👤 Имя: " + (lead.name.trim() || "—") + "\n📞 Телефон: " + lead.contact.trim() + "\n📍 Источник: Тест на уровень (" + info.code + ")" + (utmLines() ? "\n" + utmLines() : "") })
               }).catch(()=>{});
             }catch(err){}
             setBooked(true);
