@@ -1,0 +1,932 @@
+import React, { useState, useEffect, useRef, useMemo } from "react";
+
+/* Заявки уходят в Telegram-группу «Заявки» через бота @chill_education_leads_bot */
+const TG_TOKEN = "7777868493:AAED1sSl-K1M63_h8urrS5F2bR6OvuwvX3A";
+const TG_CHAT_ID = "-5200081608";
+
+/* ============================================================
+   Chill Education — тест на уровень английского (CEFR)
+   Формат: многоступенчатый / ветвящийся (routing test) с рандомизацией.
+   Разминка (6) -> ветка A1-A2 / A2-B1 / B1-C1 (8) -> аудио (2) -> speaking (1).
+   Вопросы берутся из пулов: каждый прогон отличается; повторы между
+   попытками минимизируются. Оценка — метод "потолка" (высший уровень
+   с точностью >=50%). Speaking записывается голосом и уходит в отчёт
+   для преподавателя (оценивается вручную).
+   Палитра/логотип — близкая реконструкция бренда Chat and Chill,
+   реальные фирменные ассеты и hex подставляются в CSS-переменные.
+   ============================================================ */
+
+const CSS = `
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Nunito:wght@700;800;900&display=swap');
+
+.elc-root{
+  --surface:#FFFFFF;--ink:#1A1E33;--ink-soft:#5A5F7D;--line:#E2E5F4;
+  --primary:#2440D9;--primary-deep:#1B2E8A;--primary-tint:#E7ECFF;
+  --accent:#FF7A1A;--accent-soft:#FFEEDD;--mint:#1FA85A;--wrong:#E5484D;
+  --font-display:'Nunito', ui-rounded, 'Segoe UI', system-ui, sans-serif;
+  --font-body:'Manrope', ui-rounded, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-family:var(--font-body);color:var(--ink);min-height:100vh;box-sizing:border-box;
+  padding:28px 16px 56px;display:flex;flex-direction:column;align-items:center;
+  background:radial-gradient(1100px 620px at 15% -14%, #FFFFFF 0%, rgba(255,255,255,0) 55%),
+             linear-gradient(158deg,#EEF0FB 0%, #E7ECFF 100%);
+  -webkit-font-smoothing:antialiased;
+}
+.elc-root *{box-sizing:border-box}
+.elc-shell{width:100%;max-width:700px}
+
+.elc-brand{display:flex;align-items:center;gap:12px;margin:2px 4px 18px}
+.elc-logo{width:40px;height:40px;border-radius:13px;background:linear-gradient(145deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(124,92,252,.32)}
+.elc-logo-img{height:52px;width:auto;display:block}
+.elc-word{font-family:var(--font-display);font-weight:600;font-size:19px;letter-spacing:-.01em;line-height:1;color:var(--ink)}
+.elc-word span{color:var(--ink-soft);font-weight:500}
+.elc-bs{font-size:12.5px;color:var(--ink-soft);margin-top:3px}
+
+.elc-card{background:var(--surface);border:1px solid var(--line);border-radius:26px;box-shadow:0 26px 60px -30px rgba(80,50,140,.4);padding:32px 32px 30px;position:relative;overflow:hidden}
+
+.elc-prog-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:14px}
+.elc-section{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--primary)}
+.elc-count{font-size:12.5px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.elc-bar{height:7px;background:var(--primary-tint);border-radius:999px;overflow:hidden;margin-bottom:26px}
+.elc-bar-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:999px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+
+.elc-q{animation:elc-fade-up .45s cubic-bezier(.2,.7,.2,1) both}
+.elc-stem{font-family:var(--font-display);font-weight:500;font-size:23px;line-height:1.34;letter-spacing:-.005em;margin:2px 0 20px}
+.elc-opts{display:flex;flex-direction:column;gap:11px}
+.elc-opt{text-align:left;font-family:var(--font-body);font-weight:500;font-size:16px;color:var(--ink);background:#FCFBFF;border:1.5px solid var(--line);border-radius:16px;padding:15px 17px;cursor:pointer;display:flex;align-items:center;gap:13px;transition:border-color .18s,background .18s,transform .06s;animation:elc-fade-up .4s both}
+.elc-opt:hover{border-color:#D9CEF6;background:#F8F4FF}
+.elc-opt:active{transform:scale(.995)}
+.elc-opt.sel{border-color:var(--primary);background:var(--primary-tint)}
+.elc-tick{width:22px;height:22px;border-radius:50%;border:2px solid #D3C8ED;flex:0 0 auto;display:flex;align-items:center;justify-content:center;transition:border-color .18s,background .18s}
+.elc-opt.sel .elc-tick{border-color:var(--primary);background:var(--primary)}
+.elc-dotin{width:8px;height:8px;border-radius:50%;background:#fff;opacity:0;transform:scale(.4);transition:opacity .18s,transform .18s}
+.elc-opt.sel .elc-dotin{opacity:1;transform:scale(1)}
+
+.elc-foot{display:flex;justify-content:flex-end;margin-top:26px}
+.elc-btn{font-family:var(--font-display);font-weight:500;font-size:16px;color:#fff;background:var(--primary);border:none;border-radius:14px;padding:13px 28px;cursor:pointer;transition:background .18s,transform .06s;box-shadow:0 12px 24px -10px rgba(124,92,252,.75)}
+.elc-btn:hover{background:var(--primary-deep)}
+.elc-btn:active{transform:translateY(1px)}
+.elc-btn:disabled{background:#D6CFEA;box-shadow:none;cursor:not-allowed}
+.elc-btn-ghost{background:none;color:var(--primary);box-shadow:none;border:1.5px solid var(--line)}
+.elc-btn-ghost:hover{background:var(--primary-tint)}
+
+.elc-read{background:linear-gradient(180deg,#FDFCFF,#F8F5FE);border:1px solid var(--line);border-left:4px solid var(--primary);border-radius:16px;padding:18px 20px;margin:0 0 22px}
+.elc-read-l{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--primary);margin-bottom:9px}
+.elc-read-t{font-size:15.5px;line-height:1.62;color:#3A3455}
+
+.elc-listen{background:linear-gradient(180deg,#FDFCFF,#F8F5FE);border:1px solid var(--line);border-radius:18px;padding:20px;margin:0 0 22px}
+.elc-listen-row{display:flex;align-items:center;gap:16px}
+.elc-play{width:58px;height:58px;border-radius:50%;background:linear-gradient(145deg,var(--primary),var(--primary-deep));border:none;cursor:pointer;flex:0 0 auto;display:flex;align-items:center;justify-content:center;box-shadow:0 14px 26px -8px rgba(124,92,252,.7);transition:transform .12s}
+.elc-play:active{transform:scale(.94)}
+.elc-eq{display:flex;align-items:center;gap:4px;height:26px}
+.elc-eq span{width:4px;height:100%;background:#fff;border-radius:3px;transform:scaleY(.35);transform-origin:center}
+.elc-listen.playing .elc-eq span{animation:elc-eq 1s ease-in-out infinite}
+.elc-listen.playing .elc-eq span:nth-child(2){animation-delay:.15s}
+.elc-listen.playing .elc-eq span:nth-child(3){animation-delay:.3s}
+.elc-listen.playing .elc-eq span:nth-child(4){animation-delay:.1s}
+.elc-listen.playing .elc-eq span:nth-child(5){animation-delay:.22s}
+.elc-lm{flex:1}
+.elc-lt{font-weight:600;font-size:15px}
+.elc-ls{font-size:12.5px;color:var(--ink-soft);margin-top:2px}
+.elc-link{background:none;border:none;color:var(--primary);font-family:var(--font-body);font-weight:600;font-size:12.5px;cursor:pointer;padding:0;text-decoration:underline;margin-top:10px}
+.elc-tr{font-size:14px;line-height:1.55;color:#3a3455;background:#fff;border:1px dashed var(--line);border-radius:10px;padding:12px 14px;margin-top:12px}
+
+/* speaking */
+.elc-sp-prompt{background:linear-gradient(180deg,#FFF7FB,#FEEFF5);border:1px solid var(--accent-soft);border-left:4px solid var(--accent);border-radius:16px;padding:18px 20px;margin:0 0 20px}
+.elc-sp-l{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:9px}
+.elc-sp-t{font-family:var(--font-display);font-weight:500;font-size:19px;line-height:1.4;color:#3A3455}
+.elc-sp-hint{font-size:13px;color:var(--ink-soft);margin-top:8px}
+.elc-rec{display:flex;flex-direction:column;align-items:center;gap:14px;padding:8px 0 4px}
+.elc-recbtn{width:74px;height:74px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,var(--accent),#F0559A);box-shadow:0 14px 28px -8px rgba(255,123,172,.7);transition:transform .12s}
+.elc-recbtn:active{transform:scale(.94)}
+.elc-recbtn.rec{background:linear-gradient(145deg,#EF5C6E,#D63b52);animation:elc-pulse 1.4s ease-in-out infinite}
+.elc-rec-status{font-weight:600;font-size:15px;text-align:center}
+.elc-rec-time{font-family:var(--font-display);font-variant-numeric:tabular-nums;color:var(--ink-soft);font-size:14px}
+.elc-audio{width:100%;margin-top:6px}
+.elc-ta{width:100%;min-height:96px;border:1.5px solid var(--line);border-radius:14px;padding:13px 15px;font-family:var(--font-body);font-size:15px;color:var(--ink);resize:vertical;background:#FCFBFF}
+.elc-ta:focus{outline:none;border-color:var(--primary)}
+.elc-note{font-size:12.5px;line-height:1.5;color:var(--ink-soft);background:#F7F4FC;border:1px solid var(--line);border-radius:12px;padding:11px 13px;margin-top:12px}
+
+.elc-eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--primary)}
+.elc-h1{font-family:var(--font-display);font-weight:600;font-size:33px;line-height:1.12;letter-spacing:-.015em;margin:10px 0 14px}
+.elc-p{font-size:15.5px;line-height:1.62;color:var(--ink-soft);margin:0 0 20px;max-width:54ch}
+.elc-facts{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 22px}
+.elc-fact{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:#4a4363;background:#F7F3FD;border:1px solid var(--line);border-radius:999px;padding:8px 14px}
+.elc-fdot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.elc-name{width:100%;max-width:340px;border:1.5px solid var(--line);border-radius:14px;padding:13px 16px;font-family:var(--font-body);font-size:15.5px;color:var(--ink);background:#FCFBFF;margin:0 0 22px}
+.elc-name:focus{outline:none;border-color:var(--primary)}
+.elc-lbl{font-size:13px;font-weight:600;color:#4a4363;margin:0 0 8px}
+
+.elc-inter{min-height:236px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;animation:elc-fade-up .4s both}
+.elc-idots{display:flex;gap:9px;margin-bottom:20px}
+.elc-idots span{width:12px;height:12px;border-radius:50%;background:var(--primary);animation:elc-bounce 1.1s ease-in-out infinite}
+.elc-idots span:nth-child(2){animation-delay:.15s;background:var(--accent)}
+.elc-idots span:nth-child(3){animation-delay:.3s}
+.elc-it{font-family:var(--font-display);font-weight:500;font-size:20px}
+.elc-is{font-size:13.5px;color:var(--ink-soft);margin-top:6px}
+
+.elc-res{animation:elc-fade-up .5s both}
+.elc-res-top{display:flex;gap:30px;align-items:center;margin:16px 0 6px}
+.elc-ladder{display:flex;flex-direction:column-reverse;gap:7px;flex:0 0 auto}
+.elc-rung{display:flex;align-items:center;gap:10px}
+.elc-rung-bar{height:15px;border-radius:8px;background:var(--primary-tint);transition:background .5s}
+.elc-rung.on .elc-rung-bar{background:linear-gradient(90deg,#FFB0D0,var(--accent))}
+.elc-rung.cur .elc-rung-bar{background:linear-gradient(90deg,var(--primary),var(--accent));height:22px}
+.elc-rc{font-size:12px;font-weight:700;color:var(--ink-soft);width:24px}
+.elc-rung.cur .elc-rc{color:var(--primary)}
+.elc-badge{flex:1}
+.elc-level{font-family:var(--font-display);font-weight:700;font-size:62px;line-height:1;letter-spacing:-.02em;color:var(--primary)}
+.elc-lname{font-size:15px;color:var(--ink-soft);margin-top:4px;font-weight:600}
+.elc-desc{font-size:15.5px;line-height:1.6;color:#3a3455;margin:16px 0 22px}
+
+.elc-skills{display:flex;flex-direction:column;gap:14px;margin:0 0 24px}
+.elc-sk-top{display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:6px}
+.elc-sk-name{font-weight:600;color:#3a3455}
+.elc-sk-val{color:var(--ink-soft);font-variant-numeric:tabular-nums;font-weight:600}
+.elc-sk-bar{height:9px;background:#F0EBF8;border-radius:999px;overflow:hidden}
+.elc-sk-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--primary),#A38BFF);width:0;transition:width .8s cubic-bezier(.2,.7,.2,1)}
+.elc-chip{display:inline-block;font-size:12px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:3px 10px}
+
+.elc-cta{background:linear-gradient(150deg,#16236B,#2440D9);border-radius:20px;padding:24px;color:#fff;margin:0 0 18px}
+.elc-cta-h{font-family:var(--font-display);font-weight:600;font-size:19px}
+.elc-cta-p{font-size:13.5px;line-height:1.55;color:#D8CFEE;margin:6px 0 16px}
+.elc-cta-btn{background:var(--accent);color:#fff;font-weight:700;border:none;border-radius:14px;padding:13px 24px;font-family:var(--font-display);font-size:15px;cursor:pointer;transition:transform .06s,filter .15s}
+.elc-leadform{display:flex;flex-direction:column;gap:10px;max-width:420px}
+.elc-cta-inp{width:100%;border:none;border-radius:12px;padding:13px 15px;font-family:var(--font-body);font-size:15px;color:var(--ink);background:#fff}
+.elc-cta-inp:focus{outline:none;box-shadow:0 0 0 3px rgba(255,122,26,.5)}
+.elc-cta-inp::placeholder{color:#9AA0B8}
+.elc-cta-btn:hover{filter:brightness(1.06)}
+.elc-cta-btn:active{transform:translateY(1px)}
+.elc-booked{font-size:13px;color:#C9F3DF;margin-top:12px}
+.elc-disc{font-size:12.5px;line-height:1.55;color:var(--ink-soft);background:#F7F4FC;border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:0 0 16px}
+.elc-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;align-items:center}
+.elc-restart{background:none;border:none;color:var(--ink-soft);font-family:var(--font-body);font-weight:600;font-size:13.5px;cursor:pointer;text-decoration:underline}
+
+/* report */
+.elc-rep-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.elc-rep-title{font-family:var(--font-display);font-weight:600;font-size:24px;letter-spacing:-.01em}
+.elc-rep-sub{font-size:13px;color:var(--ink-soft);margin-top:4px}
+.elc-rep-lvl{text-align:right}
+.elc-rep-lvl b{font-family:var(--font-display);font-size:30px;color:var(--primary);display:block;line-height:1}
+.elc-rep-meta{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 22px}
+.elc-rep-mchip{font-size:12.5px;font-weight:600;color:#4a4363;background:#F7F3FD;border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+.elc-sec-h{font-family:var(--font-display);font-weight:600;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--primary);margin:22px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--primary-tint)}
+.elc-ctx{font-size:13.5px;line-height:1.55;color:#4a4363;background:#FAF8FD;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 0 12px}
+.elc-ctx b{color:var(--ink)}
+.elc-item{border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px}
+.elc-item.ok{border-left:4px solid var(--mint)}
+.elc-item.no{border-left:4px solid var(--wrong)}
+.elc-item-top{display:flex;align-items:flex-start;gap:10px}
+.elc-mark{font-weight:800;font-size:14px;flex:0 0 auto;width:20px}
+.elc-mark.ok{color:var(--mint)}
+.elc-mark.no{color:var(--wrong)}
+.elc-item-q{font-weight:600;font-size:14.5px;line-height:1.45;color:var(--ink)}
+.elc-item-lvl{font-size:11px;font-weight:700;color:var(--ink-soft);margin-left:auto;flex:0 0 auto;background:#F2EEFA;border-radius:6px;padding:2px 7px}
+.elc-ans{font-size:13.5px;margin-top:8px;padding-left:30px}
+.elc-ans-row{display:flex;gap:7px;margin-top:3px}
+.elc-ans-k{color:var(--ink-soft);min-width:80px}
+.elc-ans-v{color:var(--ink);font-weight:600}
+.elc-ans-v.no{color:var(--wrong)}
+.elc-ans-v.ok{color:var(--mint)}
+.elc-sp-rep{border:1px solid var(--line);border-radius:14px;padding:16px;background:#FFF9FC}
+
+@keyframes elc-fade-up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes elc-eq{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+@keyframes elc-bounce{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(-10px);opacity:1}}
+@keyframes elc-pulse{0%,100%{box-shadow:0 0 0 0 rgba(239,92,110,.45)}50%{box-shadow:0 0 0 14px rgba(239,92,110,0)}}
+@media (max-width:560px){
+  .elc-card{padding:22px 20px 24px;border-radius:20px}
+  .elc-h1{font-size:27px}.elc-stem{font-size:20px}
+  .elc-res-top{flex-direction:column;align-items:flex-start;gap:16px}
+  .elc-level{font-size:52px}
+}
+button:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid rgba(124,92,252,.45);outline-offset:2px}
+@media (prefers-reduced-motion: reduce){
+  .elc-q,.elc-opt,.elc-res,.elc-inter,.elc-idots span,.elc-listen.playing .elc-eq span,.elc-recbtn.rec{animation:none !important}
+  .elc-bar-fill,.elc-rung-bar,.elc-sk-fill{transition:none !important}
+}
+@media print{
+  .elc-root{background:#fff;padding:0}
+  .elc-noprint{display:none !important}
+  .elc-card{box-shadow:none;border:none;border-radius:0;padding:0}
+  .elc-item{break-inside:avoid}
+}
+`;
+
+/* ---------------- ПУЛЫ ЗАДАНИЙ ---------------- */
+/* skill: gv | reading | listening ; level: 1=A1 2=A2 3=B1 4=B2 5=C1 */
+
+const ROUTER_POOL = {
+  1: [
+    { id:"r1a", skill:"gv", level:1, stem:"Hello! My name ___ Anna.", opts:["am","is","are","be"], answer:1 },
+    { id:"r1b", skill:"gv", level:1, stem:"She ___ coffee every morning.", opts:["drink","drinks","drinking","drank"], answer:1 },
+    { id:"r1c", skill:"gv", level:1, stem:"___ you like coffee?", opts:["Do","Are","Is","Does"], answer:0 },
+    { id:"r1d", skill:"gv", level:1, stem:"There ___ a book on the desk.", opts:["is","are","be","am"], answer:0 },
+  ],
+  2: [
+    { id:"r2a", skill:"gv", level:2, stem:"We ___ a film last night.", opts:["see","saw","seen","seeing"], answer:1 },
+    { id:"r2b", skill:"gv", level:2, stem:"He is taller ___ me.", opts:["then","than","that","as"], answer:1 },
+    { id:"r2c", skill:"gv", level:2, stem:"Look! It ___ now.", opts:["rains","is raining","rain","rained"], answer:1 },
+    { id:"r2d", skill:"gv", level:2, stem:"This bag is ___ than that one.", opts:["cheap","cheaper","cheapest","more cheap"], answer:1 },
+  ],
+  3: [
+    { id:"r3a", skill:"gv", level:3, stem:"I ___ never ___ to Japan.", opts:["have … been","did … go","am … been","have … go"], answer:0 },
+    { id:"r3b", skill:"gv", level:3, stem:"She's very good ___ maths.", opts:["in","on","at","with"], answer:2 },
+    { id:"r3c", skill:"gv", level:3, stem:"If it rains, we ___ at home.", opts:["stay","will stay","stayed","would stay"], answer:1 },
+    { id:"r3d", skill:"gv", level:3, stem:"I ___ live in Rome when I was a child.", opts:["use to","used to","am used to","was using"], answer:1 },
+  ],
+};
+
+const GV_POOL = {
+  lower: {
+    1: [
+      { id:"lo1a", skill:"gv", level:1, stem:"I have ___ apple and ___ banana.", opts:["a … an","an … a","a … a","an … an"], answer:1 },
+      { id:"lo1b", skill:"gv", level:1, stem:"There ___ three books on the table.", opts:["is","are","be","am"], answer:1 },
+      { id:"lo1c", skill:"gv", level:1, stem:"He ___ like fish.", opts:["don't","doesn't","isn't","not"], answer:1 },
+      { id:"lo1d", skill:"gv", level:1, stem:"The keys are ___ the drawer.", opts:["in","of","by","to"], answer:0 },
+      { id:"lo1e", skill:"gv", level:1, stem:"___ are my friends.", opts:["This","These","That","It"], answer:1 },
+    ],
+    2: [
+      { id:"lo2a", skill:"gv", level:2, stem:"Yesterday I ___ up at seven.", opts:["get","got","gotten","getting"], answer:1 },
+      { id:"lo2b", skill:"gv", level:2, stem:"It's cold. You ___ wear a coat.", opts:["should","can't","mustn't","would"], answer:0 },
+      { id:"lo2c", skill:"gv", level:2, stem:"Look at the clouds! It ___ rain.", opts:["is going to","goes to","would","was"], answer:0 },
+      { id:"lo2d", skill:"gv", level:2, stem:"This car is ___ than mine.", opts:["fast","faster","fastest","more fast"], answer:1 },
+      { id:"lo2e", skill:"gv", level:2, stem:"I don't have ___ money.", opts:["some","any","many","a"], answer:1 },
+    ],
+  },
+  mid: {
+    2: [
+      { id:"mi2a", skill:"gv", level:2, stem:"How ___ money do you need?", opts:["many","much","some","lot"], answer:1 },
+      { id:"mi2b", skill:"gv", level:2, stem:"This is ___ restaurant in town.", opts:["the better","the best","best","more good"], answer:1 },
+      { id:"mi2c", skill:"gv", level:2, stem:"She ___ late for work.", opts:["is never","never is","isn't never","are never"], answer:0 },
+      { id:"mi2d", skill:"gv", level:2, stem:"There are ___ people in the room.", opts:["much","many","a little","any"], answer:1 },
+      { id:"mi2e", skill:"gv", level:2, stem:"Your English is ___ than last year.", opts:["good","better","best","more good"], answer:1 },
+    ],
+    3: [
+      { id:"mi3a", skill:"gv", level:3, stem:"I ___ my keys. I can't find them.", opts:["lost","have lost","was losing","am losing"], answer:1 },
+      { id:"mi3b", skill:"gv", level:3, stem:"If it ___ tomorrow, we'll stay home.", opts:["will rain","rains","rained","is raining"], answer:1 },
+      { id:"mi3c", skill:"gv", level:3, stem:"I need to ___ this word ___ in the dictionary.", opts:["look … after","look … for","look … up","look … at"], answer:2 },
+      { id:"mi3d", skill:"gv", level:3, stem:"I ___ here ___ 2019.", opts:["live … for","have lived … since","have lived … for","am living … since"], answer:1 },
+      { id:"mi3e", skill:"gv", level:3, stem:"The man ___ lives next door is a doctor.", opts:["which","who","what","whose"], answer:1 },
+    ],
+  },
+  upper: {
+    3: [
+      { id:"up3a", skill:"gv", level:3, stem:"The new bridge ___ last year.", opts:["was built","built","has built","is building"], answer:0 },
+      { id:"up3b", skill:"gv", level:3, stem:"The book, ___ I read last week, was great.", opts:["who","which","what","where"], answer:1 },
+      { id:"up3c", skill:"gv", level:3, stem:"She asked me where I ___.", opts:["live","lived","living","do live"], answer:1 },
+    ],
+    4: [
+      { id:"up4a", skill:"gv", level:4, stem:"If I had known you were coming, I ___ a cake.", opts:["would bake","would have baked","had baked","will bake"], answer:1 },
+      { id:"up4b", skill:"gv", level:4, stem:"She said she ___ finish the report by Friday.", opts:["will","would","can","shall"], answer:1 },
+      { id:"up4c", skill:"gv", level:4, stem:"He's not answering — he ___ his phone at home.", opts:["must have left","must leave","should leave","had left"], answer:0 },
+      { id:"up4d", skill:"gv", level:4, stem:"Despite the difficulties, she stayed ___ about the outcome.", opts:["optimism","optimistic","optimist","optimally"], answer:1 },
+      { id:"up4e", skill:"gv", level:4, stem:"The report ___ already ___ when I arrived.", opts:["had … been finished","has … finished","was … finish","had … finish"], answer:0 },
+    ],
+    5: [
+      { id:"up5a", skill:"gv", level:5, stem:"My colleague was very ___ and covered my shifts while I was ill.", opts:["sympathy","sympathetic","symphatic","sympathising person"], answer:1 },
+      { id:"up5b", skill:"gv", level:5, stem:"Not only ___ late, but he also forgot the documents.", opts:["he was","was he","he is","did he was"], answer:1 },
+      { id:"up5c", skill:"gv", level:5, stem:"The new evidence ___ serious doubt on the theory.", opts:["casts","makes","puts","does"], answer:0 },
+      { id:"up5d", skill:"gv", level:5, stem:"___ hard she tried, she couldn't convince them.", opts:["However","Although","Despite","Whatever"], answer:0 },
+    ],
+  },
+};
+
+const READ_POOL = {
+  lower: [
+    { id:"rd-lo-1", passage:"Hi, I'm Marco. I'm from Italy, but now I live in London with my wife. I work in a small restaurant near my house. I start work at four o'clock in the afternoon and finish late at night. On Sundays I don't work, so I visit the park with my family.",
+      q:[
+        { id:"rd-lo-1a", skill:"reading", level:2, stem:"Where does Marco work?", opts:["In a restaurant","In a hospital","In a school","In a park"], answer:0 },
+        { id:"rd-lo-1b", skill:"reading", level:2, stem:"When does Marco start work?", opts:["In the morning","At four in the afternoon","Late at night","On Sundays"], answer:1 },
+      ]},
+    { id:"rd-lo-2", passage:"Emma lives in a small flat in the city centre. She hasn't got a car, so she goes to work by bus. Her office is near a big park, and at lunchtime she often eats her sandwich there. After work on Fridays, she meets her friends at a café.",
+      q:[
+        { id:"rd-lo-2a", skill:"reading", level:2, stem:"How does Emma go to work?", opts:["By car","By bus","On foot","By train"], answer:1 },
+        { id:"rd-lo-2b", skill:"reading", level:2, stem:"Where does Emma usually eat lunch?", opts:["At a café","At home","In the park","In a restaurant"], answer:2 },
+      ]},
+  ],
+  mid: [
+    { id:"rd-mi-1", passage:"Dear Sam, thanks for your email. I'd love to come to your party on Saturday, but I'm afraid I can't. My brother is getting married that weekend and the whole family is travelling to Manchester. I'm really sorry to miss it. Let's meet up the following week instead — maybe that new Thai place you mentioned? Let me know what day works. Best, Julia",
+      q:[
+        { id:"rd-mi-1a", skill:"reading", level:3, stem:"Why can't Julia come to the party?", opts:["She has to work","Her brother is getting married","She doesn't like parties","She is ill"], answer:1 },
+        { id:"rd-mi-1b", skill:"reading", level:3, stem:"What does Julia suggest?", opts:["Cancelling the party","Meeting the following week","Travelling to Manchester together","Sending another email"], answer:1 },
+      ]},
+    { id:"rd-mi-2", passage:"NOTICE TO ALL RESIDENTS. The lift in Building C will be out of service next Monday and Tuesday for essential maintenance. During this time, please use the stairs or the lift in Building B. We expect the work to be completed by Wednesday morning. We apologise for any inconvenience. — Building Management.",
+      q:[
+        { id:"rd-mi-2a", skill:"reading", level:3, stem:"When will the lift work again?", opts:["Monday","Tuesday evening","Wednesday morning","Next week"], answer:2 },
+        { id:"rd-mi-2b", skill:"reading", level:3, stem:"What can residents do while the lift is broken?", opts:["Nothing, they must wait","Use the lift in Building B","Call the manager each time","Leave the building"], answer:1 },
+      ]},
+  ],
+  upper: [
+    { id:"rd-up-1", passage:"For decades, urban planners treated the car as the organising principle of the modern city, widening roads and clearing space for parking as though mobility and driving were one and the same. Only recently has this consensus begun to fracture. A growing number of cities are reclaiming street space for pedestrians and cyclists, arguing that the health of a city is measured not by how quickly one can pass through it, but by how willing people are to linger.",
+      q:[
+        { id:"rd-up-1a", skill:"reading", level:5, stem:"What is the writer's main point?", opts:["Cars have made cities more efficient","Cities are starting to prioritise people over cars","Cycling is dangerous in cities","Roads should be wider"], answer:1 },
+        { id:"rd-up-1b", skill:"reading", level:4, stem:"In this text, 'to linger' most nearly means…", opts:["to hurry through","to stay and spend time","to get lost","to complain"], answer:1 },
+      ]},
+    { id:"rd-up-2", passage:"The popularity of the four-day working week has grown steadily, yet the evidence remains far from conclusive. Advocates point to trials in which productivity held steady or even rose, while employees reported sharply lower stress. Critics counter that such trials are often run by companies already predisposed to succeed, and that the results may not translate to industries where output is tied directly to hours worked.",
+      q:[
+        { id:"rd-up-2a", skill:"reading", level:5, stem:"What is the writer's attitude to the four-day week?", opts:["Strongly supportive","Cautiously balanced","Dismissive","Completely indifferent"], answer:1 },
+        { id:"rd-up-2b", skill:"reading", level:4, stem:"What do critics argue?", opts:["It always lowers productivity","Employees dislike it","Trials may be biased and not apply everywhere","It suits every industry"], answer:2 },
+      ]},
+  ],
+};
+
+const LISTEN_POOL = {
+  lower: [
+    { id:"ls-lo-1", rate:0.82, audio:"Hello. This is a message for Mr Jones. This is Doctor Smith's clinic. Your appointment is on Tuesday, the fifth of May, at half past ten in the morning. Please arrive ten minutes early. If you cannot come, call us on five five five, zero one eight two. Thank you.",
+      q:[
+        { id:"ls-lo-1a", skill:"listening", level:2, stem:"When is the appointment?", opts:["Tuesday morning","Tuesday evening","Thursday morning","Friday afternoon"], answer:0 },
+        { id:"ls-lo-1b", skill:"listening", level:2, stem:"What should Mr Jones do if he can't come?", opts:["Send an email","Call the clinic","Come another day","Do nothing"], answer:1 },
+      ]},
+    { id:"ls-lo-2", rate:0.82, audio:"Hi Tom, it's Sarah. I'm calling about tonight. I'm really sorry, but I have to work late, so I can't come to dinner at seven. Could we meet a bit later, maybe at half past eight? Give me a call back when you get this. Thanks, bye!",
+      q:[
+        { id:"ls-lo-2a", skill:"listening", level:2, stem:"Why is Sarah calling?", opts:["She can't come at seven","She is lost","She wants to cancel completely","She will be early"], answer:0 },
+        { id:"ls-lo-2b", skill:"listening", level:2, stem:"What time does Sarah suggest?", opts:["Seven o'clock","Half past seven","Eight o'clock","Half past eight"], answer:3 },
+      ]},
+  ],
+  mid: [
+    { id:"ls-mi-1", rate:0.92, audio:"Attention passengers. The ten fifteen train to Edinburgh has been delayed by approximately forty minutes, due to a signalling problem. We apologise for the inconvenience. Passengers who wish to travel sooner may take the ten thirty service to Glasgow and change at Carlisle. Refreshments are available in the station café.",
+      q:[
+        { id:"ls-mi-1a", skill:"listening", level:3, stem:"Why is the train delayed?", opts:["Bad weather","A signalling problem","Too many passengers","A staff shortage"], answer:1 },
+        { id:"ls-mi-1b", skill:"listening", level:3, stem:"How can passengers travel sooner?", opts:["Wait forty minutes","Take the Glasgow train and change","Ask for a refund","Go to the café"], answer:1 },
+      ]},
+    { id:"ls-mi-2", rate:0.92, audio:"Thank you for calling the City Museum. Please note our opening hours have changed. From the first of June, we are open from ten in the morning until six in the evening, Tuesday to Sunday. The museum is closed on Mondays. Entry is free for children under twelve. For group bookings, please press one.",
+      q:[
+        { id:"ls-mi-2a", skill:"listening", level:3, stem:"When is the museum closed?", opts:["Sundays","Mondays","Tuesdays","It never closes"], answer:1 },
+        { id:"ls-mi-2b", skill:"listening", level:3, stem:"Who can enter for free?", opts:["Everyone","Students","Children under twelve","Groups"], answer:2 },
+      ]},
+  ],
+  upper: [
+    { id:"ls-up-1", rate:1.0, audio:"So, personally, I think remote work is a bit of a double-edged sword. On the one hand, I get so much more done without the constant interruptions of the office. But on the other, I do miss those spontaneous conversations by the coffee machine — you know, the ones where half your best ideas actually come from. I suppose the ideal would be some kind of hybrid arrangement, but getting the balance right is easier said than done.",
+      q:[
+        { id:"ls-up-1a", skill:"listening", level:4, stem:"What is the speaker's overall opinion of remote work?", opts:["Entirely positive","Entirely negative","Mixed","Indifferent"], answer:2 },
+        { id:"ls-up-1b", skill:"listening", level:4, stem:"What does the speaker miss about the office?", opts:["The free coffee","Spontaneous conversations","The commute","Their manager"], answer:1 },
+      ]},
+    { id:"ls-up-2", rate:1.0, audio:"Honestly, I used to be quite sceptical about online learning. I assumed you'd lose all the interaction you get in a classroom. But having taught a few courses remotely now, I've come round to it. The tools have improved enormously, and in some ways students participate more — the quieter ones, especially, seem more willing to speak up. That said, it does take a lot more preparation than people realise.",
+      q:[
+        { id:"ls-up-2a", skill:"listening", level:4, stem:"How did the speaker's opinion change?", opts:["From sceptical to positive","From positive to negative","It didn't change","They remain unsure"], answer:0 },
+        { id:"ls-up-2b", skill:"listening", level:4, stem:"What surprised the speaker about remote teaching?", opts:["It needs no preparation","Quieter students participate more","Students dislike it","The tools got worse"], answer:1 },
+      ]},
+  ],
+};
+
+const SPEAK_POOL = {
+  lower: [
+    { id:"sp-lo-1", level:2, prompt:"Introduce yourself. Say your name, where you are from, and what you do.", hint:"≈ 30–45 секунд" },
+    { id:"sp-lo-2", level:2, prompt:"Describe your typical day. What time do you get up, and what do you do in the morning, afternoon and evening?", hint:"≈ 30–45 секунд" },
+    { id:"sp-lo-3", level:2, prompt:"Talk about your family or your best friend. Who are they, and what do they like doing?", hint:"≈ 30–45 секунд" },
+  ],
+  mid: [
+    { id:"sp-mi-1", level:3, prompt:"Talk about your last holiday: where you went, who with, and what you did.", hint:"≈ 1 минута" },
+    { id:"sp-mi-2", level:3, prompt:"Describe your hometown. What is it like, what can people do there, and what do you like about it?", hint:"≈ 1 минута" },
+    { id:"sp-mi-3", level:3, prompt:"What do you do in your free time? Talk about a hobby and why you enjoy it.", hint:"≈ 1 минута" },
+  ],
+  upper: [
+    { id:"sp-up-1", level:4, prompt:"Some people prefer working from home, others prefer the office. What do you think, and why?", hint:"≈ 1–2 минуты" },
+    { id:"sp-up-2", level:4, prompt:"Describe a person who has influenced you. Who are they, and how have they affected your life?", hint:"≈ 1–2 минуты" },
+    { id:"sp-up-3", level:4, prompt:"Do you think technology has made our lives better or worse? Give reasons and examples.", hint:"≈ 1–2 минуты" },
+  ],
+};
+
+const LEVEL_INFO = {
+  1:{ code:"A1", name:"Beginner", desc:"Ты понимаешь и используешь простые фразы о себе и повседневных ситуациях. Отличная точка старта — здесь язык раскрывается особенно быстро." },
+  2:{ code:"A2", name:"Elementary", desc:"Ты справляешься с простым общением на знакомые темы: покупки, работа, семья, короткие тексты и объявления." },
+  3:{ code:"B1", name:"Intermediate", desc:"Ты уверенно общаешься в большинстве бытовых ситуаций, понимаешь основную мысль текстов и речи на знакомые темы." },
+  4:{ code:"B2", name:"Upper-Intermediate", desc:"Ты свободно общаешься на разные темы, понимаешь сложные тексты и большую часть разговорной речи, умеешь выражать и обосновывать мнение." },
+  5:{ code:"C1", name:"Advanced", desc:"Ты владеешь языком гибко и точно: понимаешь сложные тексты, улавливаешь нюансы и говоришь бегло почти без усилий." },
+};
+
+const SKILL_LABEL = { gv:"Грамматика и лексика", reading:"Чтение", listening:"Аудирование" };
+const RUNG_W = { 1:74, 2:98, 3:122, 4:148, 5:174 };
+const BAND_NAME = { lower:"A1–A2", mid:"A2–B1", upper:"B1–C1" };
+
+/* ---------------- Рандомизация ---------------- */
+function shuffled(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+function sampleN(pool, n, used){
+  const fresh = shuffled(pool.filter(x=>!used.has(x.id)));
+  const chosen = fresh.slice(0, n);
+  if(chosen.length < n){
+    const rest = shuffled(pool.filter(x=>!chosen.includes(x)));
+    for(const it of rest){ if(chosen.length>=n) break; chosen.push(it); }
+  }
+  chosen.forEach(x=>used.add(x.id));
+  return chosen;
+}
+
+function buildRouter(used){
+  return [ ...sampleN(ROUTER_POOL[1],2,used), ...sampleN(ROUTER_POOL[2],2,used), ...sampleN(ROUTER_POOL[3],2,used) ];
+}
+function buildTrack(track, used){
+  let gv;
+  if(track==="lower") gv=[...sampleN(GV_POOL.lower[1],3,used), ...sampleN(GV_POOL.lower[2],3,used)];
+  else if(track==="mid") gv=[...sampleN(GV_POOL.mid[2],3,used), ...sampleN(GV_POOL.mid[3],3,used)];
+  else gv=[...sampleN(GV_POOL.upper[3],2,used), ...sampleN(GV_POOL.upper[4],2,used), ...sampleN(GV_POOL.upper[5],2,used)];
+  const read = sampleN(READ_POOL[track],1,used)[0];
+  const readItems = read.q.map(q=>({ ...q, passage:read.passage }));
+  const core = [...gv, ...readItems];
+  const listen = sampleN(LISTEN_POOL[track],1,used)[0];
+  const speak = sampleN(SPEAK_POOL[track],1,used)[0];
+  return { core, listen, speak };
+}
+
+/* Метод "потолка": высший уровень с точностью >=50%, прерываясь на первом провале */
+function estimateLevelIndex(scored){
+  let ceiling = 0;
+  for(let L=1; L<=5; L++){
+    const at = scored.filter(a=>a.level===L);
+    if(at.length===0) continue;
+    const acc = at.filter(a=>a.correct).length / at.length;
+    if(acc >= 0.5) ceiling = L; else break;
+  }
+  return ceiling;
+}
+
+/* ---------------- Иконки ---------------- */
+function Logo(){ return (<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 5.2h16v10.2H10.4L6 18.6v-3.2H4V5.2Z" fill="#fff"/><circle cx="9" cy="10.3" r="1.35" fill="#7C5CFC"/><circle cx="12" cy="10.3" r="1.35" fill="#7C5CFC"/><circle cx="15" cy="10.3" r="1.35" fill="#7C5CFC"/></svg>); }
+function PlayIcon(){ return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M8 5.5v13l11-6.5-11-6.5Z" fill="#fff"/></svg>); }
+function MicIcon(){ return (<svg width="30" height="30" viewBox="0 0 24 24" fill="none"><rect x="9" y="3" width="6" height="11" rx="3" fill="#fff"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4M8.5 21h7" stroke="#fff" strokeWidth="1.8" strokeLinecap="round"/></svg>); }
+function StopIcon(){ return (<svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="7" y="7" width="10" height="10" rx="2.5" fill="#fff"/></svg>); }
+
+function fmt(s){ const m=Math.floor(s/60), ss=s%60; return m+":"+String(ss).padStart(2,"0"); }
+
+/* ---------------- Аудио-плеер (аудирование) ---------------- */
+function ListeningPlayer({ audio, rate }){
+  const [playing, setPlaying] = useState(false);
+  const [showText, setShowText] = useState(false);
+  const [supported, setSupported] = useState(true);
+  useEffect(()=>{
+    if(typeof window==="undefined" || !("speechSynthesis" in window)) setSupported(false);
+    return ()=>{ try{ window.speechSynthesis && window.speechSynthesis.cancel(); }catch(e){} };
+  },[]);
+  const play = ()=>{
+    try{
+      const synth = window.speechSynthesis; synth.cancel();
+      const u = new SpeechSynthesisUtterance(audio);
+      u.lang="en-GB"; u.rate=rate; u.pitch=1;
+      const v = synth.getVoices().find(x=>/en(-|_)?(GB|US)/i.test(x.lang)) || synth.getVoices().find(x=>/^en/i.test(x.lang));
+      if(v) u.voice=v;
+      u.onend=()=>setPlaying(false);
+      u.onerror=()=>{ setPlaying(false); setSupported(false); };
+      setPlaying(true); synth.speak(u);
+    }catch(e){ setSupported(false); setPlaying(false); }
+  };
+  return (
+    <div className={"elc-listen"+(playing?" playing":"")}>
+      <div className="elc-listen-row">
+        <button className="elc-play" onClick={play} aria-label="Прослушать аудио">
+          {playing ? <div className="elc-eq"><span/><span/><span/><span/><span/></div> : <PlayIcon/>}
+        </button>
+        <div className="elc-lm">
+          <div className="elc-lt">{playing ? "Идёт воспроизведение…" : "Нажми, чтобы прослушать"}</div>
+          <div className="elc-ls">Переслушать можно сколько угодно раз.</div>
+        </div>
+      </div>
+      {supported
+        ? <button className="elc-link" onClick={()=>setShowText(s=>!s)}>{showText?"Скрыть текст":"Не слышно звука? Показать текст"}</button>
+        : <div className="elc-ls" style={{marginTop:10}}>В этом окне звук недоступен — ниже текст (на сайте здесь профессиональная озвучка).</div>}
+      {(showText || !supported) && <div className="elc-tr">{audio}</div>}
+    </div>
+  );
+}
+
+/* ---------------- Speaking: запись голоса ---------------- */
+function SpeakingBlock({ prompt, onComplete }){
+  const [status, setStatus] = useState("idle"); // idle|recording|recorded|fallback
+  const [seconds, setSeconds] = useState(0);
+  const [audioUrl, setAudioUrl] = useState(null);
+  const [mime, setMime] = useState("audio/webm");
+  const [text, setText] = useState("");
+  const recRef = useRef(null); const chunksRef = useRef([]); const timerRef = useRef(null); const streamRef = useRef(null);
+
+  const supported = typeof navigator!=="undefined" && navigator.mediaDevices && navigator.mediaDevices.getUserMedia && typeof window!=="undefined" && "MediaRecorder" in window;
+
+  useEffect(()=>()=>{ // cleanup
+    try{ clearInterval(timerRef.current); }catch(e){}
+    try{ streamRef.current && streamRef.current.getTracks().forEach(t=>t.stop()); }catch(e){}
+    try{ audioUrl && URL.revokeObjectURL(audioUrl); }catch(e){}
+  },[audioUrl]);
+
+  const startRec = async ()=>{
+    if(!supported){ setStatus("fallback"); return; }
+    try{
+      const stream = await navigator.mediaDevices.getUserMedia({ audio:true });
+      streamRef.current = stream;
+      const mr = new MediaRecorder(stream);
+      recRef.current = mr; chunksRef.current = [];
+      mr.ondataavailable = e=>{ if(e.data && e.data.size>0) chunksRef.current.push(e.data); };
+      mr.onstop = ()=>{
+        const type = mr.mimeType || "audio/webm";
+        const blob = new Blob(chunksRef.current, { type });
+        const url = URL.createObjectURL(blob);
+        setMime(type); setAudioUrl(url); setStatus("recorded");
+        try{ stream.getTracks().forEach(t=>t.stop()); }catch(e){}
+      };
+      mr.start();
+      setStatus("recording"); setSeconds(0);
+      timerRef.current = setInterval(()=>setSeconds(s=>{ if(s>=120){ stopRec(); } return s+1; }), 1000);
+    }catch(e){ setStatus("fallback"); }
+  };
+  const stopRec = ()=>{ try{ clearInterval(timerRef.current); }catch(e){} try{ recRef.current && recRef.current.state!=="inactive" && recRef.current.stop(); }catch(e){} };
+  const reRec = ()=>{ try{ audioUrl && URL.revokeObjectURL(audioUrl); }catch(e){} setAudioUrl(null); setSeconds(0); setStatus("idle"); };
+
+  const hasAnswer = !!audioUrl || (status==="fallback" && text.trim().length>0);
+  const finish = ()=> onComplete({ audioUrl, mime, seconds, text: text.trim(), prompt: prompt.prompt, level: prompt.level });
+
+  return (
+    <div className="elc-q">
+      <div className="elc-sp-prompt">
+        <div className="elc-sp-l">Speaking · говорение</div>
+        <div className="elc-sp-t">{prompt.prompt}</div>
+        <div className="elc-sp-hint">Говори на английском · {prompt.hint}. Совет: запиши ответ голосом — преподаватель его послушает. Но это по желанию, можно сразу узнать результат.</div>
+      </div>
+
+      {status!=="fallback" && supported && (
+        <div className="elc-rec">
+          {status==="recording" ? (
+            <button className="elc-recbtn rec" onClick={stopRec} aria-label="Остановить запись"><StopIcon/></button>
+          ) : (
+            <button className="elc-recbtn" onClick={startRec} aria-label="Записать ответ"><MicIcon/></button>
+          )}
+          <div className="elc-rec-status">
+            {status==="idle" && "Нажми, чтобы записать ответ"}
+            {status==="recording" && "Идёт запись… нажми, чтобы остановить"}
+            {status==="recorded" && "Готово! Можешь переслушать"}
+          </div>
+          {(status==="recording" || status==="recorded") && <div className="elc-rec-time">{fmt(seconds)}</div>}
+          {audioUrl && <audio className="elc-audio" src={audioUrl} controls />}
+          {status==="recorded" && <button className="elc-link" onClick={reRec}>Записать заново</button>}
+        </div>
+      )}
+
+      {(status==="fallback" || !supported) && (
+        <div>
+          <div className="elc-note">Микрофон недоступен в этом окне предпросмотра. На сайте здесь будет запись голоса — а сейчас впиши свой ответ текстом, чтобы преподаватель мог его оценить.</div>
+          <textarea className="elc-ta" style={{marginTop:12}} placeholder="Type your answer here…" value={text} onChange={e=>setText(e.target.value)} />
+        </div>
+      )}
+      {supported && status!=="fallback" && (
+        <button className="elc-link" style={{display:"block",margin:"4px auto 0"}} onClick={()=>setStatus("fallback")}>Микрофон не работает? Ответить текстом</button>
+      )}
+
+      <div className="elc-foot">
+        <button className="elc-btn" onClick={finish}>{hasAnswer ? "Завершить тест" : "Узнать результат →"}</button>
+      </div>
+    </div>
+  );
+}
+
+/* ==================== ГЛАВНЫЙ КОМПОНЕНТ ==================== */
+export default function PlacementTest(){
+  const [phase, setPhase] = useState("intro"); // intro|router|inter|core|listen|speaking|result|report
+  const [name, setName] = useState("");
+  const [bi, setBi] = useState(0);
+  const [track, setTrack] = useState(null);
+  const [routerItems, setRouterItems] = useState([]);
+  const [coreItems, setCoreItems] = useState([]);
+  const [listenClip, setListenClip] = useState(null);
+  const [speakPrompt, setSpeakPrompt] = useState(null);
+  const [answers, setAnswers] = useState([]); // {section,item,chosen,correct,audio?}
+  const [speaking, setSpeaking] = useState(null);
+  const [selected, setSelected] = useState(null);
+  const [booked, setBooked] = useState(false);
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
+  const usedRef = useRef(new Set());
+
+  const currentItem = useMemo(()=>{
+    if(phase==="router") return routerItems[bi];
+    if(phase==="core") return coreItems[bi];
+    if(phase==="listen" && listenClip) return listenClip.q[bi];
+    return null;
+  },[phase,bi,routerItems,coreItems,listenClip]);
+
+  const totalQ = 16;
+  const answered = answers.length;
+  const progressPct = phase==="result"||phase==="report" ? 100 : Math.round((answered/totalQ)*100);
+  const sectionLabel = phase==="router"?"Разминка":phase==="core"?"Основной блок":phase==="listen"?"Аудирование":"";
+
+  const start = ()=>{
+    usedRef.current = new Set(usedRef.current); // keep across attempts to reduce repeats
+    setRouterItems(buildRouter(usedRef.current));
+    setAnswers([]); setSpeaking(null); setSelected(null); setBi(0);
+    setStartTime(Date.now()); setEndTime(null); setBooked(false);
+    setPhase("router");
+  };
+
+  const handleNext = ()=>{
+    if(selected===null || !currentItem) return;
+    const item = currentItem;
+    const correct = selected === item.answer;
+    const detail = { section: sectionLabel, item, chosen: selected, correct };
+    if(phase==="listen" && listenClip) detail.audio = listenClip.audio;
+    const next = [...answers, detail];
+    setAnswers(next); setSelected(null);
+
+    if(phase==="router"){
+      if(bi+1 < routerItems.length){ setBi(bi+1); return; }
+      const rc = next.filter(a=>a.correct).length;
+      const t = rc<=2 ? "lower" : rc<=4 ? "mid" : "upper";
+      setTrack(t); setPhase("inter");
+      setTimeout(()=>{
+        const built = buildTrack(t, usedRef.current);
+        setCoreItems(built.core); setListenClip(built.listen); setSpeakPrompt(built.speak);
+        setBi(0); setPhase("core");
+      }, 1500);
+      return;
+    }
+    if(phase==="core"){
+      if(bi+1 < coreItems.length){ setBi(bi+1); return; }
+      setBi(0); setPhase("listen"); return;
+    }
+    if(phase==="listen"){
+      if(bi+1 < listenClip.q.length){ setBi(bi+1); return; }
+      setPhase("speaking"); return;
+    }
+  };
+
+  const onSpeakingDone = (resp)=>{ setSpeaking(resp); setEndTime(Date.now()); setPhase("result"); };
+  const restart = ()=>{ setPhase("intro"); setBi(0); setTrack(null); setAnswers([]); setSpeaking(null); setSelected(null); setBooked(false); };
+
+  return (
+    <div className="elc-root">
+      <style>{CSS}</style>
+      <div className="elc-shell">
+        <div className="elc-brand elc-noprint">
+          <img className="elc-logo-img" src="https://annkazanskaya.github.io/chill-education/img/logo.png" alt="Chat and Chill" />
+          <div className="elc-bs">Английский без стресса · тест на уровень</div>
+        </div>
+
+        <div className="elc-card">
+          {(phase==="router"||phase==="core"||phase==="listen") && (
+            <>
+              <div className="elc-prog-row">
+                <span className="elc-section">{sectionLabel}</span>
+                <span className="elc-count">Вопрос {Math.min(answered+1,totalQ)} из {totalQ}</span>
+              </div>
+              <div className="elc-bar"><div className="elc-bar-fill" style={{width:progressPct+"%"}}/></div>
+            </>
+          )}
+
+          {/* INTRO */}
+          {phase==="intro" && (
+            <div className="elc-q">
+              <div className="elc-eyebrow">Тест на уровень · CEFR</div>
+              <h1 className="elc-h1">Узнай свой уровень английского — без стресса</h1>
+              <p className="elc-p">Тест подстраивается под твои ответы: чем лучше справляешься, тем сложнее вопросы. Проверим грамматику и лексику, чтение, восприятие на слух и говорение — и покажем твой уровень по шкале A1–C1.</p>
+              <div className="elc-facts">
+                <span className="elc-fact"><span className="elc-fdot"/>≈ 15 минут</span>
+                <span className="elc-fact"><span className="elc-fdot"/>Адаптивный формат</span>
+                <span className="elc-fact"><span className="elc-fdot"/>Говорение голосом</span>
+                <span className="elc-fact"><span className="elc-fdot"/>Результат сразу</span>
+              </div>
+              <div className="elc-lbl">Как тебя зовут? <span style={{color:"var(--ink-soft)",fontWeight:400}}>(необязательно)</span></div>
+              <input className="elc-name" value={name} onChange={e=>setName(e.target.value)} placeholder="Твоё имя" />
+              <div><button className="elc-btn" onClick={start}>Начать тест</button></div>
+            </div>
+          )}
+
+          {/* INTERSTITIAL */}
+          {phase==="inter" && (
+            <div className="elc-inter">
+              <div className="elc-idots"><span/><span/><span/></div>
+              <div className="elc-it">Подбираем вопросы под твой уровень…</div>
+              <div className="elc-is">Дальше — задания, подходящие именно тебе.</div>
+            </div>
+          )}
+
+          {/* QUESTION */}
+          {currentItem && (phase==="router"||phase==="core"||phase==="listen") && (
+            <div className="elc-q" key={currentItem.id}>
+              {currentItem.skill==="reading" && (
+                <div className="elc-read">
+                  <div className="elc-read-l">Прочитай текст</div>
+                  <div className="elc-read-t">{currentItem.passage}</div>
+                </div>
+              )}
+              {currentItem.skill==="listening" && <ListeningPlayer audio={listenClip.audio} rate={listenClip.rate} />}
+              <div className="elc-stem">{currentItem.stem}</div>
+              <div className="elc-opts">
+                {currentItem.opts.map((opt,i)=>(
+                  <button key={i} className={"elc-opt"+(selected===i?" sel":"")} style={{animationDelay:(i*0.05)+"s"}} onClick={()=>setSelected(i)}>
+                    <span className="elc-tick"><span className="elc-dotin"/></span>
+                    <span>{opt}</span>
+                  </button>
+                ))}
+              </div>
+              <div className="elc-foot">
+                <button className="elc-btn" disabled={selected===null} onClick={handleNext}>
+                  {(phase==="listen" && bi+1===listenClip.q.length) ? "К говорению" : "Далее"}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* SPEAKING */}
+          {phase==="speaking" && speakPrompt && <SpeakingBlock prompt={speakPrompt} onComplete={onSpeakingDone} />}
+
+          {/* RESULT */}
+          {phase==="result" && (
+            <Result answers={answers} speaking={speaking} name={name} booked={booked} setBooked={setBooked}
+                    restart={restart} openReport={()=>setPhase("report")} />
+          )}
+
+          {/* REPORT */}
+          {phase==="report" && (
+            <Report answers={answers} speaking={speaking} name={name} track={track}
+                    startTime={startTime} endTime={endTime} back={()=>setPhase("result")} />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function scoredFrom(answers){ return answers.map(a=>({ level:a.item.level, correct:a.correct, skill:a.item.skill })); }
+
+function Result({ answers, speaking, name, booked, setBooked, restart, openReport }){
+  const scored = scoredFrom(answers);
+  const ceiling = estimateLevelIndex(scored);
+  const displayIndex = Math.max(1, ceiling);
+  const info = LEVEL_INFO[displayIndex];
+  const preA1 = ceiling===0;
+
+  const [lit, setLit] = useState(0);
+  const [barsIn, setBarsIn] = useState(false);
+  const [lead, setLead] = useState({ name: name||"", contact:"" });
+  useEffect(()=>{
+    let i=0; const id=setInterval(()=>{ i++; setLit(i); if(i>=displayIndex) clearInterval(id); }, 180);
+    const t=setTimeout(()=>setBarsIn(true), 250);
+    return ()=>{ clearInterval(id); clearTimeout(t); };
+  },[displayIndex]);
+
+  const skills = ["gv","reading","listening"].map(sk=>{
+    const at = scored.filter(a=>a.skill===sk);
+    const c = at.filter(a=>a.correct).length;
+    return { sk, c, t:at.length, pct: at.length? Math.round(c/at.length*100):0 };
+  });
+
+  return (
+    <div className="elc-res">
+      <div className="elc-eyebrow" style={{textAlign:"center"}}>{name?name+", ":""}твой предварительный уровень</div>
+      <div className="elc-res-top">
+        <div className="elc-ladder">
+          {[1,2,3,4,5].map(L=>{
+            const on=L<=lit, cur=L===displayIndex&&lit>=displayIndex;
+            return (<div className={"elc-rung"+(on?" on":"")+(cur?" cur":"")} key={L}>
+              <span className="elc-rc">{LEVEL_INFO[L].code}</span>
+              <div className="elc-rung-bar" style={{width:RUNG_W[L]}}/>
+            </div>);
+          })}
+        </div>
+        <div className="elc-badge">
+          <div className="elc-level">{info.code}</div>
+          <div className="elc-lname">{info.name}{preA1?" · начальный старт":""}</div>
+        </div>
+      </div>
+      <p className="elc-desc">{info.desc}</p>
+
+      <div className="elc-skills">
+        {skills.map(s=>(
+          <div key={s.sk}>
+            <div className="elc-sk-top"><span className="elc-sk-name">{SKILL_LABEL[s.sk]}</span><span className="elc-sk-val">{s.c}/{s.t}</span></div>
+            <div className="elc-sk-bar"><div className="elc-sk-fill" style={{width:(barsIn?s.pct:0)+"%"}}/></div>
+          </div>
+        ))}
+        <div>
+          <div className="elc-sk-top"><span className="elc-sk-name">Говорение</span><span className="elc-chip">на проверке у преподавателя</span></div>
+          <div className="elc-sk-bar"><div className="elc-sk-fill" style={{width:(barsIn?100:0)+"%",background:"linear-gradient(90deg,var(--accent),#FFB0D0)",opacity:.5}}/></div>
+        </div>
+      </div>
+
+      <div className="elc-cta">
+        <div className="elc-cta-h">Забронируй бесплатный пробный урок</div>
+        <div className="elc-cta-p">Преподаватель послушает твоё говорение, разберёт ошибки и подберёт программу под уровень {info.code}. Никакой оплаты — просто знакомство.</div>
+        {booked ? (
+          <div className="elc-booked">✓ Спасибо{name?", "+name:""}! Мы свяжемся с тобой и подберём программу под уровень {info.code}.</div>
+        ) : (
+          <form className="elc-leadform" onSubmit={(e)=>{
+            e.preventDefault();
+            if(!lead.contact.trim()) return;
+            try{
+              const rec = { name: lead.name.trim(), contact: lead.contact.trim(), level: info.code, at: new Date().toISOString() };
+              const all = JSON.parse(localStorage.getItem("chill_leads")||"[]"); all.push(rec);
+              localStorage.setItem("chill_leads", JSON.stringify(all));
+              console.log("CHILL LEAD:", rec);
+            }catch(err){}
+            try{
+              fetch("https://api.telegram.org/bot" + TG_TOKEN + "/sendMessage", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ chat_id: TG_CHAT_ID, text: "🔔 Новая заявка с сайта\n👤 Имя: " + (lead.name.trim() || "—") + "\n📞 Телефон: " + lead.contact.trim() + "\n📍 Источник: Тест на уровень (" + info.code + ")" })
+              }).catch(()=>{});
+            }catch(err){}
+            setBooked(true);
+          }}>
+            <input className="elc-cta-inp" name="name" autoComplete="name" placeholder="Имя" value={lead.name} onChange={e=>setLead(l=>({...l,name:e.target.value}))} />
+            <input className="elc-cta-inp" name="phone" type="tel" inputMode="tel" autoComplete="tel" placeholder="Телефон или telegram" value={lead.contact} onChange={e=>setLead(l=>({...l,contact:e.target.value}))} required />
+            <button className="elc-cta-btn" type="submit">Записаться на бесплатный урок</button>
+          </form>
+        )}
+      </div>
+
+      <div className="elc-disc">Это предварительная оценка по грамматике, лексике, чтению и аудированию (~15 минут). Итоговый уровень, включая говорение и письмо, преподаватель подтверждает на первом занятии.</div>
+      <div className="elc-actions">
+        <button className="elc-btn elc-btn-ghost" onClick={openReport}>Отчёт для преподавателя →</button>
+        <button className="elc-restart" onClick={restart}>Пройти тест заново</button>
+      </div>
+    </div>
+  );
+}
+
+/* ---------------- Отчёт для преподавателя / админа ---------------- */
+function Report({ answers, speaking, name, track, startTime, endTime, back }){
+  const scored = scoredFrom(answers);
+  const ceiling = estimateLevelIndex(scored);
+  const info = LEVEL_INFO[Math.max(1,ceiling)];
+  const total = answers.length;
+  const correct = answers.filter(a=>a.correct).length;
+  const dur = startTime && endTime ? Math.round((endTime-startTime)/1000) : null;
+  const when = new Date(endTime||Date.now()).toLocaleString("ru-RU");
+
+  const skillLine = ["gv","reading","listening"].map(sk=>{
+    const at=scored.filter(a=>a.skill===sk); const c=at.filter(a=>a.correct).length;
+    return SKILL_LABEL[sk]+": "+c+"/"+at.length;
+  });
+
+  // группируем по секциям, показывая тексты/аудио один раз
+  const order = ["Разминка","Основной блок","Аудирование"];
+  const bySection = order.map(sec=>({ sec, items: answers.filter(a=>a.section===sec) })).filter(g=>g.items.length);
+
+  return (
+    <div className="elc-res">
+      <div className="elc-rep-head">
+        <div>
+          <div className="elc-rep-title">Отчёт по тесту</div>
+          <div className="elc-rep-sub">Ученик: <b>{name||"без имени"}</b> · {when}</div>
+        </div>
+        <div className="elc-rep-lvl">
+          <b>{info.code}</b>
+          <div className="elc-rep-sub">{correct}/{total} верно</div>
+        </div>
+      </div>
+      <div className="elc-rep-meta">
+        <span className="elc-rep-mchip">Ветка: {BAND_NAME[track]||"—"}</span>
+        {dur!=null && <span className="elc-rep-mchip">Время: {fmt(dur)}</span>}
+        {skillLine.map((s,i)=><span className="elc-rep-mchip" key={i}>{s}</span>)}
+      </div>
+
+      {bySection.map(g=>{
+        let lastPassage=null, lastAudio=null;
+        return (
+          <div key={g.sec}>
+            <div className="elc-sec-h">{g.sec}</div>
+            {g.items.map((a,idx)=>{
+              const it=a.item; const chosenTxt=it.opts[a.chosen]; const correctTxt=it.opts[it.answer];
+              const showPassage = it.passage && it.passage!==lastPassage; if(showPassage) lastPassage=it.passage;
+              const showAudio = a.audio && a.audio!==lastAudio; if(showAudio) lastAudio=a.audio;
+              return (
+                <div key={it.id+idx}>
+                  {showPassage && <div className="elc-ctx"><b>Текст:</b> {it.passage}</div>}
+                  {showAudio && <div className="elc-ctx"><b>Аудио (расшифровка):</b> {a.audio}</div>}
+                  <div className={"elc-item "+(a.correct?"ok":"no")}>
+                    <div className="elc-item-top">
+                      <span className={"elc-mark "+(a.correct?"ok":"no")}>{a.correct?"✓":"✗"}</span>
+                      <span className="elc-item-q">{it.stem}</span>
+                      <span className="elc-item-lvl">{LEVEL_INFO[it.level].code}</span>
+                    </div>
+                    <div className="elc-ans">
+                      <div className="elc-ans-row"><span className="elc-ans-k">Ответ ученика:</span><span className={"elc-ans-v "+(a.correct?"ok":"no")}>{chosenTxt}</span></div>
+                      {!a.correct && <div className="elc-ans-row"><span className="elc-ans-k">Правильно:</span><span className="elc-ans-v ok">{correctTxt}</span></div>}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        );
+      })}
+
+      <div className="elc-sec-h">Speaking · говорение</div>
+      <div className="elc-sp-rep">
+        <div style={{fontWeight:600,fontSize:14.5,marginBottom:8}}>Задание: {speaking?speaking.prompt:"—"}</div>
+        {speaking && speaking.audioUrl ? (
+          <>
+            <audio className="elc-audio" src={speaking.audioUrl} controls />
+            <div style={{marginTop:10}}>
+              <a className="elc-link" href={speaking.audioUrl} download={"speaking-"+(name||"student")+".webm"}>Скачать запись</a>
+              <span style={{color:"var(--ink-soft)",fontSize:12.5,marginLeft:10}}>длительность ≈ {fmt(speaking.seconds||0)}</span>
+            </div>
+          </>
+        ) : speaking && speaking.text ? (
+          <div className="elc-tr" style={{marginTop:0}}><b style={{color:"var(--ink-soft)",fontWeight:600}}>Текстовый ответ:</b><br/>{speaking.text}</div>
+        ) : <div style={{color:"var(--ink-soft)",fontSize:14}}>Ответ не записан.</div>}
+        <div className="elc-note" style={{marginTop:12}}>Говорение оценивается преподавателем вручную (беглость, произношение, грамматика, словарный запас).</div>
+      </div>
+
+      <div className="elc-disc" style={{marginTop:20}}>В рабочей версии этот отчёт автоматически сохраняется в админ-панели Chill Education и доступен преподавателю до урока. Здесь — демонстрация того, что видит школа.</div>
+      <div className="elc-actions">
+        <button className="elc-btn" onClick={()=>window.print()}>Печать / сохранить PDF</button>
+        <button className="elc-restart" onClick={back}>← Назад к результату</button>
+      </div>
+    </div>
+  );
+}

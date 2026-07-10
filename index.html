@@ -100,9 +100,9 @@
       <p style="max-width:440px;margin:20px 0 28px;font-size:18px;line-height:1.55;color:#5A5F7D">Определим уровень, разберём слабые места и покажем, как учиться без выгорания. Первый урок — <span style="color:#FF7A1A;font-weight:700">бесплатно</span>.</p>
 
       <!-- lead form -->
-      <form class="leadform" data-leadform style="display:flex;gap:10px;background:#fff;padding:8px;border-radius:18px;box-shadow:0 14px 34px -18px rgba(36,64,217,.35);max-width:480px">
-        <input name="name" placeholder="Имя" required style="flex:1;min-width:0;border:none;outline:none;font-family:'Manrope';font-size:15px;font-weight:500;padding:13px 16px;border-radius:12px;background:#F4F5FC;color:#1A1E33">
-        <input name="contact" placeholder="Телефон / telegram" required style="flex:1.2;min-width:0;border:none;outline:none;font-family:'Manrope';font-size:15px;font-weight:500;padding:13px 16px;border-radius:12px;background:#F4F5FC;color:#1A1E33">
+      <form class="leadform" data-leadform data-source="Главная — шапка" style="display:flex;gap:10px;background:#fff;padding:8px;border-radius:18px;box-shadow:0 14px 34px -18px rgba(36,64,217,.35);max-width:480px">
+        <input name="name" type="text" autocomplete="name" placeholder="Имя" required style="flex:1;min-width:0;border:none;outline:none;font-family:'Manrope';font-size:15px;font-weight:500;padding:13px 16px;border-radius:12px;background:#F4F5FC;color:#1A1E33">
+        <input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="Телефон" required style="flex:1.2;min-width:0;border:none;outline:none;font-family:'Manrope';font-size:15px;font-weight:500;padding:13px 16px;border-radius:12px;background:#F4F5FC;color:#1A1E33">
         <button type="submit" style="flex-shrink:0;border:none;cursor:pointer;background:#FF7A1A;color:#fff;font-family:'Manrope';font-weight:700;font-size:15px;padding:13px 22px;border-radius:12px;box-shadow:0 8px 18px rgba(255,122,26,.32)">Отправить</button>
       </form>
 
@@ -258,9 +258,9 @@
         <span style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.16);color:#fff;font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase;padding:8px 14px;border-radius:999px">Демо-урок · бесплатно</span>
         <h2 class="h-nunito" style="font-weight:900;font-size:clamp(32px,4.6vw,54px);line-height:1;letter-spacing:-1px;color:#fff;margin:18px 0 14px">Почувствуй, как<br>проходят уроки</h2>
         <p style="font-size:18px;line-height:1.5;color:rgba(255,255,255,.82);margin-bottom:28px">Определим уровень и покажем формат без стресса. Никакой оплаты — просто знакомство.</p>
-        <form class="leadform" data-leadform style="display:flex;gap:10px;background:#fff;padding:8px;border-radius:18px;box-shadow:0 14px 34px -18px rgba(36,64,217,.35);max-width:480px">
-          <input name="name" placeholder="Имя" required style="flex:1;min-width:0;border:none;outline:none;font-family:'Manrope';font-size:15px;font-weight:500;padding:13px 16px;border-radius:12px;background:#F4F5FC;color:#1A1E33">
-          <input name="contact" placeholder="Телефон / telegram" required style="flex:1.2;min-width:0;border:none;outline:none;font-family:'Manrope';font-size:15px;font-weight:500;padding:13px 16px;border-radius:12px;background:#F4F5FC;color:#1A1E33">
+        <form class="leadform" data-leadform data-source="Главная — демо-урок" style="display:flex;gap:10px;background:#fff;padding:8px;border-radius:18px;box-shadow:0 14px 34px -18px rgba(36,64,217,.35);max-width:480px">
+          <input name="name" type="text" autocomplete="name" placeholder="Имя" required style="flex:1;min-width:0;border:none;outline:none;font-family:'Manrope';font-size:15px;font-weight:500;padding:13px 16px;border-radius:12px;background:#F4F5FC;color:#1A1E33">
+          <input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="Телефон" required style="flex:1.2;min-width:0;border:none;outline:none;font-family:'Manrope';font-size:15px;font-weight:500;padding:13px 16px;border-radius:12px;background:#F4F5FC;color:#1A1E33">
           <button type="submit" style="flex-shrink:0;border:none;cursor:pointer;background:#FF7A1A;color:#fff;font-family:'Manrope';font-weight:700;font-size:15px;padding:13px 22px;border-radius:12px;box-shadow:0 8px 18px rgba(255,122,26,.32)">Отправить</button>
         </form>
       </div>
@@ -526,9 +526,21 @@ function renderReview() {
 renderReview();
 
 // ---------- LEAD FORM ----------
+const TG_TOKEN = '7777868493:AAED1sSl-K1M63_h8urrS5F2bR6OvuwvX3A';
+const TG_CHAT_ID = '-5200081608';
+function sendLeadToTelegram(text){
+  return fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ chat_id: TG_CHAT_ID, text })
+  }).catch(() => {});
+}
 document.querySelectorAll('form[data-leadform]').forEach(form => {
   form.addEventListener('submit', e => {
     e.preventDefault();
+    const name = (form.elements.namedItem('name')?.value || '').trim();
+    const phone = (form.elements.namedItem('phone')?.value || '').trim();
+    sendLeadToTelegram('🔔 Новая заявка с сайта\n👤 Имя: ' + (name || '—') + '\n📞 Телефон: ' + phone + '\n📍 Источник: ' + (form.dataset.source || 'Главная'));
     form.outerHTML = `
       <div style="display:flex;align-items:center;gap:14px;background:#fff;border-radius:18px;padding:18px 22px;box-shadow:0 12px 30px -16px rgba(36,64,217,.3);max-width:480px">
         <span style="display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:#E9F7EE;color:#1FA85A;font-size:22px;flex-shrink:0">✓</span>
