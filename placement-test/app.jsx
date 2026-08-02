@@ -60,13 +60,13 @@ const CSS = `
 .elc-shell{width:100%;max-width:700px}
 
 .elc-brand{display:flex;align-items:center;gap:12px;margin:2px 4px 18px}
-.elc-logo{width:40px;height:40px;border-radius:13px;background:linear-gradient(145deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(124,92,252,.32)}
+.elc-logo{width:40px;height:40px;border-radius:13px;background:linear-gradient(145deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(36,64,217,.32)}
 .elc-logo-img{height:52px;width:auto;display:block}
 .elc-word{font-family:var(--font-display);font-weight:600;font-size:19px;letter-spacing:-.01em;line-height:1;color:var(--ink)}
 .elc-word span{color:var(--ink-soft);font-weight:500}
 .elc-bs{font-size:12.5px;color:var(--ink-soft);margin-top:3px}
 
-.elc-card{background:var(--surface);border:1px solid var(--line);border-radius:26px;box-shadow:0 26px 60px -30px rgba(80,50,140,.4);padding:32px 32px 30px;position:relative;overflow:hidden}
+.elc-card{background:var(--surface);border:1px solid var(--line);border-radius:26px;box-shadow:0 26px 60px -30px rgba(36,64,217,.28);padding:32px 32px 30px;position:relative;overflow:hidden}
 
 .elc-prog-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:14px}
 .elc-section{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--primary)}
@@ -87,7 +87,7 @@ const CSS = `
 .elc-opt.sel .elc-dotin{opacity:1;transform:scale(1)}
 
 .elc-foot{display:flex;justify-content:flex-end;margin-top:26px}
-.elc-btn{font-family:var(--font-display);font-weight:500;font-size:16px;color:#fff;background:var(--primary);border:none;border-radius:14px;padding:13px 28px;cursor:pointer;transition:background .18s,transform .06s;box-shadow:0 12px 24px -10px rgba(124,92,252,.75)}
+.elc-btn{font-family:var(--font-display);font-weight:500;font-size:16px;color:#fff;background:var(--primary);border:none;border-radius:14px;padding:13px 28px;cursor:pointer;transition:background .18s,transform .06s;box-shadow:0 12px 24px -10px rgba(36,64,217,.75)}
 .elc-btn:hover{background:var(--primary-deep)}
 .elc-btn:active{transform:translateY(1px)}
 .elc-btn:disabled{background:#D6CFEA;box-shadow:none;cursor:not-allowed}
@@ -100,7 +100,7 @@ const CSS = `
 
 .elc-listen{background:linear-gradient(180deg,#FDFCFF,#F8F5FE);border:1px solid var(--line);border-radius:18px;padding:20px;margin:0 0 22px}
 .elc-listen-row{display:flex;align-items:center;gap:16px}
-.elc-play{width:58px;height:58px;border-radius:50%;background:linear-gradient(145deg,var(--primary),var(--primary-deep));border:none;cursor:pointer;flex:0 0 auto;display:flex;align-items:center;justify-content:center;box-shadow:0 14px 26px -8px rgba(124,92,252,.7);transition:transform .12s}
+.elc-play{width:58px;height:58px;border-radius:50%;background:linear-gradient(145deg,var(--primary),var(--primary-deep));border:none;cursor:pointer;flex:0 0 auto;display:flex;align-items:center;justify-content:center;box-shadow:0 14px 26px -8px rgba(36,64,217,.7);transition:transform .12s}
 .elc-play:active{transform:scale(.94)}
 .elc-eq{display:flex;align-items:center;gap:4px;height:26px}
 .elc-eq span{width:4px;height:100%;background:#fff;border-radius:3px;transform:scaleY(.35);transform-origin:center}
@@ -121,7 +121,7 @@ const CSS = `
 .elc-sp-t{font-family:var(--font-display);font-weight:500;font-size:19px;line-height:1.4;color:#3A3455}
 .elc-sp-hint{font-size:13px;color:var(--ink-soft);margin-top:8px}
 .elc-rec{display:flex;flex-direction:column;align-items:center;gap:14px;padding:8px 0 4px}
-.elc-recbtn{width:74px;height:74px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,var(--accent),#F0559A);box-shadow:0 14px 28px -8px rgba(255,123,172,.7);transition:transform .12s}
+.elc-recbtn{width:74px;height:74px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#FF9A4D,var(--accent));box-shadow:0 14px 28px -8px rgba(255,122,26,.55);transition:transform .12s}
 .elc-recbtn:active{transform:scale(.94)}
 .elc-recbtn.rec{background:linear-gradient(145deg,#EF5C6E,#D63b52);animation:elc-pulse 1.4s ease-in-out infinite}
 .elc-rec-status{font-weight:600;font-size:15px;text-align:center}
@@ -154,7 +154,7 @@ const CSS = `
 .elc-ladder{display:flex;flex-direction:column-reverse;gap:7px;flex:0 0 auto}
 .elc-rung{display:flex;align-items:center;gap:10px}
 .elc-rung-bar{height:15px;border-radius:8px;background:var(--primary-tint);transition:background .5s}
-.elc-rung.on .elc-rung-bar{background:linear-gradient(90deg,#FFB0D0,var(--accent))}
+.elc-rung.on .elc-rung-bar{background:linear-gradient(90deg,#FFD1A6,var(--accent))}
 .elc-rung.cur .elc-rung-bar{background:linear-gradient(90deg,var(--primary),var(--accent));height:22px}
 .elc-rc{font-size:12px;font-weight:700;color:var(--ink-soft);width:24px}
 .elc-rung.cur .elc-rc{color:var(--primary)}
@@ -167,8 +167,8 @@ const CSS = `
 .elc-sk-top{display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:6px}
 .elc-sk-name{font-weight:600;color:#3a3455}
 .elc-sk-val{color:var(--ink-soft);font-variant-numeric:tabular-nums;font-weight:600}
-.elc-sk-bar{height:9px;background:#F0EBF8;border-radius:999px;overflow:hidden}
-.elc-sk-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--primary),#A38BFF);width:0;transition:width .8s cubic-bezier(.2,.7,.2,1)}
+.elc-sk-bar{height:9px;background:#EAEEFB;border-radius:999px;overflow:hidden}
+.elc-sk-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--primary),#6B86FF);width:0;transition:width .8s cubic-bezier(.2,.7,.2,1)}
 .elc-chip{display:inline-block;font-size:12px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:3px 10px}
 
 .elc-cta{background:linear-gradient(150deg,#16236B,#2440D9);border-radius:20px;padding:24px;color:#fff;margin:0 0 18px}
@@ -224,7 +224,7 @@ const CSS = `
   .elc-res-top{flex-direction:column;align-items:flex-start;gap:16px}
   .elc-level{font-size:52px}
 }
-button:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid rgba(124,92,252,.45);outline-offset:2px}
+button:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid rgba(36,64,217,.45);outline-offset:2px}
 @media (prefers-reduced-motion: reduce){
   .elc-q,.elc-opt,.elc-res,.elc-inter,.elc-idots span,.elc-listen.playing .elc-eq span,.elc-recbtn.rec{animation:none !important}
   .elc-bar-fill,.elc-rung-bar,.elc-sk-fill{transition:none !important}
@@ -466,7 +466,7 @@ function estimateLevelIndex(scored){
 }
 
 /* ---------------- Иконки ---------------- */
-function Logo(){ return (<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 5.2h16v10.2H10.4L6 18.6v-3.2H4V5.2Z" fill="#fff"/><circle cx="9" cy="10.3" r="1.35" fill="#7C5CFC"/><circle cx="12" cy="10.3" r="1.35" fill="#7C5CFC"/><circle cx="15" cy="10.3" r="1.35" fill="#7C5CFC"/></svg>); }
+function Logo(){ return (<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 5.2h16v10.2H10.4L6 18.6v-3.2H4V5.2Z" fill="#fff"/><circle cx="9" cy="10.3" r="1.35" fill="#2440D9"/><circle cx="12" cy="10.3" r="1.35" fill="#2440D9"/><circle cx="15" cy="10.3" r="1.35" fill="#2440D9"/></svg>); }
 function PlayIcon(){ return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M8 5.5v13l11-6.5-11-6.5Z" fill="#fff"/></svg>); }
 function MicIcon(){ return (<svg width="30" height="30" viewBox="0 0 24 24" fill="none"><rect x="9" y="3" width="6" height="11" rx="3" fill="#fff"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4M8.5 21h7" stroke="#fff" strokeWidth="1.8" strokeLinecap="round"/></svg>); }
 function StopIcon(){ return (<svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="7" y="7" width="10" height="10" rx="2.5" fill="#fff"/></svg>); }
@@ -676,7 +676,7 @@ export default function PlacementTest(){
       <style>{CSS}</style>
       <div className="elc-shell">
         <div className="elc-brand elc-noprint">
-          <img className="elc-logo-img" src="https://annkazanskaya.github.io/chill-education/img/logo.png" alt="Chat and Chill" />
+          <img className="elc-logo-img" src="../img/logo.png" alt="Chat and Chill" />
           <div className="elc-bs">Английский без стресса · тест на уровень</div>
         </div>
 
@@ -818,7 +818,7 @@ function Result({ answers, speaking, name, booked, setBooked, restart, openRepor
         ))}
         <div>
           <div className="elc-sk-top"><span className="elc-sk-name">Говорение</span><span className="elc-chip">на проверке у преподавателя</span></div>
-          <div className="elc-sk-bar"><div className="elc-sk-fill" style={{width:(barsIn?100:0)+"%",background:"linear-gradient(90deg,var(--accent),#FFB0D0)",opacity:.5}}/></div>
+          <div className="elc-sk-bar"><div className="elc-sk-fill" style={{width:(barsIn?100:0)+"%",background:"linear-gradient(90deg,var(--accent),#FFD1A6)",opacity:.5}}/></div>
         </div>
       </div>
 
