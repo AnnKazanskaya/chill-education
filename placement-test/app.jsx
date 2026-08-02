@@ -468,6 +468,7 @@ function estimateLevelIndex(scored){
 /* ---------------- Иконки ---------------- */
 function Logo(){ return (<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 5.2h16v10.2H10.4L6 18.6v-3.2H4V5.2Z" fill="#fff"/><circle cx="9" cy="10.3" r="1.35" fill="#2440D9"/><circle cx="12" cy="10.3" r="1.35" fill="#2440D9"/><circle cx="15" cy="10.3" r="1.35" fill="#2440D9"/></svg>); }
 function PlayIcon(){ return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M8 5.5v13l11-6.5-11-6.5Z" fill="#fff"/></svg>); }
+function PauseIcon(){ return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="7" y="5" width="3.6" height="14" rx="1.6" fill="#fff"/><rect x="13.4" y="5" width="3.6" height="14" rx="1.6" fill="#fff"/></svg>); }
 function MicIcon(){ return (<svg width="30" height="30" viewBox="0 0 24 24" fill="none"><rect x="9" y="3" width="6" height="11" rx="3" fill="#fff"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4M8.5 21h7" stroke="#fff" strokeWidth="1.8" strokeLinecap="round"/></svg>); }
 function StopIcon(){ return (<svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="7" y="7" width="10" height="10" rx="2.5" fill="#fff"/></svg>); }
 
@@ -494,14 +495,16 @@ function ListeningPlayer({ audio, rate }){
       setPlaying(true); synth.speak(u);
     }catch(e){ setSupported(false); setPlaying(false); }
   };
+  const stop = ()=>{ try{ window.speechSynthesis.cancel(); }catch(e){} setPlaying(false); };
+  const toggle = ()=> playing ? stop() : play();
   return (
     <div className={"elc-listen"+(playing?" playing":"")}>
       <div className="elc-listen-row">
-        <button className="elc-play" onClick={play} aria-label="Прослушать аудио">
-          {playing ? <div className="elc-eq"><span/><span/><span/><span/><span/></div> : <PlayIcon/>}
+        <button className="elc-play" onClick={toggle} aria-label={playing?"Остановить":"Прослушать аудио"}>
+          {playing ? <PauseIcon/> : <PlayIcon/>}
         </button>
         <div className="elc-lm">
-          <div className="elc-lt">{playing ? "Идёт воспроизведение…" : "Нажми, чтобы прослушать"}</div>
+          <div className="elc-lt">{playing ? "Идёт воспроизведение… нажми, чтобы остановить" : "Нажми, чтобы прослушать"}</div>
           <div className="elc-ls">Переслушать можно сколько угодно раз.</div>
         </div>
       </div>
@@ -859,7 +862,7 @@ function Result({ answers, speaking, name, booked, setBooked, restart, openRepor
 
       <div className="elc-disc">Это предварительная оценка по грамматике, лексике, чтению и аудированию (~15 минут). Итоговый уровень, включая говорение и письмо, преподаватель подтверждает на первом занятии.</div>
       <div className="elc-actions">
-        <button className="elc-btn elc-btn-ghost" onClick={openReport}>Отчёт для преподавателя →</button>
+        <button className="elc-btn elc-btn-ghost" onClick={openReport}>Узнать результаты →</button>
         <button className="elc-restart" onClick={restart}>Пройти тест заново</button>
       </div>
     </div>
