@@ -879,6 +879,10 @@ function Result({ answers, speaking, name, booked, setBooked, restart, openRepor
           }}>
             <input className="elc-cta-inp" name="name" autoComplete="name" placeholder="Имя" value={lead.name} onChange={e=>setLead(l=>({...l,name:e.target.value}))} />
             <input className="elc-cta-inp" name="phone" type="tel" inputMode="tel" autoComplete="tel" placeholder="Телефон или telegram" value={lead.contact} onChange={e=>setLead(l=>({...l,contact:e.target.value}))} required />
+            <label style={{display:"flex",alignItems:"flex-start",gap:"8px",fontSize:"12px",lineHeight:1.4,color:"rgba(255,255,255,.75)",cursor:"pointer"}}>
+              <input type="checkbox" required style={{marginTop:"1px",flexShrink:0,width:"15px",height:"15px",accentColor:"var(--accent)",cursor:"pointer"}} />
+              <span>Я соглашаюсь с <a href="../policy.html" target="_blank" rel="noopener" style={{color:"#fff",textDecoration:"underline"}}>политикой конфиденциальности</a> и даю <a href="../consent.html" target="_blank" rel="noopener" style={{color:"#fff",textDecoration:"underline"}}>согласие на обработку персональных данных</a></span>
+            </label>
             <button className="elc-cta-btn" type="submit">Записаться на бесплатный урок</button>
           </form>
         )}

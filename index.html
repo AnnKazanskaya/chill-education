@@ -100,10 +100,14 @@
       <p style="max-width:440px;margin:20px 0 28px;font-size:18px;line-height:1.55;color:#5A5F7D">Определим уровень, разберём слабые места и покажем, как учиться без выгорания. Первый урок — <span style="color:#FF7A1A;font-weight:700">бесплатно</span>.</p>
 
       <!-- lead form -->
-      <form class="leadform" data-leadform data-source="Главная — шапка" style="display:flex;gap:10px;background:#fff;padding:8px;border-radius:18px;box-shadow:0 14px 34px -18px rgba(36,64,217,.35);max-width:480px">
+      <form class="leadform" data-leadform data-source="Главная — шапка" style="display:flex;flex-wrap:wrap;gap:10px;background:#fff;padding:8px;border-radius:18px;box-shadow:0 14px 34px -18px rgba(36,64,217,.35);max-width:480px">
         <input name="name" type="text" autocomplete="name" placeholder="Имя" required style="flex:1;min-width:0;border:none;outline:none;font-family:'Manrope';font-size:15px;font-weight:500;padding:13px 16px;border-radius:12px;background:#F4F5FC;color:#1A1E33">
         <input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="Телефон" required style="flex:1.2;min-width:0;border:none;outline:none;font-family:'Manrope';font-size:15px;font-weight:500;padding:13px 16px;border-radius:12px;background:#F4F5FC;color:#1A1E33">
         <button type="submit" style="flex-shrink:0;border:none;cursor:pointer;background:#FF7A1A;color:#fff;font-family:'Manrope';font-weight:700;font-size:15px;padding:13px 22px;border-radius:12px;box-shadow:0 8px 18px rgba(255,122,26,.32)">Отправить</button>
+        <label style="flex:1 0 100%;display:flex;align-items:flex-start;gap:8px;padding:2px 6px 4px;font-size:12px;line-height:1.4;color:#8C90AC;cursor:pointer">
+          <input type="checkbox" name="consent" required style="margin-top:1px;flex-shrink:0;width:15px;height:15px;accent-color:#2440D9;cursor:pointer">
+          <span>Я соглашаюсь с <a href="policy.html" target="_blank" rel="noopener" style="color:#2440D9;text-decoration:underline">политикой конфиденциальности</a> и даю <a href="consent.html" target="_blank" rel="noopener" style="color:#2440D9;text-decoration:underline">согласие на обработку персональных данных</a></span>
+        </label>
       </form>
 
       <div style="display:flex;align-items:center;gap:18px;margin-top:18px">
@@ -258,10 +262,14 @@
         <span style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.16);color:#fff;font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase;padding:8px 14px;border-radius:999px">Демо-урок · бесплатно</span>
         <h2 class="h-nunito" style="font-weight:900;font-size:clamp(32px,4.6vw,54px);line-height:1;letter-spacing:-1px;color:#fff;margin:18px 0 14px">Почувствуй, как<br>проходят уроки</h2>
         <p style="font-size:18px;line-height:1.5;color:rgba(255,255,255,.82);margin-bottom:28px">Определим уровень и покажем формат без стресса. Никакой оплаты — просто знакомство.</p>
-        <form class="leadform" data-leadform data-source="Главная — демо-урок" style="display:flex;gap:10px;background:#fff;padding:8px;border-radius:18px;box-shadow:0 14px 34px -18px rgba(36,64,217,.35);max-width:480px">
+        <form class="leadform" data-leadform data-source="Главная — демо-урок" style="display:flex;flex-wrap:wrap;gap:10px;background:#fff;padding:8px;border-radius:18px;box-shadow:0 14px 34px -18px rgba(36,64,217,.35);max-width:480px">
           <input name="name" type="text" autocomplete="name" placeholder="Имя" required style="flex:1;min-width:0;border:none;outline:none;font-family:'Manrope';font-size:15px;font-weight:500;padding:13px 16px;border-radius:12px;background:#F4F5FC;color:#1A1E33">
           <input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="Телефон" required style="flex:1.2;min-width:0;border:none;outline:none;font-family:'Manrope';font-size:15px;font-weight:500;padding:13px 16px;border-radius:12px;background:#F4F5FC;color:#1A1E33">
           <button type="submit" style="flex-shrink:0;border:none;cursor:pointer;background:#FF7A1A;color:#fff;font-family:'Manrope';font-weight:700;font-size:15px;padding:13px 22px;border-radius:12px;box-shadow:0 8px 18px rgba(255,122,26,.32)">Отправить</button>
+          <label style="flex:1 0 100%;display:flex;align-items:flex-start;gap:8px;padding:2px 6px 4px;font-size:12px;line-height:1.4;color:#8C90AC;cursor:pointer">
+            <input type="checkbox" name="consent" required style="margin-top:1px;flex-shrink:0;width:15px;height:15px;accent-color:#2440D9;cursor:pointer">
+            <span>Я соглашаюсь с <a href="policy.html" target="_blank" rel="noopener" style="color:#2440D9;text-decoration:underline">политикой конфиденциальности</a> и даю <a href="consent.html" target="_blank" rel="noopener" style="color:#2440D9;text-decoration:underline">согласие на обработку персональных данных</a></span>
+          </label>
         </form>
       </div>
     </div>
@@ -292,9 +300,8 @@
     </div>
     <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;padding-top:24px;border-top:1px solid #E2E5F4">
       <div style="display:flex;gap:20px;flex-wrap:wrap">
-        <a href="#" style="font-size:13px;color:#8C90AC;text-decoration:none">Политика конфиденциальности</a>
-        <a href="#" style="font-size:13px;color:#8C90AC;text-decoration:none">Публичная оферта</a>
-        <a href="#" style="font-size:13px;color:#8C90AC;text-decoration:none">Согласие на обработку данных</a>
+        <a href="policy.html" style="font-size:13px;color:#8C90AC;text-decoration:none">Политика конфиденциальности</a>
+        <a href="consent.html" style="font-size:13px;color:#8C90AC;text-decoration:none">Согласие на обработку данных</a>
       </div>
       <span style="font-size:13px;color:#B0B3C9">ИП Кувшинов А. В. · БИН 001009551336</span>
     </div>
