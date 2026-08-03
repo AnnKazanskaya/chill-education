@@ -510,7 +510,7 @@ function fmt(s){ const m=Math.floor(s/60), ss=s%60; return m+":"+String(ss).padS
 
 /* ---------------- Аудио-плеер (аудирование) ---------------- */
 function ListeningPlayer({ audio, rate }){
-  const [playing, setPlaying] = useState(false);
+  const [status, setStatus] = useState("idle"); // idle | playing | paused
   const [showText, setShowText] = useState(false);
   const [supported, setSupported] = useState(true);
   useEffect(()=>{
@@ -524,21 +524,28 @@ function ListeningPlayer({ audio, rate }){
       u.lang="en-GB"; u.rate=rate; u.pitch=1;
       const v = synth.getVoices().find(x=>/en(-|_)?(GB|US)/i.test(x.lang)) || synth.getVoices().find(x=>/^en/i.test(x.lang));
       if(v) u.voice=v;
-      u.onend=()=>setPlaying(false);
-      u.onerror=()=>{ setPlaying(false); setSupported(false); };
-      setPlaying(true); synth.speak(u);
-    }catch(e){ setSupported(false); setPlaying(false); }
+      u.onend=()=>setStatus("idle");
+      u.onerror=()=>{ setStatus("idle"); setSupported(false); };
+      setStatus("playing"); synth.speak(u);
+    }catch(e){ setSupported(false); setStatus("idle"); }
   };
-  const stop = ()=>{ try{ window.speechSynthesis.cancel(); }catch(e){} setPlaying(false); };
-  const toggle = ()=> playing ? stop() : play();
+  const toggle = ()=>{
+    try{
+      const synth = window.speechSynthesis;
+      if(status==="playing"){ synth.pause(); setStatus("paused"); }
+      else if(status==="paused"){ synth.resume(); setStatus("playing"); }
+      else { play(); }
+    }catch(e){ setSupported(false); }
+  };
+  const isPlaying = status==="playing", isPaused = status==="paused";
   return (
-    <div className={"elc-listen"+(playing?" playing":"")}>
+    <div className={"elc-listen"+(isPlaying?" playing":"")}>
       <div className="elc-listen-row">
-        <button className="elc-play" onClick={toggle} aria-label={playing?"Остановить":"Прослушать аудио"}>
-          {playing ? <PauseIcon/> : <PlayIcon/>}
+        <button className="elc-play" onClick={toggle} aria-label={isPlaying?"Пауза":isPaused?"Продолжить":"Прослушать аудио"}>
+          {isPlaying ? <PauseIcon/> : <PlayIcon/>}
         </button>
         <div className="elc-lm">
-          <div className="elc-lt">{playing ? "Идёт воспроизведение… нажми, чтобы остановить" : "Нажми, чтобы прослушать"}</div>
+          <div className="elc-lt">{isPlaying ? "Идёт воспроизведение… нажми, чтобы поставить на паузу" : isPaused ? "Пауза — нажми, чтобы продолжить" : "Нажми, чтобы прослушать"}</div>
           <div className="elc-ls">Переслушать можно сколько угодно раз.</div>
         </div>
       </div>
