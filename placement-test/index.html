@@ -63,6 +63,50 @@ function utmLines(){
   return "";
 }
 
+/* Отправка результата теста учителю: подробный отчёт + голосовое (в группу «Заявки») */
+async function sendTestResults({ name, contact, level, answers, speaking }){
+  try{
+    const total = answers.length;
+    const correct = answers.filter(a=>a.correct).length;
+    const skillLine = ["gv","reading","listening"].map(sk=>{
+      const at = answers.filter(a=>a.item.skill===sk); const c = at.filter(a=>a.correct).length;
+      return SKILL_LABEL[sk] + ": " + c + "/" + at.length;
+    }).join("\n");
+    const qLines = answers.map(a=>{
+      const it=a.item; const chosen = it.opts[a.chosen];
+      const base = (a.correct?"✅":"❌") + " [" + LEVEL_INFO[it.level].code + "] " + it.stem + " → " + chosen;
+      return a.correct ? base : base + "  (верно: " + it.opts[it.answer] + ")";
+    }).join("\n");
+    const spLine = !speaking ? "не записано" : speaking.audioUrl ? "🎙 голосовое — файл ниже" : (speaking.text ? "✍️ " + speaking.text : "не записано");
+    let text =
+      "📝 Результат теста на уровень\n" +
+      "👤 Ученик: " + (name||"—") + "\n" +
+      "📞 Контакт: " + (contact||"—") + "\n" +
+      "🎯 Уровень: " + level + " · верно " + correct + "/" + total + "\n" +
+      (utmLines() ? utmLines() + "\n" : "") +
+      "\n📊 " + skillLine +
+      "\n\n🗣 Speaking: " + (speaking ? speaking.prompt : "—") + "\n" + spLine +
+      "\n\n📋 Ответы:\n" + qLines;
+    if(text.length > 4090) text = text.slice(0,4080) + "\n…";
+    await fetch("https://api.telegram.org/bot"+TG_TOKEN+"/sendMessage", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ chat_id: TG_CHAT_ID, text })
+    }).catch(()=>{});
+    if(speaking && speaking.audioUrl){
+      try{
+        const blob = await (await fetch(speaking.audioUrl)).blob();
+        const m = speaking.mime || blob.type || "";
+        const ext = (m.indexOf("mp4")>=0||m.indexOf("m4a")>=0) ? "m4a" : m.indexOf("ogg")>=0 ? "ogg" : m.indexOf("wav")>=0 ? "wav" : "webm";
+        const fd = new FormData();
+        fd.append("chat_id", TG_CHAT_ID);
+        fd.append("caption", "🎙 Говорение — " + (name||"ученик") + " · " + level);
+        fd.append("document", blob, "govorenie-" + ((name||"student").replace(/\s+/g,"_")) + "." + ext);
+        await fetch("https://api.telegram.org/bot"+TG_TOKEN+"/sendDocument", { method:"POST", body: fd }).catch(()=>{});
+      }catch(e){}
+    }
+  }catch(e){}
+}
+
 /* ============================================================
    Chill Education — тест на уровень английского (CEFR)
    Формат: многоступенчатый / ветвящийся (routing test) с рандомизацией.
@@ -882,11 +926,7 @@ function Result({ answers, speaking, name, booked, setBooked, restart, openRepor
               console.log("CHILL LEAD:", rec);
             }catch(err){}
             try{
-              fetch("https://api.telegram.org/bot" + TG_TOKEN + "/sendMessage", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({ chat_id: TG_CHAT_ID, text: "🔔 Новая заявка с сайта\n👤 Имя: " + (lead.name.trim() || "—") + "\n📞 Телефон: " + lead.contact.trim() + "\n📍 Источник: Тест на уровень (" + info.code + ")" + (utmLines() ? "\n" + utmLines() : "") })
-              }).catch(()=>{});
+              sendTestResults({ name: (lead.name.trim()||name||""), contact: lead.contact.trim(), level: info.code, answers, speaking });
             }catch(err){}
             setBooked(true);
           }}>
