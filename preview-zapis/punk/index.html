@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Личные уроки английского — панк-версия</title>
+<style>
+  html,body{margin:0;padding:0;background:#141414}
+  #boot{position:fixed;inset:0;display:grid;place-items:center;background:#141414;color:#fff;font-family:monospace;z-index:9999}
+</style>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+</head>
+<body>
+<div id="boot">LOADING…</div>
+<div id="root"></div>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useMemo } = React;
+
+/* ============================================================
+   Chat & Chill — личные уроки. ПАНК-КОЛЛАЖ ВЕРСИЯ (прототип).
+   Тексты владельца. Слоты/оплата — демо. Фото — плейсхолдеры,
+   заменяются на реальные после получения файлов.
+   ============================================================ */
+
+const CSS = `
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=PT+Mono&family=Caveat:wght@700&display=swap');
+.pk{--pink:#FF2E88;--yel:#F7E017;--ink:#111;--paper:#EFEBE2;--paper2:#E4DFD3;
+    font-family:'PT Mono',monospace;color:var(--ink);min-height:100vh;
+    background:#141414;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.pk *{box-sizing:border-box}
+.sheet{max-width:520px;margin:0 auto;background:var(--paper);position:relative;
+  background-image:radial-gradient(rgba(0,0,0,.045) 1px,transparent 1px),radial-gradient(rgba(0,0,0,.03) 1px,transparent 1px);
+  background-size:7px 7px,11px 11px;background-position:0 0,3px 5px}
+.sec{padding:26px 18px;position:relative}
+.tear{height:26px;background:#141414;position:relative}
+.tear:before{content:"";position:absolute;left:0;right:0;top:0;height:26px;background:var(--paper);
+  clip-path:polygon(0 0,4% 62%,9% 18%,15% 78%,21% 30%,27% 88%,33% 22%,40% 70%,46% 12%,53% 82%,60% 28%,66% 92%,72% 20%,79% 66%,85% 14%,91% 74%,96% 34%,100% 0)}
+.tear.flip:before{transform:scaleY(-1);top:auto;bottom:0;background:var(--paper)}
+.leo{height:22px;background:#C9A15A;background-image:radial-gradient(#000 3px,transparent 3.5px),radial-gradient(#7A5A22 2px,transparent 2.6px);background-size:26px 18px,19px 15px;background-position:0 0,9px 7px}
+.tape{position:absolute;width:92px;height:26px;background:rgba(240,255,120,.6);border-left:1px dashed rgba(0,0,0,.2);border-right:1px dashed rgba(0,0,0,.2);transform:rotate(-6deg);top:-12px;left:24px;z-index:3}
+.tag{display:inline-block;background:#000;color:#fff;font-family:'Oswald',sans-serif;font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;padding:5px 12px;transform:rotate(-2deg);margin:0 0 14px}
+.tag.p{background:var(--pink);color:#fff;transform:rotate(1.5deg)}
+.tag.y{background:var(--yel);color:#000;transform:rotate(-1deg)}
+.ransom{line-height:1.02;margin:6px 0 16px;word-break:break-word}
+.ransom span{display:inline-block;font-family:'Oswald',sans-serif;font-weight:700;font-size:34px;text-transform:uppercase;padding:2px 7px;margin:3px 2px}
+.ransom span:nth-child(4n+1){background:#000;color:#fff;transform:rotate(-3deg)}
+.ransom span:nth-child(4n+2){background:#fff;color:#000;transform:rotate(2deg);box-shadow:2px 2px 0 rgba(0,0,0,.35)}
+.ransom span:nth-child(4n+3){background:var(--pink);color:#fff;transform:rotate(-1.5deg)}
+.ransom span:nth-child(4n+4){background:var(--yel);color:#000;transform:rotate(2.5deg)}
+.hl{background:linear-gradient(transparent 15%,var(--yel) 15%,var(--yel) 88%,transparent 88%);padding:0 2px}
+.hlp{background:linear-gradient(transparent 15%,#FFB7D5 15%,#FFB7D5 88%,transparent 88%);padding:0 2px}
+.p{font-size:13.5px;line-height:1.65;margin:0 0 12px}
+.small{font-size:12px;color:#444}
+.scrib{font-family:'Caveat',cursive;font-size:22px;transform:rotate(-2deg);display:inline-block;color:#000}
+.btnp{display:block;width:100%;border:3px solid #000;background:var(--pink);color:#fff;font-family:'Oswald',sans-serif;font-weight:700;font-size:17px;letter-spacing:.06em;text-transform:uppercase;padding:15px;cursor:pointer;box-shadow:5px 5px 0 #000;transform:rotate(-.6deg);transition:transform .08s;text-decoration:none;text-align:center}
+.btnp:active{transform:translate(3px,3px) rotate(-.6deg);box-shadow:2px 2px 0 #000}
+.btnp.y{background:var(--yel);color:#000}
+.btnp.w{background:#fff;color:#000}
+.photo{position:relative;background:#fff;padding:10px 10px 34px;box-shadow:4px 6px 0 rgba(0,0,0,.55);transform:rotate(-2deg);margin:8px 0 18px}
+.photo .inner{width:100%;height:230px;background:#222 url() center/cover;filter:grayscale(1) contrast(1.12);display:grid;place-items:center;color:#888;font-size:12px}
+.photo .cap{position:absolute;bottom:7px;left:12px;font-family:'Caveat',cursive;font-size:20px;color:#111}
+.facts{display:flex;flex-direction:column;gap:8px;margin:0 0 14px}
+.factp{display:flex;gap:10px;align-items:flex-start;background:#fff;border:2px solid #000;padding:10px 12px;font-size:13px;transform:rotate(-.5deg);box-shadow:3px 3px 0 rgba(0,0,0,.3)}
+.factp:nth-child(2){transform:rotate(.7deg)}
+.factp b{font-family:'Oswald',sans-serif;text-transform:uppercase;font-size:13px}
+.avps{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.avp{width:46px;height:46px;border:2.5px solid #000;background:#fff;display:grid;place-items:center;font-family:'Oswald',sans-serif;font-weight:700;font-size:18px;cursor:pointer;transform:rotate(-3deg);box-shadow:3px 3px 0 rgba(0,0,0,.4)}
+.avp:nth-child(2n){transform:rotate(2deg)}
+.avp.sel{background:var(--yel)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.cell{background:#fff;border:2px solid #000;padding:10px;font-size:12px;line-height:1.5;box-shadow:3px 3px 0 rgba(0,0,0,.25)}
+.cell .cl{font-family:'Oswald',sans-serif;font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;background:var(--yel);display:inline-block;padding:1px 6px}
+.cell:nth-child(3) .cl{background:#ddd}
+.cell:nth-child(4) .cl{background:var(--pink);color:#fff}
+.res-line{font-family:'Caveat',cursive;font-size:24px;margin:2px 0 12px;transform:rotate(-1deg)}
+.days{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 10px}
+.dayp{flex:0 0 auto;min-width:56px;text-align:center;border:2.5px solid #000;background:#fff;padding:8px 5px;cursor:pointer;box-shadow:3px 3px 0 rgba(0,0,0,.35)}
+.dayp.sel{background:var(--yel)}
+.dayp.empty{opacity:.35;cursor:not-allowed;box-shadow:none}
+.dayp .dw{font-size:10px;text-transform:uppercase}
+.dayp .dd{font-family:'Oswald',sans-serif;font-weight:700;font-size:19px}
+.dayp .dn{font-size:10px;color:var(--pink);font-weight:700}
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:8px}
+.slotp{border:2.5px solid #000;background:#fff;padding:11px 4px;text-align:center;font-family:'Oswald',sans-serif;font-weight:700;font-size:16px;cursor:pointer;box-shadow:3px 3px 0 rgba(0,0,0,.35)}
+.slotp:hover{background:var(--yel)}
+.timerp{border:2.5px dashed #000;background:var(--yel);padding:10px 12px;font-size:13px;margin:0 0 14px;transform:rotate(-.5deg)}
+.rowp{background:#000;color:#fff;padding:11px 13px;font-size:13px;margin:0 0 14px;transform:rotate(.4deg)}
+.lbl{font-family:'Oswald',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.06em;margin:14px 0 6px}
+.inp,.sel2{width:100%;border:2.5px solid #000;background:#fff;padding:12px 13px;font-family:'PT Mono',monospace;font-size:14px;box-shadow:inset 2px 2px 0 rgba(0,0,0,.08)}
+.inp:focus,.sel2:focus{outline:3px solid var(--pink)}
+.consent{display:flex;gap:9px;font-size:11.5px;line-height:1.5;margin:14px 0 4px;cursor:pointer}
+.consent input{width:17px;height:17px;accent-color:var(--pink);flex:0 0 auto;margin-top:1px}
+.consent a{color:var(--pink);font-weight:700}
+.cur{display:flex;gap:8px;margin:0 0 14px}
+.cur button{flex:1;border:2.5px solid #000;background:#fff;font-family:'Oswald',sans-serif;font-weight:700;font-size:15px;padding:8px;cursor:pointer;box-shadow:3px 3px 0 rgba(0,0,0,.3)}
+.cur button.on{background:#000;color:var(--yel)}
+.pricep{display:flex;align-items:baseline;gap:12px;margin:0 0 6px}
+.pricep b{font-family:'Oswald',sans-serif;font-weight:700;font-size:40px;background:var(--yel);padding:0 8px;transform:rotate(-1deg);display:inline-block}
+.strike{position:relative;color:#555;font-size:15px}
+.strike:after{content:"";position:absolute;left:-3px;right:-3px;top:52%;height:3px;background:var(--pink);transform:rotate(-6deg)}
+.listp{margin:8px 0 14px;padding:0;list-style:none}
+.listp li{position:relative;padding:4px 0 4px 22px;font-size:12.5px;line-height:1.55}
+.listp li:before{content:"✗";position:absolute;left:2px;top:3px;color:var(--pink);font-weight:700}
+.acc2{border:2.5px solid #000;background:#fff;box-shadow:4px 4px 0 rgba(0,0,0,.35);margin:0 0 16px}
+.acc2 summary{list-style:none;cursor:pointer;padding:13px 15px;font-family:'Oswald',sans-serif;font-weight:700;font-size:15px;text-transform:uppercase;display:flex;justify-content:space-between}
+.acc2 summary::-webkit-details-marker{display:none}
+.acc2 .body{border-top:2px dashed #000;padding:8px 15px 12px}
+.backp{background:none;border:none;font-family:'PT Mono',monospace;font-size:13px;cursor:pointer;padding:4px 0;margin-bottom:8px;text-decoration:underline}
+.okbox{border:3px solid #000;background:#fff;box-shadow:5px 5px 0 var(--pink);padding:18px;text-align:center;margin:0 0 16px;transform:rotate(-.5deg)}
+.demo{position:fixed;left:0;right:0;bottom:0;background:#000;color:#fff;font-size:12px;font-family:'PT Mono',monospace;padding:8px 12px;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;z-index:50}
+.demo button{background:var(--pink);color:#fff;border:none;padding:5px 10px;font-family:'PT Mono',monospace;font-size:12px;cursor:pointer}
+.brandp{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#000}
+.brandp img{height:38px;filter:drop-shadow(0 0 0 #fff)}
+.brandp .t{color:#fff;font-size:11px;text-transform:uppercase;letter-spacing:.12em}
+.trustp{font-size:11.5px;text-align:center;margin-top:12px;color:#333}
+.trustp b{background:var(--yel);padding:0 4px}
+@media(max-width:380px){.ransom span{font-size:28px}.slots{grid-template-columns:repeat(2,1fr)}}
+`;
+
+const PRICES={RUB:{c:"₽",lesson:"4 500",intro:"2 250"},KZT:{c:"₸",lesson:"27 000",intro:"13 500"},USD:{c:"$",lesson:"55",intro:"28"}};
+const STORIES=[
+ {n:"Самал",res:"IELTS: 4.5 → 6.5",want:"Поднять балл IELTS с 4.5.",work:"Разобрали все части экзамена, плотно тренировали speaking и writing, много работали над форматом.",a:"IELTS 4.5.",b:"Overall 6.5 (L 6.5, R 7.0, W 6.0, S 7.0). «Я так счастлива!»"},
+ {n:"Глеб",res:"новая работа + английский в офисе",want:"Подготовиться к интервью в международную компанию.",work:"Реальные рабочие диалоги и бизнес-лексика — чтобы уверенно пройти интервью.",a:"Pre-intermediate.",b:"Получил работу, говорит на английском прямо в офисе."},
+ {n:"Даниил",res:"заговорил в путешествиях",want:"Понимать речь и свободно общаться в поездках.",work:"Выводили в живую речь то, что он уже знает, обкатывали в реальных ситуациях.",a:"Знал язык, но терялся в разговоре.",b:"Из Таиланда: «Теперь понимаю, что говорят. Страха больше нет.»"},
+ {n:"Валерий",res:"свободная речь, переехал в Лондон",want:"Начать почти с нуля и дойти до свободного общения.",work:"Живые уроки: игры, гаджеты, новости — то, что интересно.",a:"Практически с нуля.",b:"Свободно поддерживает беседу, живёт в Лондоне."},
+];
+
+function track(e,p){try{window.dataLayer=window.dataLayer||[];window.dataLayer.push({event:e,...p});}catch(x){}try{if(typeof window.gtag==="function")window.gtag("event",e,p||{});}catch(x){}try{console.log("[GA4]",e,p||{});}catch(x){}}
+
+function buildSlots(){
+  const now=Date.now(),LAG=12*3600*1000,hoursUTC=[9,10,11,14,15,16],out=[];
+  const base=new Date();base.setUTCHours(0,0,0,0);
+  for(let d=0;d<14;d++){const day=new Date(base.getTime()+d*86400000),dow=day.getUTCDay(),slots=[];
+    if(dow!==0&&dow!==6){hoursUTC.forEach((h,i)=>{const t=Date.UTC(day.getUTCFullYear(),day.getUTCMonth(),day.getUTCDate(),h);
+      if(t<now+LAG)return; if(((d*5+i*3)%10)<4)return; slots.push(t);});}
+    out.push({ts:day.getTime(),slots});}
+  return out;
+}
+const MSK="Europe/Moscow";
+const fT=ts=>new Intl.DateTimeFormat("ru-RU",{timeZone:MSK,hour:"2-digit",minute:"2-digit"}).format(new Date(ts));
+const fW=ts=>new Intl.DateTimeFormat("ru-RU",{timeZone:MSK,weekday:"short"}).format(new Date(ts));
+const fD=ts=>new Intl.DateTimeFormat("ru-RU",{timeZone:MSK,day:"numeric"}).format(new Date(ts));
+const fFull=ts=>new Intl.DateTimeFormat("ru-RU",{timeZone:MSK,weekday:"long",day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"}).format(new Date(ts))+" (МСК)";
+
+const Ransom=({text})=>(<div className="ransom">{text.split(" ").map((w,wi)=>(<span key={wi} style={{background:"none",boxShadow:"none",transform:"none",padding:0,margin:0}}>{w.split("").map((ch,i)=><span key={i}>{ch}</span>)}<span style={{background:"none",boxShadow:"none",transform:"none",padding:0,margin:0}}>&nbsp;</span></span>))}</div>);
+
+function App(){
+  const [flow,setFlow]=useState(null);
+  const [forceNo,setForceNo]=useState(false);
+  const days=useMemo(()=>buildSlots(),[]);
+  const hasAny=days.some(d=>d.slots.length>0)&&!forceNo;
+  const [dayIdx,setDayIdx]=useState(()=>{const i=days.findIndex(d=>d.slots.length>0);return i<0?0:i;});
+  const [slot,setSlot]=useState(null);
+  const [deadline,setDeadline]=useState(null);
+  const [left,setLeft]=useState(900);
+  const [q,setQ]=useState({level:"",why:"",email:""});
+  const [consent,setConsent]=useState(false);
+  const [ccy,setCcy]=useState("RUB");
+  const [story,setStory]=useState(0);
+
+  useEffect(()=>{track("view_page",{variant:"punk"});},[]);
+  useEffect(()=>{if(!deadline)return;const id=setInterval(()=>{const s=Math.max(0,Math.round((deadline-Date.now())/1000));setLeft(s);if(s<=0){clearInterval(id);setSlot(null);setDeadline(null);setFlow("slots");}},1000);return()=>clearInterval(id);},[deadline]);
+
+  const start=()=>{track("open_calendar");setFlow(hasAny?"slots":"noslots");window.scrollTo(0,0);};
+  const pick=ts=>{setSlot(ts);track("select_slot",{slot:new Date(ts).toISOString()});setDeadline(Date.now()+900000);setLeft(900);setFlow("questions");window.scrollTo(0,0);};
+  const submitQ=e=>{e.preventDefault();if(!consent)return;track("submit_form",{level:q.level});setFlow("pay");window.scrollTo(0,0);};
+  const pay=()=>{track("begin_checkout",{currency:ccy});setTimeout(()=>{track("purchase",{currency:ccy});setDeadline(null);setFlow("done");window.scrollTo(0,0);},600);};
+  const goSchool=()=>{track("go_to_school");window.open("https://chill.education/?utm_source=lichnye&utm_medium=referral&utm_campaign=no_slots","_blank","noopener");};
+  const contact=()=>{track("contact_click");window.open("https://t.me/chilleducation","_blank","noopener");};
+
+  const mm=String(Math.floor(left/60)).padStart(2,"0"),ss=String(left%60).padStart(2,"0");
+  const P=PRICES[ccy];
+
+  return (
+    <div className="pk">
+      <style>{CSS}</style>
+      <div className="sheet">
+        <div className="brandp">
+          <img src="https://chill.education/img/logo.png" alt="Chat and Chill"/>
+          <div className="t">личные уроки</div>
+        </div>
+
+        {flow===null&&(<>
+          {/* Экран 1 */}
+          <div className="sec">
+            <div className="tag p">Личные уроки · онлайн</div>
+            <Ransom text="Заговори и перестань бояться ошибок"/>
+            <p className="p">Индивидуальные уроки <span className="hl">один на один</span> под твои цели: работа, поездки, общение с друзьями из других стран. <span className="hlp">Готовлю и к IELTS.</span></p>
+            <button className="btnp" onClick={start}>Выбрать время для вводного</button>
+            <div className="trustp"><b>10 лет преподаю</b> · <b>мой IELTS 8</b> · <b>веду уроки из Лондона</b></div>
+          </div>
+
+          <div className="tear"/><div className="leo"/><div style={{height:8,background:"#141414"}}/>
+          <div className="tear flip" style={{background:"#141414"}}/>
+
+          {/* Экран 2 */}
+          <div className="sec">
+            <div className="tag y">Обо мне</div>
+            <Ransom text="Кто я и как мы будем работать"/>
+            <div className="photo"><div className="tape"/><div className="inner">место под фото (пришли файлы — вставлю)</div><div className="cap">это я, привет из Лондона</div></div>
+            <p className="p">Преподаю английский <span className="hl">10 лет</span>. Сейчас сам учусь на педагога в Лондоне и живу здесь — живая говорящая среда всегда под рукой, и я приношу её на уроки.</p>
+            <p className="p">Работаю в миксе лексического и коммуникативного подходов. Если по-простому: <span className="hlp">ты много говоришь</span> и набираешь живые фразы, а не зубришь правила в отрыве от речи. Мой балл IELTS — 8: если нужен экзамен, я знаю эту кухню изнутри.</p>
+            <p className="p small">За что меня ценят: интересные уроки, честная нагрузка без переработок и без халявы, и методика, которая реально работает.</p>
+          </div>
+
+          {/* Экран 3 */}
+          <div className="sec" style={{paddingTop:0}}>
+            <div className="tag">Как всё устроено</div>
+            <div className="facts">
+              <div className="factp"><b>ZOOM</b><span>живой урок один на один</span></div>
+              <div className="factp"><b>ПЛАТФОРМА</b><span>словарь, интерактивные задания, домашка — всё в одном месте</span></div>
+              <div className="factp"><b>45–50 МИН</b><span>без зубрёжки правил ради правил</span></div>
+            </div>
+            <div className="scrib">что будет на вводном ↓</div>
+            <p className="p">Знакомимся: я определяю твой уровень, а ты вживую смотришь платформу и то, как я работаю. К концу урока тебе понятно, <span className="hl">на каком ты уровне</span> и как двигаемся дальше.</p>
+          </div>
+
+          <div className="tear"/><div className="leo"/><div className="tear flip"/>
+
+          {/* Экран 4 */}
+          <div className="sec">
+            <div className="tag p">Отзывы</div>
+            <Ransom text="Истории моих учеников"/>
+            <div className="avps">
+              {STORIES.map((s,i)=><div key={i} className={"avp"+(i===story?" sel":"")} onClick={()=>setStory(i)}>{s.n[0]}</div>)}
+            </div>
+            <div style={{fontFamily:"'Oswald',sans-serif",fontWeight:700,fontSize:20,textTransform:"uppercase"}}>{STORIES[story].n}</div>
+            <div className="res-line">↑ {STORIES[story].res}</div>
+            <div className="g2">
+              <div className="cell"><div className="cl">Что хотел</div>{STORIES[story].want}</div>
+              <div className="cell"><div className="cl" style={{background:"#FFB7D5"}}>Как работали</div>{STORIES[story].work}</div>
+              <div className="cell"><div className="cl">точка А</div>{STORIES[story].a}</div>
+              <div className="cell"><div className="cl">точка Б</div>{STORIES[story].b}</div>
+            </div>
+          </div>
+
+          {/* Правила */}
+          <div className="sec" style={{paddingTop:0}}>
+            <details className="acc2">
+              <summary>Правила <span>+</span></summary>
+              <div className="body">
+                <ul className="listp">
+                  <li>Уроки в Zoom, материалы на платформе. Урок 45–50 минут.</li>
+                  <li>Отмена или перенос в день урока — урок считается проведённым.</li>
+                  <li>Если урок отменяю я в тот же день — тебе начисляется дополнительный.</li>
+                  <li>Не вышел на связь 15 минут и не предупредил — урок проведён.</li>
+                  <li>Свободное время закрепляется за тобой на 2 недели.</li>
+                  <li>Цена меняется дважды в год на 10% (сентябрь и декабрь).</li>
+                  <li>Решил закончить — предупреди за 2 недели.</li>
+                </ul>
+              </div>
+            </details>
+            <button className="btnp y" onClick={start}>Выбрать время для вводного</button>
+          </div>
+        </>)}
+
+        {flow==="slots"&&(
+          <div className="sec">
+            <button className="backp" onClick={()=>setFlow(null)}>← на главную</button>
+            <div className="tag y">Шаг 1 из 3</div>
+            <Ransom text="Выбери удобное время"/>
+            <p className="p small">🕒 Время указано по Москве (МСК).</p>
+            <div className="days">
+              {days.map((d,i)=>(
+                <div key={d.ts} className={"dayp"+(i===dayIdx?" sel":"")+(d.slots.length?"":" empty")} onClick={()=>d.slots.length&&setDayIdx(i)}>
+                  <div className="dw">{fW(d.ts)}</div><div className="dd">{fD(d.ts)}</div><div className="dn">{d.slots.length?d.slots.length+" ок.":"—"}</div>
+                </div>
+              ))}
+            </div>
+            {days[dayIdx]&&days[dayIdx].slots.length?(
+              <div className="slots">{days[dayIdx].slots.map(ts=><div key={ts} className="slotp" onClick={()=>pick(ts)}>{fT(ts)}</div>)}</div>
+            ):<p className="p small" style={{textAlign:"center"}}>выбери день со свободными окнами</p>}
+          </div>
+        )}
+
+        {flow==="questions"&&(
+          <div className="sec">
+            <button className="backp" onClick={()=>setFlow("slots")}>← другое время</button>
+            <div className="timerp">⏳ время держим за тобой: <b>{mm}:{ss}</b></div>
+            <div className="rowp">вводное · {slot?fFull(slot):""}</div>
+            <Ransom text="Пара вопросов перед стартом"/>
+            <p className="p small">Это поможет мне подготовиться к нашему первому уроку.</p>
+            <form onSubmit={submitQ}>
+              <div className="lbl">Как ты оцениваешь свой уровень?</div>
+              <select className="sel2" required value={q.level} onChange={e=>setQ(v=>({...v,level:e.target.value}))}>
+                <option value="" disabled>выбери…</option>
+                <option>Начинающий</option><option>A1–A2</option><option>B1–B2</option><option>C1 и выше</option><option>Не знаю</option>
+              </select>
+              <div className="lbl">Для чего тебе английский?</div>
+              <input className="inp" required value={q.why} onChange={e=>setQ(v=>({...v,why:e.target.value}))} placeholder="работа, путешествия, переезд…"/>
+              <div className="lbl">Куда прислать доступы?</div>
+              <input className="inp" required type="email" value={q.email} onChange={e=>setQ(v=>({...v,email:e.target.value}))} placeholder="you@mail.ru" autoComplete="email"/>
+              <label className="consent">
+                <input type="checkbox" checked={consent} onChange={e=>setConsent(e.target.checked)} required/>
+                <span>Согласен(на) с <a href="https://chill.education/policy.html" target="_blank" rel="noopener">политикой</a> и <a href="https://chill.education/offer.html" target="_blank" rel="noopener">офертой</a></span>
+              </label>
+              <div style={{height:12}}/>
+              <button className="btnp" type="submit" disabled={!consent}>Перейти к оплате</button>
+            </form>
+          </div>
+        )}
+
+        {flow==="pay"&&(
+          <div className="sec">
+            <button className="backp" onClick={()=>setFlow("questions")}>← назад</button>
+            <div className="timerp">⏳ время держим за тобой: <b>{mm}:{ss}</b></div>
+            <Ransom text="Сколько это стоит"/>
+            <div className="cur">{Object.keys(PRICES).map(k=><button key={k} className={ccy===k?"on":""} onClick={()=>setCcy(k)}>{PRICES[k].c}</button>)}</div>
+            <div className="pricep"><b>{P.intro} {P.c}</b><span className="strike">{P.lesson} {P.c}</span><span className="scrib">вводное −50%</span></div>
+            <div className="rowp">вводное · {slot?fFull(slot):""}</div>
+            <div className="lbl">Как оплата устроена</div>
+            <ul className="listp">
+              <li>Оплата за месяц вперёд (2 раза в неделю → 8 уроков).</li>
+              <li>Оплаченные уроки действуют 2 месяца.</li>
+              <li>Слот закрепляется только после оплаты.</li>
+            </ul>
+            <button className="btnp" onClick={pay}>Оплатить и записаться</button>
+            <div style={{height:10}}/>
+            <button className="btnp w" onClick={contact} style={{fontSize:13,padding:10}}>связаться — если с оплатой что-то не так</button>
+            <p className="p small" style={{textAlign:"center",marginTop:10}}>демо-кнопка · на боевом сайте здесь оплата</p>
+          </div>
+        )}
+
+        {flow==="done"&&(
+          <div className="sec">
+            <div className="okbox">
+              <div className="tag y" style={{transform:"rotate(-2deg)"}}>✓ done</div>
+              <Ransom text="Готово ты записан"/>
+              <p className="p">Всё прошло, жду тебя на уроке. Скинул на почту <b>{q.email||"—"}</b> доступ к платформе, ссылку на Zoom и добавил урок в календарь.</p>
+              <div className="rowp" style={{textAlign:"left"}}>вводное · {slot?fFull(slot):""}</div>
+            </div>
+            <div className="lbl">Что придёт на почту</div>
+            <ul className="listp">
+              <li>Доступ к интерактивной платформе (логин и пароль)</li>
+              <li>Постоянная ссылка на Zoom</li>
+              <li>Событие в календарь с датой и временем урока</li>
+            </ul>
+            <p className="p small">Перед уроком проверь, что интернет и связь работают стабильно. До встречи.</p>
+            <button className="btnp w" onClick={()=>{setFlow(null);setSlot(null);setConsent(false);}}>на главную</button>
+          </div>
+        )}
+
+        {flow==="noslots"&&(
+          <div className="sec">
+            <button className="backp" onClick={()=>setFlow(null)}>← на главную</button>
+            <div className="tag p">Свободных окон нет</div>
+            <Ransom text="Сейчас у меня всё занято"/>
+            <p className="p">У меня ограниченное расписание, и свободные окна бывают не всегда. Но есть <span className="hl">преподаватели моей школы</span> — те же материалы и та же методика. Подход будет тот же. Вводный урок у них <span className="hlp">бесплатный</span>.</p>
+            <button className="btnp" onClick={goSchool}>Записаться к преподавателям школы →</button>
+          </div>
+        )}
+
+        <div className="tear"/>
+        <div style={{background:"#141414",color:"#777",fontSize:11,fontFamily:"'PT Mono',monospace",textAlign:"center",padding:"16px 12px 26px"}}>
+          Chat &amp; Chill · <a href="https://chill.education/policy.html" style={{color:"#999"}}>политика</a> · <a href="https://chill.education/offer.html" style={{color:"#999"}}>оферта</a>
+        </div>
+      </div>
+
+      <div className="demo">
+        панк-прототип · демо-данные
+        <button onClick={()=>{setForceNo(v=>!v);setFlow(!forceNo?"noslots":null);window.scrollTo(0,0);}}>{forceNo?"со слотами":"«нет слотов»"}</button>
+        <a href="./" style={{color:"#F7E017"}}>← брендовая версия</a>
+      </div>
+    </div>
+  );
+}
+
+document.getElementById("boot").style.display="none";
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
