@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Запись на вводное занятие — Chat &amp; Chill</title>
-<meta name="description" content="Выбери свободное время и запишись на бесплатное вводное занятие по английскому.">
+<title>Личные уроки английского — Chat &amp; Chill</title>
+<meta name="description" content="Индивидуальные уроки английского один на один. Запишись на вводное занятие.">
 <style>
   html,body{margin:0;padding:0;background:#EEF0FB}
   #boot{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;font-family:-apple-system,BlinkMacSystemFont,'Manrope',sans-serif;background:#EEF0FB;z-index:9999}
@@ -28,8 +28,8 @@
 const { useState, useEffect, useMemo, useRef } = React;
 
 /* ============================================================
-   Chat & Chill — запись на вводное занятие (ПРОТОТИП)
-   Данные слотов — демонстрационные. Календарь, оплата и письма
+   Chat & Chill — личные уроки (ПРОТОТИП, демо-данные)
+   Тексты — от владельца. Слоты/оплата/письма — заглушки,
    подключаются к бэкенду на следующем этапе.
    ============================================================ */
 
@@ -38,302 +38,371 @@ const CSS = `
 .bk{--primary:#2440D9;--primary-deep:#1B2E8A;--primary-tint:#E7ECFF;--accent:#FF7A1A;
     --ink:#1A1E33;--ink-soft:#5A5F7D;--line:#E2E5F4;--surface:#fff;--ok:#1FA85A;
     --fd:'Nunito',sans-serif;--fb:'Manrope',sans-serif;
-    font-family:var(--fb);color:var(--ink);min-height:100vh;display:flex;flex-direction:column;
-    align-items:center;padding:20px 14px 60px;-webkit-font-smoothing:antialiased;
+    font-family:var(--fb);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased;
     background:radial-gradient(900px 500px at 15% -10%,#fff 0,rgba(255,255,255,0) 55%),#EEF0FB}
 .bk *{box-sizing:border-box}
-.bk-shell{width:100%;max-width:460px}
-.bk-brand{display:flex;align-items:center;gap:10px;margin:2px 2px 16px}
-.bk-brand img{height:44px;width:auto}
-.bk-bs{font-size:12px;color:var(--ink-soft)}
-.bk-card{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:0 22px 50px -30px rgba(36,64,217,.4);padding:24px 22px}
-.bk-eyebrow{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--primary)}
-.bk-h1{font-family:var(--fd);font-weight:900;font-size:27px;line-height:1.1;letter-spacing:-.5px;margin:10px 0 12px}
-.bk-p{font-size:15px;line-height:1.55;color:var(--ink-soft);margin:0 0 16px}
-.bk-facts{display:flex;flex-direction:column;gap:9px;margin:0 0 20px}
-.bk-fact{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:#3A3F5A}
-.bk-fdot{flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:var(--primary-tint);color:var(--primary);display:grid;place-items:center;font-weight:800;font-size:12px;font-family:var(--fd)}
-.bk-price{display:flex;align-items:baseline;gap:10px;margin:0 0 18px}
-.bk-price b{font-family:var(--fd);font-weight:900;font-size:30px;color:var(--ink)}
-.bk-price s{color:var(--ink-soft);font-size:16px}
-.bk-price .free{color:var(--accent);font-weight:700;font-size:14px;background:#FFEEDD;padding:3px 10px;border-radius:999px}
-.bk-btn{display:block;width:100%;text-align:center;font-family:var(--fd);font-weight:800;font-size:16px;color:#fff;background:var(--primary);border:none;border-radius:14px;padding:15px;cursor:pointer;box-shadow:0 12px 24px -10px rgba(36,64,217,.7);transition:background .15s,transform .06s}
-.bk-btn:hover{background:var(--primary-deep)}
-.bk-btn:active{transform:translateY(1px)}
-.bk-btn:disabled{background:#C7CEEB;box-shadow:none;cursor:not-allowed}
-.bk-btn-acc{background:var(--accent);box-shadow:0 12px 24px -10px rgba(255,122,26,.7)}
-.bk-btn-acc:hover{background:#E86A00}
-.bk-ghost{background:none;color:var(--primary);border:1.5px solid var(--line);box-shadow:none}
-.bk-ghost:hover{background:var(--primary-tint)}
-.bk-back{background:none;border:none;color:var(--ink-soft);font-family:var(--fb);font-weight:600;font-size:14px;cursor:pointer;padding:6px 0;margin-bottom:6px}
-.bk-step{font-size:12px;color:var(--ink-soft);margin-bottom:10px;font-weight:600}
-.bk-tz{font-size:12.5px;color:var(--ink-soft);margin:0 0 14px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.bk-tz select{font-family:var(--fb);font-size:12.5px;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:4px 6px;background:#fff}
-.bk-days{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 10px;margin:0 -2px 6px}
-.bk-day{flex:0 0 auto;min-width:58px;text-align:center;border:1.5px solid var(--line);border-radius:14px;padding:9px 6px;cursor:pointer;background:#FCFBFF;transition:border-color .15s,background .15s}
-.bk-day.sel{border-color:var(--primary);background:var(--primary-tint)}
-.bk-day.empty{opacity:.4;cursor:not-allowed}
-.bk-day .dw{font-size:11px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em}
-.bk-day .dd{font-family:var(--fd);font-weight:800;font-size:18px;margin-top:2px}
-.bk-day .dn{font-size:10.5px;color:var(--ok);margin-top:2px;font-weight:700}
-.bk-day.empty .dn{color:var(--ink-soft)}
-.bk-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px}
-.bk-slot{border:1.5px solid var(--line);border-radius:12px;padding:11px 6px;text-align:center;font-weight:700;font-size:15px;cursor:pointer;background:#FCFBFF;transition:border-color .15s,background .15s}
-.bk-slot:hover{border-color:#C9D2F5;background:#F5F7FF}
-.bk-slot.sel{border-color:var(--primary);background:var(--primary);color:#fff}
-.bk-empty{text-align:center;padding:20px 10px;color:var(--ink-soft);font-size:14px}
-.bk-timer{display:flex;align-items:center;gap:8px;background:#FFF6EE;border:1px solid #FFE0C4;border-radius:12px;padding:10px 12px;font-size:13px;color:#8A4B10;margin:0 0 16px}
-.bk-timer b{font-variant-numeric:tabular-nums;font-family:var(--fd)}
-.bk-lbl{font-size:13px;font-weight:700;color:#3A3F5A;margin:14px 0 6px}
-.bk-inp,.bk-sel,.bk-ta{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;font-family:var(--fb);font-size:15px;color:var(--ink);background:#FCFBFF}
-.bk-inp:focus,.bk-sel:focus,.bk-ta:focus{outline:none;border-color:var(--primary)}
-.bk-row{background:var(--primary-tint);border-radius:14px;padding:12px 14px;margin:0 0 16px;font-size:14px}
-.bk-row b{font-family:var(--fd)}
-.bk-consent{display:flex;align-items:flex-start;gap:9px;font-size:12px;line-height:1.4;color:var(--ink-soft);margin:14px 0 4px;cursor:pointer}
-.bk-consent input{margin-top:1px;width:16px;height:16px;accent-color:var(--primary);flex:0 0 auto}
-.bk-consent a{color:var(--primary)}
-.bk-note{font-size:11.5px;color:var(--ink-soft);text-align:center;margin-top:12px;line-height:1.5}
-.bk-demo{position:fixed;left:0;right:0;bottom:0;background:#1A1E33;color:#fff;font-size:12px;padding:8px 12px;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;z-index:50}
-.bk-demo button{background:rgba(255,255,255,.16);color:#fff;border:none;border-radius:8px;padding:5px 10px;font-family:var(--fb);font-size:12px;cursor:pointer}
-.bk-ok-ic{width:56px;height:56px;border-radius:50%;background:#E9F7EE;color:var(--ok);display:grid;place-items:center;font-size:30px;margin:0 auto 14px}
-@media(max-width:380px){.bk-slots{grid-template-columns:repeat(2,1fr)}}
+.wrap{width:100%;max-width:480px;margin:0 auto;padding:18px 16px 90px}
+.brand{display:flex;align-items:center;gap:10px;margin:0 2px 12px}
+.brand img{height:42px;width:auto}
+.brand .bs{font-size:12px;color:var(--ink-soft)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:0 22px 50px -34px rgba(36,64,217,.4);padding:22px 20px;margin:0 0 14px}
+.eyebrow{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--primary)}
+.h1{font-family:var(--fd);font-weight:900;font-size:28px;line-height:1.08;letter-spacing:-.6px;margin:10px 0 12px}
+.h2{font-family:var(--fd);font-weight:900;font-size:22px;line-height:1.12;letter-spacing:-.4px;margin:0 0 12px}
+.p{font-size:15px;line-height:1.6;color:#3A3F5A;margin:0 0 12px}
+.muted{color:var(--ink-soft)}
+.btn{display:block;width:100%;text-align:center;font-family:var(--fd);font-weight:800;font-size:16px;color:#fff;background:var(--primary);border:none;border-radius:14px;padding:15px;cursor:pointer;box-shadow:0 12px 24px -10px rgba(36,64,217,.7);transition:background .15s,transform .06s;text-decoration:none}
+.btn:hover{background:var(--primary-deep)}.btn:active{transform:translateY(1px)}
+.btn:disabled{background:#C7CEEB;box-shadow:none;cursor:not-allowed}
+.btn-acc{background:var(--accent);box-shadow:0 12px 24px -10px rgba(255,122,26,.7)}.btn-acc:hover{background:#E86A00}
+.btn-ghost{background:none;color:var(--primary);border:1.5px solid var(--line);box-shadow:none}.btn-ghost:hover{background:var(--primary-tint)}
+.hero{position:relative;overflow:hidden;background:linear-gradient(160deg,#2440D9,#4B6BFF);color:#fff;border-radius:24px;padding:24px 20px 22px;margin:0 0 14px}
+.hero .mascot{position:absolute;right:-18px;top:-10px;width:150px;opacity:.95;pointer-events:none}
+.hero .eyebrow{color:#BFD0FF}
+.hero .h1{color:#fff;position:relative;max-width:78%}
+.hero .sub{font-size:14.5px;line-height:1.5;color:#E4ECFF;margin:0 0 18px;position:relative;max-width:90%}
+.hero .btn{background:var(--accent);box-shadow:0 14px 26px -10px rgba(0,0,0,.35)}
+.trust{font-size:12px;color:#CDD9FF;margin-top:12px;text-align:center}
+.facts{display:flex;flex-direction:column;gap:10px;margin:6px 0 4px}
+.fact{display:flex;gap:11px;align-items:flex-start;font-size:14px;color:#3A3F5A}
+.ic{flex:0 0 auto;width:38px;height:38px;border-radius:11px;background:var(--primary-tint);color:var(--primary);display:grid;place-items:center;font-size:18px}
+.subh{font-family:var(--fd);font-weight:800;font-size:15px;margin:16px 0 8px}
+.photo{width:100%;height:180px;border-radius:16px;background:linear-gradient(135deg,#E7ECFF,#FFEEDD);display:grid;place-items:center;color:var(--ink-soft);font-size:13px;margin:0 0 14px}
+.avts{display:flex;gap:9px;margin:0 0 14px;flex-wrap:wrap}
+.avt{width:46px;height:46px;border-radius:50%;border:2px solid transparent;cursor:pointer;display:grid;place-items:center;font-family:var(--fd);font-weight:800;color:#fff;font-size:16px;transition:transform .1s}
+.avt.sel{border-color:var(--primary);transform:scale(1.05)}
+.story-res{display:inline-block;font-size:12px;font-weight:700;color:var(--ok);background:#E9F7EE;border-radius:999px;padding:4px 11px;margin:2px 0 12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gcell{background:#FAFAFE;border:1px solid var(--line);border-radius:13px;padding:12px}
+.gcell .gl{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--primary);margin-bottom:5px}
+.gcell .gv{font-size:13px;line-height:1.45;color:#3A3F5A}
+.gcell.ab .gl{color:var(--ink-soft)}
+.gcell.b .gl{color:var(--accent)}
+.step{font-size:12px;color:var(--ink-soft);margin-bottom:8px;font-weight:600}
+.back{background:none;border:none;color:var(--ink-soft);font-family:var(--fb);font-weight:600;font-size:14px;cursor:pointer;padding:4px 0;margin-bottom:6px}
+.tznote{font-size:12.5px;color:var(--ink-soft);margin:0 0 12px}
+.days{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;margin:0 -2px 4px}
+.day{flex:0 0 auto;min-width:56px;text-align:center;border:1.5px solid var(--line);border-radius:14px;padding:8px 6px;cursor:pointer;background:#FCFBFF}
+.day.sel{border-color:var(--primary);background:var(--primary-tint)}
+.day.empty{opacity:.4;cursor:not-allowed}
+.day .dw{font-size:11px;color:var(--ink-soft);text-transform:uppercase}
+.day .dd{font-family:var(--fd);font-weight:800;font-size:17px;margin-top:2px}
+.day .dn{font-size:10px;color:var(--ok);margin-top:2px;font-weight:700}
+.day.empty .dn{color:var(--ink-soft)}
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px}
+.slot{border:1.5px solid var(--line);border-radius:12px;padding:11px 4px;text-align:center;font-weight:700;font-size:15px;cursor:pointer;background:#FCFBFF}
+.slot:hover{border-color:#C9D2F5;background:#F5F7FF}.slot.sel{border-color:var(--primary);background:var(--primary);color:#fff}
+.timer{display:flex;align-items:center;gap:8px;background:#FFF6EE;border:1px solid #FFE0C4;border-radius:12px;padding:10px 12px;font-size:13px;color:#8A4B10;margin:0 0 14px}
+.timer b{font-variant-numeric:tabular-nums;font-family:var(--fd)}
+.lbl{font-size:13px;font-weight:700;color:#3A3F5A;margin:14px 0 6px}
+.inp,.sel{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;font-family:var(--fb);font-size:15px;color:var(--ink);background:#FCFBFF}
+.inp:focus,.sel:focus{outline:none;border-color:var(--primary)}
+.rowc{background:var(--primary-tint);border-radius:14px;padding:12px 14px;margin:0 0 14px;font-size:14px}.rowc b{font-family:var(--fd)}
+.cur{display:flex;gap:6px;margin:0 0 14px}
+.cur button{flex:1;border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:8px;font-family:var(--fd);font-weight:800;cursor:pointer;color:var(--ink-soft)}
+.cur button.on{border-color:var(--primary);background:var(--primary);color:#fff}
+.price{display:flex;align-items:baseline;gap:10px;margin:0 0 4px}
+.price b{font-family:var(--fd);font-weight:900;font-size:30px}
+.pill{color:var(--accent);font-weight:700;font-size:13px;background:#FFEEDD;padding:3px 10px;border-radius:999px}
+.list{margin:8px 0 14px;padding:0;list-style:none}
+.list li{position:relative;padding:4px 0 4px 20px;font-size:13.5px;color:#3A3F5A;line-height:1.45}
+.list li:before{content:"";position:absolute;left:2px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.consent{display:flex;align-items:flex-start;gap:9px;font-size:12px;line-height:1.4;color:var(--ink-soft);margin:14px 0 4px;cursor:pointer}
+.consent input{margin-top:1px;width:16px;height:16px;accent-color:var(--primary);flex:0 0 auto}.consent a{color:var(--primary)}
+.contact-btn{display:block;width:100%;text-align:center;margin-top:10px;background:none;border:none;color:var(--primary);font-family:var(--fb);font-weight:600;font-size:14px;cursor:pointer;text-decoration:underline}
+.acc{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:0 0 14px}
+.acc summary{list-style:none;cursor:pointer;padding:14px 16px;font-family:var(--fd);font-weight:800;font-size:15px;display:flex;justify-content:space-between;align-items:center}
+.acc summary::-webkit-details-marker{display:none}
+.acc[open] summary{border-bottom:1px solid var(--line)}
+.acc .body{padding:6px 16px 14px}
+.ok-ic{width:56px;height:56px;border-radius:50%;background:#E9F7EE;color:var(--ok);display:grid;place-items:center;font-size:30px;margin:0 auto 12px}
+.note{font-size:11.5px;color:var(--ink-soft);text-align:center;margin-top:12px;line-height:1.5}
+.demo{position:fixed;left:0;right:0;bottom:0;background:#1A1E33;color:#fff;font-size:12px;padding:8px 12px;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;z-index:50}
+.demo button{background:rgba(255,255,255,.16);color:#fff;border:none;border-radius:8px;padding:5px 10px;font-family:var(--fb);font-size:12px;cursor:pointer}
+@media(max-width:380px){.slots{grid-template-columns:repeat(2,1fr)}.hero .h1{max-width:100%}.hero .mascot{opacity:.35}}
 `;
 
-const TZ_OPTS = [
-  { id:"Europe/Moscow", label:"Москва (MSK)" },
-  { id:"Asia/Almaty", label:"Астана / Алматы" },
-  { id:"Asia/Yekaterinburg", label:"Екатеринбург" },
-  { id:"Europe/Kiev", label:"Киев" },
-  { id:"Europe/London", label:"Лондон" },
+const PRICES = {
+  RUB:{c:"₽", lesson:"4 500", intro:"2 250"},
+  KZT:{c:"₸", lesson:"27 000", intro:"13 500"}, // ДЕМО — тенге уточнить у владельца
+  USD:{c:"$", lesson:"55", intro:"28"},
+};
+const STORIES = [
+  { n:"Самал", col:"#7C5CFC", res:"Подняла IELTS с 4.5 до 6.5",
+    want:"Поднять балл IELTS с 4.5.",
+    work:"Разобрали все части экзамена, плотно тренировали speaking и writing, много работали над форматом.",
+    a:"IELTS 4.5.", b:"Overall 6.5 (L 6.5, R 7.0, W 6.0, S 7.0). «Я так счастлива!»" },
+  { n:"Глеб", col:"#2440D9", res:"Сменил работу, говорит по-английски в офисе",
+    want:"Подготовиться к интервью в международную компанию.",
+    work:"Разбирали реальные рабочие диалоги и бизнес-лексику, чтобы он уверенно прошёл интервью.",
+    a:"Уровень pre-intermediate.", b:"Получил новую работу, говорит на английском прямо в офисе." },
+  { n:"Даниил", col:"#FF7A1A", res:"Заговорил в путешествиях, без страха",
+    want:"Понимать речь и свободно общаться в поездках.",
+    work:"Выводили в живую речь то, что он уже знает, обкатывали в реальных ситуациях.",
+    a:"Знал язык, но терялся в живом разговоре.", b:"Из Таиланда: «Теперь понимаю, что говорят. Страха больше нет.»" },
+  { n:"Валерий", col:"#1FA85A", res:"Свободно общается и переехал в Лондон",
+    want:"Начать почти с нуля и дойти до свободного общения.",
+    work:"Живые уроки с обсуждением того, что интересно: игры, гаджеты, новости.",
+    a:"Начинал практически с нуля.", b:"Свободно поддерживает беседу, переехал жить в Лондон." },
 ];
-const PRICE = { intro: "2 250 ₽", regular: "4 500 ₽" }; // ДЕМО — финальные цифры от владельца
 
-/* ------- события воронки (GA4) ------- */
 function track(event, params){
-  try{ window.dataLayer = window.dataLayer||[]; window.dataLayer.push({ event, ...params }); }catch(e){}
-  try{ if(typeof window.gtag==="function") window.gtag("event", event, params||{}); }catch(e){}
-  try{ console.log("[GA4]", event, params||{}); }catch(e){}
+  try{ window.dataLayer=window.dataLayer||[]; window.dataLayer.push({event,...params}); }catch(e){}
+  try{ if(typeof window.gtag==="function") window.gtag("event",event,params||{}); }catch(e){}
+  try{ console.log("[GA4]",event,params||{}); }catch(e){}
 }
 
-/* ------- демо-слоты: рабочие часы владельца (Лондон) в UTC, на 14 дней ------- */
+/* демо-слоты, время по МСК (Europe/Moscow), ручная отметка эмулируется */
 function buildSlots(){
-  const now = Date.now();
-  const MIN_LAG = 12*3600*1000; // нельзя записаться раньше чем за 12 ч
-  const workHoursUTC = [8,9,10,11,14,15,16,17]; // ~рабочие часы владельца
-  const days = [];
-  const base = new Date(); base.setUTCHours(0,0,0,0);
-  for(let d=0; d<14; d++){
-    const day = new Date(base.getTime() + d*86400000);
-    const dow = day.getUTCDay();
-    const slots = [];
-    if(dow!==0 && dow!==6){ // будни
-      workHoursUTC.forEach((h,idx)=>{
-        const t = Date.UTC(day.getUTCFullYear(), day.getUTCMonth(), day.getUTCDate(), h);
-        if(t < now + MIN_LAG) return;
-        // детерминированная «занятость» ~35%
-        const busy = ((d*7 + idx*3) % 10) < 3;
-        if(!busy) slots.push(t);
+  const now=Date.now(), LAG=12*3600*1000;
+  const hoursUTC=[9,10,11,14,15,16]; // рабочие часы владельца
+  const out=[]; const base=new Date(); base.setUTCHours(0,0,0,0);
+  for(let d=0;d<14;d++){
+    const day=new Date(base.getTime()+d*86400000), dow=day.getUTCDay(), slots=[];
+    if(dow!==0&&dow!==6){
+      hoursUTC.forEach((h,i)=>{
+        const t=Date.UTC(day.getUTCFullYear(),day.getUTCMonth(),day.getUTCDate(),h);
+        if(t<now+LAG) return;
+        if(((d*5+i*3)%10)<4) return; // ~40% занято
+        slots.push(t);
       });
     }
-    days.push({ ts: day.getTime(), slots });
+    out.push({ts:day.getTime(),slots});
   }
-  return days;
+  return out;
 }
-
-function fmtTime(ts, tz){ return new Intl.DateTimeFormat("ru-RU",{ timeZone:tz, hour:"2-digit", minute:"2-digit" }).format(new Date(ts)); }
-function fmtDay(ts, tz){ return new Intl.DateTimeFormat("ru-RU",{ timeZone:tz, weekday:"short" }).format(new Date(ts)); }
-function fmtDayNum(ts, tz){ return new Intl.DateTimeFormat("ru-RU",{ timeZone:tz, day:"numeric" }).format(new Date(ts)); }
-function fmtFull(ts, tz){ return new Intl.DateTimeFormat("ru-RU",{ timeZone:tz, weekday:"long", day:"numeric", month:"long", hour:"2-digit", minute:"2-digit" }).format(new Date(ts)); }
+const MSK="Europe/Moscow";
+const fT=(ts)=>new Intl.DateTimeFormat("ru-RU",{timeZone:MSK,hour:"2-digit",minute:"2-digit"}).format(new Date(ts));
+const fW=(ts)=>new Intl.DateTimeFormat("ru-RU",{timeZone:MSK,weekday:"short"}).format(new Date(ts));
+const fD=(ts)=>new Intl.DateTimeFormat("ru-RU",{timeZone:MSK,day:"numeric"}).format(new Date(ts));
+const fFull=(ts)=>new Intl.DateTimeFormat("ru-RU",{timeZone:MSK,weekday:"long",day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"}).format(new Date(ts))+" (МСК)";
 
 function App(){
-  const [step, setStep] = useState("landing"); // landing|calendar|form|pay|done|noslots
-  const [tz, setTz] = useState(()=>{ try{ return Intl.DateTimeFormat().resolvedOptions().timeZone||"Europe/Moscow"; }catch(e){ return "Europe/Moscow"; } });
-  const [forceNoSlots, setForceNoSlots] = useState(false);
-  const days = useMemo(()=>buildSlots(),[]);
-  const hasAny = days.some(d=>d.slots.length>0) && !forceNoSlots;
-  const [dayIdx, setDayIdx] = useState(()=> days.findIndex(d=>d.slots.length>0));
-  const [slot, setSlot] = useState(null);
-  const [deadline, setDeadline] = useState(null);
-  const [left, setLeft] = useState(900);
-  const [form, setForm] = useState({ name:"", email:"", tg:"", level:"", why:"", how:"" });
-  const [consent, setConsent] = useState(false);
-  const startedForm = useRef(false);
+  const [flow,setFlow]=useState(null); // null=лендинг | slots|questions|pay|done|noslots
+  const [forceNo,setForceNo]=useState(false);
+  const days=useMemo(()=>buildSlots(),[]);
+  const hasAny=days.some(d=>d.slots.length>0)&&!forceNo;
+  const [dayIdx,setDayIdx]=useState(()=>{const i=days.findIndex(d=>d.slots.length>0);return i<0?0:i;});
+  const [slot,setSlot]=useState(null);
+  const [deadline,setDeadline]=useState(null);
+  const [left,setLeft]=useState(900);
+  const [q,setQ]=useState({level:"",why:"",email:""});
+  const [consent,setConsent]=useState(false);
+  const [ccy,setCcy]=useState("RUB");
+  const [story,setStory]=useState(0);
 
-  useEffect(()=>{ track("view_page"); },[]);
-
-  // таймер брони 15 мин
+  useEffect(()=>{track("view_page");},[]);
   useEffect(()=>{
-    if(!deadline) return;
-    const id = setInterval(()=>{
-      const s = Math.max(0, Math.round((deadline - Date.now())/1000));
-      setLeft(s);
-      if(s<=0){ clearInterval(id); setSlot(null); setDeadline(null); setStep("calendar"); }
-    }, 1000);
+    if(!deadline)return;
+    const id=setInterval(()=>{const s=Math.max(0,Math.round((deadline-Date.now())/1000));setLeft(s);if(s<=0){clearInterval(id);setSlot(null);setDeadline(null);setFlow("slots");}},1000);
     return ()=>clearInterval(id);
   },[deadline]);
 
-  const goCalendar = ()=>{ track("open_calendar"); setStep(hasAny? "calendar":"noslots"); };
-  const pickSlot = (ts)=>{
-    setSlot(ts); track("select_slot", { slot:new Date(ts).toISOString() });
-    const dl = Date.now()+15*60*1000; setDeadline(dl); setLeft(900); setStep("form");
-  };
-  const submitForm = (e)=>{
-    e.preventDefault();
-    if(!consent) return;
-    track("submit_form", { level:form.level });
-    setStep("pay");
-  };
-  const pay = ()=>{ track("begin_checkout"); setTimeout(()=>{ track("purchase"); setDeadline(null); setStep("done"); }, 600); };
-  const goSchool = ()=>{
-    track("go_to_school");
-    window.open("https://chill.education/?utm_source=booking&utm_medium=referral&utm_campaign=no_slots","_blank","noopener");
-  };
+  const startBooking=()=>{track("open_calendar");setFlow(hasAny?"slots":"noslots");window.scrollTo(0,0);};
+  const pickSlot=(ts)=>{setSlot(ts);track("select_slot",{slot:new Date(ts).toISOString()});setDeadline(Date.now()+15*60*1000);setLeft(900);setFlow("questions");window.scrollTo(0,0);};
+  const submitQ=(e)=>{e.preventDefault();if(!consent)return;track("submit_form",{level:q.level});setFlow("pay");window.scrollTo(0,0);};
+  const pay=()=>{track("begin_checkout",{currency:ccy});setTimeout(()=>{track("purchase",{currency:ccy});setDeadline(null);setFlow("done");window.scrollTo(0,0);},600);};
+  const goSchool=()=>{track("go_to_school");window.open("https://chill.education/?utm_source=lichnye&utm_medium=referral&utm_campaign=no_slots","_blank","noopener");};
+  const contact=()=>{track("contact_click");window.open("https://t.me/chilleducation","_blank","noopener");};
 
-  const mm = String(Math.floor(left/60)).padStart(2,"0"), ss = String(left%60).padStart(2,"0");
+  const mm=String(Math.floor(left/60)).padStart(2,"0"), ss=String(left%60).padStart(2,"0");
+  const P=PRICES[ccy];
 
   return (
     <div className="bk">
       <style>{CSS}</style>
-      <div className="bk-shell">
-        <div className="bk-brand">
+      <div className="wrap">
+        <div className="brand">
           <img src="https://chill.education/img/logo.png" alt="Chat and Chill" />
-          <div className="bk-bs">Английский без стресса</div>
+          <div className="bs">Английский без стресса · личные уроки</div>
         </div>
 
-        {/* LANDING */}
-        {step==="landing" && (
-          <div className="bk-card">
-            <div className="bk-eyebrow">Вводное занятие · онлайн</div>
-            <h1 className="bk-h1">Познакомимся и определим твой уровень за одно занятие</h1>
-            <p className="bk-p">Я послушаю твою речь, разберём цели и покажу, как будет проходить обучение — без стресса и зубрёжки. Выбери удобное время ниже.</p>
-            <div className="bk-facts">
-              <div className="bk-fact"><span className="bk-fdot">1</span><span>Живой урок 1-на-1 по видеосвязи, 45 минут.</span></div>
-              <div className="bk-fact"><span className="bk-fdot">2</span><span>Определим уровень и составим план под твою цель.</span></div>
-              <div className="bk-fact"><span className="bk-fdot">3</span><span>После оплаты сразу придёт ссылка на Zoom и файл для календаря.</span></div>
-            </div>
-            <div className="bk-price"><b>{PRICE.intro}</b><s>{PRICE.regular}</s><span className="free">вводное · −50%</span></div>
-            <button className="bk-btn" onClick={goCalendar}>Выбрать время</button>
+        {/* ================= ЛЕНДИНГ ================= */}
+        {flow===null && (<>
+          {/* Экран 1 — hero */}
+          <div className="hero">
+            <img className="mascot" src="https://chill.education/img/hero-mascot.png" alt="" />
+            <div className="eyebrow">Личные уроки · онлайн</div>
+            <h1 className="h1">Заговори на английском и перестань бояться ошибок</h1>
+            <div className="sub">Индивидуальные уроки один на один под твои цели: работа, поездки, общение с друзьями из других стран. Готовлю и к IELTS.</div>
+            <button className="btn" onClick={startBooking}>Выбрать время для вводного</button>
+            <div className="trust">10 лет преподаю · мой IELTS 8 · веду уроки из Лондона</div>
           </div>
-        )}
 
-        {/* CALENDAR */}
-        {step==="calendar" && (
-          <div className="bk-card">
-            <div className="bk-step">Шаг 1 из 3 · выбор времени</div>
-            <div className="bk-tz">🌍 Время показано в поясе:
-              <select value={tz} onChange={e=>setTz(e.target.value)}>
-                {TZ_OPTS.find(o=>o.id===tz) ? null : <option value={tz}>{tz}</option>}
-                {TZ_OPTS.map(o=><option key={o.id} value={o.id}>{o.label}</option>)}
-              </select>
+          {/* Экран 2 — обо мне */}
+          <div className="card">
+            <div className="eyebrow">Обо мне</div>
+            <h2 className="h2" style={{marginTop:10}}>Кто я и как мы будем работать</h2>
+            <div className="photo">📷 живое фото преподавателя</div>
+            <p className="p">Преподаю английский 10 лет. Сейчас сам учусь на педагога в Лондоне и живу здесь, так что живая говорящая среда у меня всегда под рукой — и я приношу её на уроки.</p>
+            <p className="p">Работаю в миксе лексического и коммуникативного подходов. Если по-простому: ты много говоришь и набираешь живые фразы, а не зубришь правила в отрыве от речи. Мой балл IELTS 8 — если тебе нужен экзамен, я знаю эту кухню изнутри.</p>
+            <p className="p muted">За что меня ценят ученики: интересные уроки, честная нагрузка без переработок и без халявы, и методика, которая реально работает.</p>
+          </div>
+
+          {/* Экран 3 — как проходят уроки */}
+          <div className="card">
+            <div className="eyebrow">Как проходят уроки</div>
+            <h2 className="h2" style={{marginTop:10}}>Как всё устроено</h2>
+            <p className="p">Занимаемся в Zoom, а все материалы — на интерактивной платформе: встроенный словарь, удобные задания и домашка, всё в одном месте. Один урок — 45–50 минут, без зубрёжки правил ради правил.</p>
+            <div className="facts">
+              <div className="fact"><span className="ic">🎥</span><span>Zoom — живой урок один на один</span></div>
+              <div className="fact"><span className="ic">📚</span><span>Интерактивная платформа: словарь, задания, домашка</span></div>
+              <div className="fact"><span className="ic">⏱️</span><span>45–50 минут — концентрированно и по делу</span></div>
             </div>
-            <div className="bk-days">
+            <div className="subh">Что будет на вводном</div>
+            <p className="p muted">Знакомимся: я определяю твой уровень, а ты вживую смотришь платформу, формат заданий и то, как я работаю. К концу урока тебе будет понятно, на каком ты уровне и как мы двигаемся дальше.</p>
+          </div>
+
+          {/* Экран 4 — истории учеников */}
+          <div className="card">
+            <div className="eyebrow">Отзывы</div>
+            <h2 className="h2" style={{marginTop:10}}>Истории моих учеников</h2>
+            <div className="avts">
+              {STORIES.map((s,i)=>(
+                <div key={i} className={"avt"+(i===story?" sel":"")} style={{background:s.col}} onClick={()=>setStory(i)}>{s.n[0]}</div>
+              ))}
+            </div>
+            <div style={{fontFamily:"var(--fd)",fontWeight:900,fontSize:19}}>{STORIES[story].n}</div>
+            <div className="story-res">↑ {STORIES[story].res}</div>
+            <div className="grid2">
+              <div className="gcell"><div className="gl">Что хотел</div><div className="gv">{STORIES[story].want}</div></div>
+              <div className="gcell"><div className="gl">Как работали</div><div className="gv">{STORIES[story].work}</div></div>
+              <div className="gcell ab"><div className="gl">Точка А</div><div className="gv">{STORIES[story].a}</div></div>
+              <div className="gcell b"><div className="gl">Точка Б</div><div className="gv">{STORIES[story].b}</div></div>
+            </div>
+          </div>
+
+          {/* Правила (сворачиваемо) */}
+          <details className="acc">
+            <summary>Правила <span className="muted" style={{fontWeight:600,fontSize:13}}>развернуть</span></summary>
+            <div className="body">
+              <ul className="list">
+                <li>Уроки в Zoom, материалы на платформе. Урок 45–50 минут.</li>
+                <li>Отмена или перенос в день урока — урок считается проведённым.</li>
+                <li>Если урок отменяю я в тот же день — тебе начисляется дополнительный.</li>
+                <li>Не вышел на связь 15 минут и не предупредил — урок считается проведённым.</li>
+                <li>Свободное время закрепляется за тобой на 2 недели.</li>
+                <li>Цена меняется дважды в год на 10% (сентябрь и декабрь).</li>
+                <li>Решил закончить — предупреди за 2 недели, чтобы я спланировал расписание.</li>
+              </ul>
+            </div>
+          </details>
+
+          <button className="btn btn-acc" onClick={startBooking}>Выбрать время для вводного</button>
+        </>)}
+
+        {/* ================= Экран 5 — выбор времени ================= */}
+        {flow==="slots" && (
+          <div className="card">
+            <button className="back" onClick={()=>setFlow(null)}>← На главную</button>
+            <div className="step">Шаг 1 из 3 · выбор времени</div>
+            <h2 className="h2">Выбери удобное время</h2>
+            <div className="tznote">🕒 Время указано по Москве (МСК).</div>
+            <div className="days">
               {days.map((d,i)=>(
-                <div key={d.ts} className={"bk-day"+(i===dayIdx?" sel":"")+(d.slots.length?"":" empty")}
-                     onClick={()=>d.slots.length&&setDayIdx(i)}>
-                  <div className="dw">{fmtDay(d.ts,tz)}</div>
-                  <div className="dd">{fmtDayNum(d.ts,tz)}</div>
-                  <div className="dn">{d.slots.length? d.slots.length+" оконⁿ".replace("ⁿ",""):"—"}</div>
+                <div key={d.ts} className={"day"+(i===dayIdx?" sel":"")+(d.slots.length?"":" empty")} onClick={()=>d.slots.length&&setDayIdx(i)}>
+                  <div className="dw">{fW(d.ts)}</div><div className="dd">{fD(d.ts)}</div>
+                  <div className="dn">{d.slots.length?d.slots.length+" ок.":"—"}</div>
                 </div>
               ))}
             </div>
-            {dayIdx>=0 && days[dayIdx] ? (
-              <div className="bk-slots">
-                {days[dayIdx].slots.map(ts=>(
-                  <div key={ts} className={"bk-slot"+(slot===ts?" sel":"")} onClick={()=>pickSlot(ts)}>{fmtTime(ts,tz)}</div>
-                ))}
-              </div>
-            ) : <div className="bk-empty">Выбери день со свободными окнами</div>}
+            {days[dayIdx]&&days[dayIdx].slots.length?(
+              <div className="slots">{days[dayIdx].slots.map(ts=><div key={ts} className="slot" onClick={()=>pickSlot(ts)}>{fT(ts)}</div>)}</div>
+            ):<p className="p muted" style={{textAlign:"center"}}>Выбери день со свободными окнами</p>}
           </div>
         )}
 
-        {/* FORM */}
-        {step==="form" && (
-          <div className="bk-card">
-            <button className="bk-back" onClick={()=>setStep("calendar")}>← Другое время</button>
-            <div className="bk-timer">⏳ Время держим за тобой: <b>{mm}:{ss}</b></div>
-            <div className="bk-row">Вводное занятие · <b>{slot? fmtFull(slot,tz):""}</b></div>
-            <form onSubmit={submitForm} onChange={()=>{ if(!startedForm.current){ startedForm.current=true; track("begin_form"); } }}>
-              <div className="bk-lbl">Как тебя зовут?</div>
-              <input className="bk-inp" required value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))} placeholder="Имя" autoComplete="name" />
-              <div className="bk-lbl">Email <span style={{color:"#9AA0B8",fontWeight:400}}>(туда придёт ссылка и .ics)</span></div>
-              <input className="bk-inp" required type="email" value={form.email} onChange={e=>setForm(f=>({...f,email:e.target.value}))} placeholder="you@mail.ru" autoComplete="email" />
-              <div className="bk-lbl">Telegram</div>
-              <input className="bk-inp" value={form.tg} onChange={e=>setForm(f=>({...f,tg:e.target.value}))} placeholder="@username" />
-              <div className="bk-lbl">Твой уровень английского</div>
-              <select className="bk-sel" required value={form.level} onChange={e=>setForm(f=>({...f,level:e.target.value}))}>
+        {/* ================= Экран 6 — пара вопросов ================= */}
+        {flow==="questions" && (
+          <div className="card">
+            <button className="back" onClick={()=>setFlow("slots")}>← Другое время</button>
+            <div className="timer">⏳ Время держим за тобой: <b>{mm}:{ss}</b></div>
+            <div className="rowc">Вводное занятие · <b>{slot?fFull(slot):""}</b></div>
+            <h2 className="h2">Пара вопросов перед стартом</h2>
+            <p className="p muted" style={{marginTop:-4}}>Это поможет мне подготовиться к нашему первому уроку.</p>
+            <form onSubmit={submitQ}>
+              <div className="lbl">Как ты оцениваешь свой уровень?</div>
+              <select className="sel" required value={q.level} onChange={e=>setQ(v=>({...v,level:e.target.value}))}>
                 <option value="" disabled>Выбери…</option>
-                <option>Начинаю с нуля</option><option>A2</option><option>B1</option><option>B2</option><option>C1+</option><option>Не знаю</option>
+                <option>Начинающий</option><option>A1–A2</option><option>B1–B2</option><option>C1 и выше</option><option>Не знаю</option>
               </select>
-              <div className="bk-lbl">Зачем тебе английский?</div>
-              <input className="bk-inp" value={form.why} onChange={e=>setForm(f=>({...f,why:e.target.value}))} placeholder="Работа, переезд, путешествия…" />
-              <div className="bk-lbl">Как учил раньше? <span style={{color:"#9AA0B8",fontWeight:400}}>(необязательно)</span></div>
-              <input className="bk-inp" value={form.how} onChange={e=>setForm(f=>({...f,how:e.target.value}))} placeholder="Школа, репетитор, приложения…" />
-              <label className="bk-consent">
+              <div className="lbl">Для чего тебе английский?</div>
+              <input className="inp" required value={q.why} onChange={e=>setQ(v=>({...v,why:e.target.value}))} placeholder="Работа, путешествия, переезд, для себя…" />
+              <div className="lbl">Куда прислать доступы к платформе?</div>
+              <input className="inp" required type="email" value={q.email} onChange={e=>setQ(v=>({...v,email:e.target.value}))} placeholder="you@mail.ru" autoComplete="email" />
+              <label className="consent">
                 <input type="checkbox" checked={consent} onChange={e=>setConsent(e.target.checked)} required />
                 <span>Я соглашаюсь с <a href="https://chill.education/policy.html" target="_blank" rel="noopener">политикой конфиденциальности</a> и <a href="https://chill.education/offer.html" target="_blank" rel="noopener">офертой</a></span>
               </label>
-              <button className="bk-btn" type="submit" disabled={!consent} style={{marginTop:12}}>Перейти к оплате</button>
+              <button className="btn" type="submit" disabled={!consent} style={{marginTop:12}}>Перейти к оплате</button>
             </form>
           </div>
         )}
 
-        {/* PAY */}
-        {step==="pay" && (
-          <div className="bk-card">
-            <button className="bk-back" onClick={()=>setStep("form")}>← Назад</button>
-            <div className="bk-timer">⏳ Время держим за тобой: <b>{mm}:{ss}</b></div>
-            <div className="bk-eyebrow">Оплата вводного занятия</div>
-            <h1 className="bk-h1" style={{fontSize:23,margin:"8px 0 12px"}}>{slot? fmtFull(slot,tz):""}</h1>
-            <div className="bk-price"><b>{PRICE.intro}</b><span className="free">вводное · −50%</span></div>
-            <p className="bk-p">Слот закрепится за тобой только после оплаты. Сразу после — письмо со ссылкой на Zoom и файлом для календаря.</p>
-            <button className="bk-btn bk-btn-acc" onClick={pay}>Оплатить {PRICE.intro}</button>
-            <div className="bk-note">Демо-кнопка. На боевом сайте здесь откроется безопасная оплата Т-Кассы.</div>
+        {/* ================= Экран 7 — оплата ================= */}
+        {flow==="pay" && (
+          <div className="card">
+            <button className="back" onClick={()=>setFlow("questions")}>← Назад</button>
+            <div className="timer">⏳ Время держим за тобой: <b>{mm}:{ss}</b></div>
+            <h2 className="h2">Сколько это стоит</h2>
+            <div className="cur">
+              {Object.keys(PRICES).map(k=><button key={k} className={ccy===k?"on":""} onClick={()=>setCcy(k)}>{PRICES[k].c}</button>)}
+            </div>
+            <div className="price"><b>{P.intro} {P.c}</b><span className="pill">вводное · −50%</span></div>
+            <p className="p muted" style={{marginTop:2}}>Обычный урок — {P.lesson} {P.c}. Вводное — половина цены.</p>
+            <div className="rowc">Вводное занятие · <b>{slot?fFull(slot):""}</b></div>
+            <div className="subh">Как оплата устроена</div>
+            <ul className="list">
+              <li>Оплата за месяц вперёд (например, 2 раза в неделю — 8 уроков).</li>
+              <li>Оплаченные уроки действуют 2 месяца.</li>
+              <li>Слот закрепляется только после оплаты.</li>
+            </ul>
+            <button className="btn btn-acc" onClick={pay}>Оплатить и записаться</button>
+            <button className="contact-btn" onClick={contact}>Связаться — если с оплатой что-то не так</button>
+            <div className="note">Демо-кнопка. На боевом сайте здесь откроется безопасная оплата (провайдер уточняется).</div>
           </div>
         )}
 
-        {/* DONE */}
-        {step==="done" && (
-          <div className="bk-card" style={{textAlign:"center"}}>
-            <div className="bk-ok-ic">✓</div>
-            <h1 className="bk-h1" style={{fontSize:24}}>Готово, ты записан{form.name?", "+form.name:""}!</h1>
-            <div className="bk-row" style={{textAlign:"left"}}>Вводное занятие<br/><b>{slot? fmtFull(slot,tz):""}</b></div>
-            <p className="bk-p">Письмо со ссылкой на Zoom и файлом для календаря придёт на <b>{form.email||"почту"}</b>. До встречи!</p>
-            <button className="bk-btn bk-ghost" onClick={()=>{ setStep("landing"); setSlot(null); setConsent(false); }}>На главную</button>
+        {/* ================= Экран 9 — после оплаты ================= */}
+        {flow==="done" && (
+          <div className="card" style={{textAlign:"center"}}>
+            <div className="ok-ic">✓</div>
+            <h2 className="h2">Готово, ты записан!</h2>
+            <p className="p">Всё прошло, жду тебя на уроке. Скинул на почту <b>{q.email||"—"}</b> доступ к платформе, ссылку на Zoom и добавил урок в календарь.</p>
+            <div className="rowc" style={{textAlign:"left"}}>Вводное занятие<br/><b>{slot?fFull(slot):""}</b></div>
+            <div style={{textAlign:"left"}}>
+              <div className="subh">Что придёт на почту</div>
+              <ul className="list">
+                <li>Доступ к интерактивной платформе (логин и пароль)</li>
+                <li>Постоянная ссылка на Zoom</li>
+                <li>Событие в календарь с датой и временем урока</li>
+              </ul>
+            </div>
+            <p className="note">Перед уроком проверь, что интернет и связь работают стабильно. До встречи!</p>
+            <button className="btn btn-ghost" onClick={()=>{setFlow(null);setSlot(null);setConsent(false);}}>На главную</button>
           </div>
         )}
 
-        {/* NO SLOTS -> школа */}
-        {step==="noslots" && (
-          <div className="bk-card" style={{textAlign:"center"}}>
-            <div className="bk-eyebrow">Свободных окон нет</div>
-            <h1 className="bk-h1">Ближайшие даты пока заняты 🙈</h1>
-            <p className="bk-p">У меня сейчас всё расписано. Чтобы не ждать — можно начать в моей школе Chill Education: те же принципы, проверенные преподаватели, свободные места есть.</p>
-            <button className="bk-btn" onClick={goSchool}>Записаться в школу Chill Education →</button>
-            <div style={{margin:"18px 0 6px",fontSize:13,color:"#5A5F7D"}}>или оставь почту — напишу, когда появится окно у меня:</div>
-            <WaitList />
+        {/* ================= Нет слотов → школа ================= */}
+        {flow==="noslots" && (
+          <div className="card" style={{textAlign:"center"}}>
+            <button className="back" onClick={()=>setFlow(null)} style={{textAlign:"left",display:"block"}}>← На главную</button>
+            <div className="eyebrow">Сейчас всё занято</div>
+            <h2 className="h2" style={{marginTop:10}}>Сейчас у меня всё занято</h2>
+            <p className="p">У меня ограниченное расписание, и свободные окна бывают не всегда. Но есть преподаватели моей школы — они работают по тем же материалам и той же методике, что и я. Подход будет тот же. Вводный урок у них <b>бесплатный</b>.</p>
+            <img src="https://chill.education/img/cta-mascot.png" alt="" style={{height:120,margin:"4px auto 12px"}} />
+            <button className="btn" onClick={goSchool}>Записаться к преподавателям школы →</button>
           </div>
         )}
       </div>
 
-      {/* демо-переключатель (только для прототипа) */}
-      <div className="bk-demo">
+      <div className="demo">
         Прототип · демо-данные
-        <button onClick={()=>{ setForceNoSlots(v=>!v); setStep(!forceNoSlots?"noslots":"landing"); }}>
-          {forceNoSlots? "Показать со слотами":"Показать «нет слотов»"}
+        <button onClick={()=>{setForceNo(v=>!v);setFlow(!forceNo?"noslots":null);window.scrollTo(0,0);}}>
+          {forceNo?"Показать со слотами":"Показать «нет слотов»"}
         </button>
       </div>
     </div>
-  );
-}
-
-function WaitList(){
-  const [v,setV]=useState(""); const [ok,setOk]=useState(false);
-  if(ok) return <div style={{color:"#1FA85A",fontWeight:600,fontSize:14}}>✓ Записал, напишу как появится окно.</div>;
-  return (
-    <form onSubmit={e=>{e.preventDefault(); if(!v.trim())return; track("waitlist_join"); setOk(true);}} style={{display:"flex",gap:8}}>
-      <input className="bk-inp" type="email" required value={v} onChange={e=>setV(e.target.value)} placeholder="you@mail.ru" style={{flex:1}} />
-      <button className="bk-btn" type="submit" style={{width:"auto",padding:"12px 16px"}}>Жду</button>
-    </form>
   );
 }
 
