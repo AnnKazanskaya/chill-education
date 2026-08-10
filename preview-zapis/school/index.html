@@ -35,6 +35,14 @@
   @media(min-width:761px){
     .about-teacher{width:100%!important;max-width:440px!important;animation:none!important}
   }
+  /* планшет и узкий ноутбук: компактнее шапка */
+  @media(min-width:761px) and (max-width:1020px){
+    header nav[data-nav]{gap:16px!important}
+    header nav[data-nav] a{font-size:14px!important}
+    .btn-signup{font-size:13px!important;padding:10px 16px!important}
+  }
+  /* модалка не выше экрана */
+  #school-modal>div{max-height:90vh;overflow:auto}
   @media(max-width:760px){
     [data-nav]{display:none!important}
     [data-cta-cat]{display:none!important}
@@ -43,8 +51,8 @@
     .lbl-full{display:none}
     .lbl-short{display:inline}
     #top{grid-template-columns:1fr!important;padding-top:14px!important;gap:16px!important}
-    .hero-visual{position:absolute!important;top:34px;right:-21px;width:132px;min-height:0!important;height:auto!important;z-index:5;pointer-events:none}
-    .hero-mascot{width:127px!important;max-width:127px!important}
+    .hero-visual{position:static!important;width:100%;min-height:0!important;height:auto!important;order:-1;pointer-events:none;margin:4px 0 2px}
+    .hero-mascot{width:170px!important;max-width:170px!important}
     .hero-deco,.hero-hello,.hero-glow{display:none!important}
     .hero-text{position:relative;z-index:1}
     .sec{padding-top:30px!important;padding-bottom:30px!important}
@@ -53,6 +61,17 @@
     .review-portrait{width:200px!important}
     .rev-ava-img{width:46px!important;height:46px!important}
     .about-grid{grid-template-columns:1fr!important}
+    .about-teacher{max-height:440px}
+    .hero-cta{display:block!important;text-align:center}
+    #video{padding-top:10px!important}
+  }
+  /* маленькие телефоны */
+  @media(max-width:400px){
+    .day-btn{min-width:52px;padding:8px 4px}
+    .slot-btn{font-size:14px;padding:11px 4px}
+    #school-modal>div{padding:24px 18px}
+    .btn-signup{padding:8px 11px!important;font-size:12px!important}
+    header a img{height:40px!important}
   }
 </style>
 </head>
@@ -79,7 +98,7 @@
       <span style="display:inline-flex;align-items:center;gap:8px;background:#fff;color:#2440D9;font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase;padding:8px 14px;border-radius:999px;box-shadow:0 4px 14px rgba(36,64,217,.12)">✦ Личные уроки · онлайн</span>
       <h1 class="h-nunito" style="font-weight:900;font-size:clamp(40px,5.4vw,72px);line-height:.98;letter-spacing:-1.5px;margin:18px 0 0">Заговори <span style="color:#2440D9">на английском</span><br>и перестань бояться ошибок</h1>
       <p style="max-width:460px;margin:20px 0 28px;font-size:18px;line-height:1.55;color:#5A5F7D">Индивидуальные уроки один на один под твои цели: работа, поездки, общение с друзьями из других стран. <span style="color:#FF7A1A;font-weight:700">Готовлю и к IELTS.</span></p>
-      <a href="#calendar" style="display:inline-block;background:#FF7A1A;color:#fff;font-weight:700;font-size:16px;padding:16px 28px;border-radius:14px;text-decoration:none;box-shadow:0 8px 20px rgba(255,122,26,.32)">Выбрать время для вводного</a>
+      <a href="#calendar" class="hero-cta" style="display:inline-block;background:#FF7A1A;color:#fff;font-weight:700;font-size:16px;padding:16px 28px;border-radius:14px;text-decoration:none;box-shadow:0 8px 20px rgba(255,122,26,.32)">Выбрать время для вводного</a>
       <div style="display:flex;align-items:center;gap:8px;margin-top:18px;flex-wrap:wrap">
         <span style="font-size:13px;font-weight:600;color:#5A5F7D">10 лет преподаю</span><span style="color:#C7CCE6">·</span>
         <span style="font-size:13px;font-weight:600;color:#5A5F7D">мой IELTS 8</span><span style="color:#C7CCE6">·</span>
