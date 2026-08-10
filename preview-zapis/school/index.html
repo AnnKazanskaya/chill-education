@@ -32,6 +32,9 @@
   .cur-btn.active{background:#2440D9;color:#fff}
   .inp2{width:100%;border:none;outline:none;font-family:'Manrope';font-size:15px;font-weight:500;padding:13px 16px;border-radius:12px;background:#F4F5FC;color:#1A1E33}
   .inp2:focus{box-shadow:0 0 0 3px rgba(36,64,217,.35)}
+  @media(min-width:761px){
+    .about-teacher{width:100%!important;max-width:440px!important;animation:none!important}
+  }
   @media(max-width:760px){
     [data-nav]{display:none!important}
     [data-cta-cat]{display:none!important}
@@ -123,7 +126,7 @@
       <h2 class="h-nunito" style="font-weight:900;font-size:clamp(30px,4vw,46px);line-height:1.02;letter-spacing:-1px;margin-top:12px">Кто я и как мы<br>будем работать</h2>
     </div>
     <div class="about-grid" style="display:grid;grid-template-columns:340px 1fr;gap:28px;align-items:start;max-width:980px;margin:0 auto">
-      <img src="img/alex-nobg.png" alt="Алекс — преподаватель английского" class="floaty" style="width:50%;max-width:220px;margin:0 auto;display:block">
+      <img src="img/alex-nobg.png" alt="Алекс — преподаватель английского" class="floaty about-teacher" style="width:50%;max-width:220px;margin:0 auto;display:block">
       <div style="display:flex;flex-direction:column;gap:16px">
         <div style="background:#fff;border-radius:22px;padding:24px 26px;box-shadow:0 24px 50px -38px rgba(36,64,217,.35)">
           <p style="font-size:16px;line-height:1.6;color:#3A3F5C">Преподаю английский <b>10 лет</b>. Сейчас сам учусь на педагога в Лондоне и живу здесь, так что живая говорящая среда у меня всегда под рукой — и я приношу её на уроки.</p>
