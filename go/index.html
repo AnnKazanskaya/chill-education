@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://chill.education/">
+<title>Chat &amp; Chill — переход на сайт…</title>
+<script>
+(function(){
+  /* Формат кода после #:
+     [страница:]источник[.тип].кампания[.пометка]
+     источник: tg→telegram, ig→instagram, vk, yt→youtube, иное — как есть
+     тип (необязателен, по умолчанию cpc): cpc | social | referral | email
+     страница (необязательна): test → тест на уровень, pay → оплата
+     Примеры:  #tg.yaplakal_12_08   #ig.social.blogger_x   #test:tg.lentach */
+  var SRC={tg:'telegram',ig:'instagram',vk:'vk',yt:'youtube'};
+  var MED=['cpc','social','referral','email'];
+  var PAGES={test:'https://chill.education/placement-test/',pay:'https://chill.education/pay.html'};
+  var base='https://chill.education/';
+  try{
+    var code=(location.hash||'').replace(/^#/,'');
+    if(code){
+      var m=code.match(/^([a-z]+):(.*)$/);
+      if(m && PAGES[m[1]]){ base=PAGES[m[1]]; code=m[2]; }
+      var parts=code.split('.');
+      var source=SRC[parts[0]]||parts[0]||'link';
+      var medium='cpc', rest=parts.slice(1);
+      if(rest.length>1 && MED.indexOf(rest[0])>=0){ medium=rest[0]; rest=rest.slice(1); }
+      var campaign=rest[0]||'unknown';
+      var content=rest[1]||'';
+      var u=base+(base.indexOf('?')>=0?'&':'?')+
+        'utm_source='+encodeURIComponent(source)+
+        '&utm_medium='+encodeURIComponent(medium)+
+        '&utm_campaign='+encodeURIComponent(campaign)+
+        (content?'&utm_content='+encodeURIComponent(content):'');
+      location.replace(u);
+      return;
+    }
+  }catch(e){}
+  location.replace(base);
+})();
+</script>
+</head>
+<body style="font-family:sans-serif;padding:40px;color:#1A1E33">
+Открываем сайт… <a href="https://chill.education/">Перейти вручную</a>
+</body>
+</html>

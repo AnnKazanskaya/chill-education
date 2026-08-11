@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Генератор UTM-ссылок — Chat &amp; Chill</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Nunito:wght@800;900&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Manrope',sans-serif;color:#1A1E33;background:#EEF0FB;-webkit-font-smoothing:antialiased;min-height:100vh}
+  img{display:block}
+  ::selection{background:#FF7A1A;color:#fff}
+  .wrap{max-width:680px;margin:0 auto;padding:0 20px 60px}
+  .h-nunito{font-family:'Nunito',sans-serif}
+  .card{background:#fff;border-radius:26px;padding:26px clamp(20px,4vw,32px);box-shadow:0 24px 50px -34px rgba(36,64,217,.35)}
+  .lbl{font-size:13px;font-weight:700;color:#3A3F5C;margin:16px 0 6px}
+  .lbl small{font-weight:500;color:#8C90AC}
+  .inp,.sel{width:100%;border:1.5px solid #E2E5F4;border-radius:12px;padding:12px 14px;font-family:'Manrope';font-size:15px;color:#1A1E33;background:#FCFCFF}
+  .inp:focus,.sel:focus{outline:none;border-color:#2440D9}
+  .hint{font-size:12px;color:#8C90AC;margin-top:5px;line-height:1.45}
+  .res{background:#F4F5FC;border:1.5px dashed #C9D2F5;border-radius:14px;padding:14px 16px;font-size:14px;word-break:break-all;line-height:1.5;font-family:ui-monospace,Menlo,monospace}
+  .btn{display:inline-block;border:none;cursor:pointer;background:#FF7A1A;color:#fff;font-family:'Manrope';font-weight:700;font-size:15px;padding:13px 24px;border-radius:12px;box-shadow:0 8px 18px rgba(255,122,26,.32);transition:transform .06s}
+  .btn:active{transform:translateY(1px)}
+  .btn-blue{background:#2440D9;box-shadow:0 8px 18px rgba(36,64,217,.3)}
+  .chip{display:inline-block;background:#E7ECFF;color:#2440D9;font-weight:700;font-size:12px;padding:5px 12px;border-radius:999px;margin:2px 4px 2px 0}
+  .hist-item{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;border-top:1px solid #EEF0F8;padding:12px 0}
+  .hist-item:first-child{border-top:none}
+  .hist-url{font-size:12.5px;word-break:break-all;color:#5A5F7D;line-height:1.5;font-family:ui-monospace,Menlo,monospace}
+  .hist-name{font-weight:700;font-size:13.5px;color:#1A1E33;margin-bottom:2px}
+  .copy-mini{flex-shrink:0;border:1.5px solid #E2E5F4;background:#fff;border-radius:10px;padding:7px 12px;font-family:'Manrope';font-weight:700;font-size:12px;color:#2440D9;cursor:pointer}
+  .ok-flash{color:#1FA85A!important;border-color:#1FA85A!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header style="display:flex;align-items:center;justify-content:space-between;padding:16px 0 8px">
+    <a href="https://chill.education/" style="display:flex;align-items:center;text-decoration:none">
+      <img src="../img/logo.png" alt="Chat and Chill" style="height:54px;width:auto">
+    </a>
+    <span style="font-size:13px;color:#8C90AC;font-weight:600">внутренний инструмент</span>
+  </header>
+
+  <div style="margin:18px 0 22px">
+    <span style="font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#2440D9">Маркетинг</span>
+    <h1 class="h-nunito" style="font-weight:900;font-size:clamp(28px,5vw,40px);line-height:1.05;letter-spacing:-1px;margin-top:8px">Генератор UTM-ссылок</h1>
+    <p style="font-size:15px;color:#5A5F7D;margin-top:10px;line-height:1.55">Собери ссылку для рекламного поста — переходы по ней появятся в Google Аналитике отдельной строкой.</p>
+  </div>
+
+  <div class="card">
+    <div class="lbl">Куда ведёт ссылка</div>
+    <select class="sel" id="f-page">
+      <option value="https://chill.education/">Главная — chill.education</option>
+      <option value="https://chill.education/placement-test/">Тест на уровень</option>
+      <option value="https://chill.education/pay.html">Оплата</option>
+      <option value="custom">Другая страница…</option>
+    </select>
+    <input class="inp" id="f-page-custom" placeholder="https://chill.education/…" style="display:none;margin-top:8px">
+
+    <div class="lbl">Где будет реклама <small>(utm_source)</small></div>
+    <select class="sel" id="f-source">
+      <option value="telegram">Telegram</option>
+      <option value="instagram">Instagram</option>
+      <option value="vk">ВКонтакте</option>
+      <option value="youtube">YouTube</option>
+      <option value="custom">Другое…</option>
+    </select>
+    <input class="inp" id="f-source-custom" placeholder="например: tiktok" style="display:none;margin-top:8px">
+
+    <div class="lbl">Тип размещения <small>(utm_medium)</small></div>
+    <select class="sel" id="f-medium">
+      <option value="cpc">Платная реклама (cpc)</option>
+      <option value="social">Бесплатный пост (social)</option>
+      <option value="referral">Партнёрская ссылка (referral)</option>
+      <option value="email">Рассылка (email)</option>
+    </select>
+    <div class="hint">Платные посты в каналах и у блогеров — это «Платная реклама», как lentach и yaplakal.</div>
+
+    <div class="lbl">Название кампании <small>(utm_campaign — так строка будет называться в отчёте)</small></div>
+    <input class="inp" id="f-campaign" placeholder="например: yaplakal_12_08 или имя канала">
+    <div class="hint">Обычно: имя канала, и если постов несколько — дата поста. Русские буквы, пробелы и заглавные исправятся автоматически. <b>Пиши одинаково для одинаковых кампаний</b> — «Lentach» и «lentach» станут в отчёте разными строками.</div>
+
+    <div class="lbl">Пометка внутри кампании <small>(utm_content, необязательно)</small></div>
+    <input class="inp" id="f-content" placeholder="например: video или kartinka — если в одной кампании два разных креатива">
+
+    <div style="margin-top:20px">
+      <button class="btn" id="gen">Собрать ссылку</button>
+    </div>
+
+    <div id="out" style="display:none;margin-top:20px">
+      <div class="lbl" style="margin-top:0">Длинная ссылка</div>
+      <div class="res" id="res-url"></div>
+      <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+        <button class="btn btn-blue" id="copy">Скопировать</button>
+        <a id="test-link" href="#" target="_blank" rel="noopener" style="display:inline-block;font-weight:700;font-size:14px;color:#2440D9;text-decoration:none;padding:13px 6px">Проверить переход →</a>
+      </div>
+      <div id="short-block">
+        <div class="lbl">Короткая ссылка <small>(ведёт туда же, метки те же)</small></div>
+        <div class="res" id="res-short"></div>
+        <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+          <button class="btn btn-blue" id="copy-short">Скопировать короткую</button>
+          <a id="test-short" href="#" target="_blank" rel="noopener" style="display:inline-block;font-weight:700;font-size:14px;color:#2440D9;text-decoration:none;padding:13px 6px">Проверить переход →</a>
+        </div>
+      </div>
+      <div class="lbl">Как это будет видно в отчёте GA</div>
+      <div><span class="chip" id="p-source"></span><span class="chip" id="p-medium"></span><span class="chip" id="p-campaign"></span><span class="chip" id="p-content" style="display:none"></span></div>
+      <div class="hint" style="margin-top:8px">Отчёты → «Привлечение трафика». Строка появится после первых переходов (в «Реальном времени» — сразу).</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:18px" id="hist-card" hidden>
+    <h2 class="h-nunito" style="font-weight:800;font-size:20px;margin-bottom:6px">Последние ссылки</h2>
+    <p style="font-size:13px;color:#8C90AC;margin-bottom:10px">Хранятся только в этом браузере.</p>
+    <div id="hist"></div>
+  </div>
+
+  <p style="font-size:12.5px;color:#8C90AC;margin-top:22px;line-height:1.6">Короткая ссылка создаётся автоматически и ведёт туда же, куда длинная, с теми же метками. Совсем короткий адрес вида <b>chill.education/yp12</b> (без #) нужно заводить на сайте вручную — если очень нужно, напиши Ане.</p>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const TR={'а':'a','б':'b','в':'v','г':'g','д':'d','е':'e','ё':'e','ж':'zh','з':'z','и':'i','й':'y','к':'k','л':'l','м':'m','н':'n','о':'o','п':'p','р':'r','с':'s','т':'t','у':'u','ф':'f','х':'h','ц':'c','ч':'ch','ш':'sh','щ':'sch','ъ':'','ы':'y','ь':'','э':'e','ю':'yu','я':'ya'};
+function slug(s){
+  return s.toLowerCase().trim()
+    .split('').map(ch=>TR[ch]!==undefined?TR[ch]:ch).join('')
+    .replace(/[\s.\-/]+/g,'_')
+    .replace(/[^a-z0-9_]/g,'')
+    .replace(/_+/g,'_').replace(/^_|_$/g,'');
+}
+$('f-page').addEventListener('change',()=>{$('f-page-custom').style.display=$('f-page').value==='custom'?'':'none';});
+$('f-source').addEventListener('change',()=>{$('f-source-custom').style.display=$('f-source').value==='custom'?'':'none';});
+
+function load(){try{return JSON.parse(localStorage.getItem('cc_utm_hist')||'[]');}catch(e){return[];}}
+function save(h){try{localStorage.setItem('cc_utm_hist',JSON.stringify(h.slice(0,10)));}catch(e){}}
+function renderHist(){
+  const h=load();
+  $('hist-card').hidden=!h.length;
+  $('hist').innerHTML=h.map((x,i)=>`
+    <div class="hist-item">
+      <div><div class="hist-name">${x.name}</div><div class="hist-url">${x.short||x.url}</div></div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        ${x.short?`<button class="copy-mini" data-i="${i}" data-k="short">Короткую</button>`:''}
+        <button class="copy-mini" data-i="${i}" data-k="url">Длинную</button>
+      </div>
+    </div>`).join('');
+  document.querySelectorAll('.copy-mini').forEach(b=>b.addEventListener('click',()=>copyText(load()[+b.dataset.i][b.dataset.k],b)));
+}
+function copyText(t,btn){
+  const done=()=>{const old=btn.textContent;btn.textContent='✓ Скопировано';btn.classList.add('ok-flash');setTimeout(()=>{btn.textContent=old;btn.classList.remove('ok-flash');},1600);};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done).catch(()=>fallback());}else fallback();
+  function fallback(){const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done();}catch(e){alert('Скопируй вручную: '+t);}ta.remove();}
+}
+$('gen').addEventListener('click',()=>{
+  let page=$('f-page').value==='custom'?$('f-page-custom').value.trim():$('f-page').value;
+  if(!page){alert('Укажи адрес страницы');return;}
+  if(!/^https?:\/\//i.test(page))page='https://'+page;
+  const source=$('f-source').value==='custom'?slug($('f-source-custom').value)||'other':$('f-source').value;
+  const medium=$('f-medium').value;
+  const campaign=slug($('f-campaign').value);
+  if(!campaign){alert('Заполни название кампании — без него в отчёте будет «(not set)»');$('f-campaign').focus();return;}
+  const content=slug($('f-content').value);
+  const u=new URL(page);
+  u.searchParams.set('utm_source',source);
+  u.searchParams.set('utm_medium',medium);
+  u.searchParams.set('utm_campaign',campaign);
+  if(content)u.searchParams.set('utm_content',content);else u.searchParams.delete('utm_content');
+  const url=u.toString();
+  $('res-url').textContent=url;
+  $('test-link').href=url;
+  // короткая ссылка через /go
+  const SRC_CODE={telegram:'tg',instagram:'ig',vk:'vk',youtube:'yt'};
+  const PAGE_CODE={'https://chill.education/':'','https://chill.education/placement-test/':'test:','https://chill.education/pay.html':'pay:'};
+  let shortUrl=null;
+  if(PAGE_CODE[page]!==undefined){
+    shortUrl='https://chill.education/go#'+PAGE_CODE[page]+(SRC_CODE[source]||source)+(medium!=='cpc'?'.'+medium:'')+'.'+campaign+(content?'.'+content:'');
+  }
+  $('short-block').style.display=shortUrl?'':'none';
+  if(shortUrl){$('res-short').textContent=shortUrl;$('test-short').href=shortUrl;}
+  $('p-source').textContent='source: '+source;
+  $('p-medium').textContent='medium: '+medium;
+  $('p-campaign').textContent='campaign: '+campaign;
+  $('p-content').style.display=content?'':'none';
+  if(content)$('p-content').textContent='content: '+content;
+  $('out').style.display='';
+  const h=load();h.unshift({name:campaign+(content?' · '+content:''),url,short:shortUrl});save(h);renderHist();
+  $('out').scrollIntoView({behavior:'smooth',block:'nearest'});
+});
+$('copy').addEventListener('click',()=>copyText($('res-url').textContent,$('copy')));
+renderHist();
+</script>
+</body>
+</html>
