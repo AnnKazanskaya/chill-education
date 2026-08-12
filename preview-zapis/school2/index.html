@@ -55,11 +55,12 @@
     .btn-signup{padding:9px 14px!important;font-size:13px!important;border-radius:12px!important}
     .lbl-full{display:none}
     .lbl-short{display:inline}
-    #top{padding-bottom:28px!important}
-    .hero-visual{padding-top:3vh!important}
-    .hero-mascot{height:min(38vh,380px)!important;max-width:96%!important}
-    .alex-word{font-size:min(44vw,26vh)!important}
-    .hero-text .h-nunito{font-size:29px!important}
+    /* мобайл: постер обычным блоком сверху, текст ниже — без наложений */
+    #top{min-height:0!important;display:block!important;padding:10px 0 30px!important}
+    .hero-visual{position:relative!important;inset:auto!important;padding-top:10px!important;margin-bottom:10px}
+    .hero-mascot{height:min(40vh,340px)!important;max-width:96%!important}
+    .alex-word{font-size:min(46vw,25vh)!important}
+    .hero-text .h-nunito{font-size:27px!important}
     .hero-hello,.hero-glow{display:none!important}
     .hero-visual img.hero-deco{width:30px!important}
     .hero-visual img.hero-deco:nth-of-type(2n){width:20px!important}
