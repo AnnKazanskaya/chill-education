@@ -23,6 +23,9 @@
   .wrap{max-width:1280px;margin:0 auto;padding:0 24px}
   .h-nunito{font-family:'Nunito',sans-serif}
   .lbl-short{display:none}
+  /* шапка: скрыта наверху, плавно появляется после скролла */
+  header{position:fixed!important;top:0;left:0;right:0;margin:0!important;transform:translateY(-110%);opacity:0;transition:transform .38s ease,opacity .38s ease;will-change:transform,opacity}
+  header.shown{transform:none;opacity:1}
   .day-btn{flex:0 0 auto;min-width:62px;text-align:center;border:1.5px solid #E2E5F4;border-radius:14px;padding:10px 6px;cursor:pointer;background:#fff;transition:border-color .15s,background .15s}
   .day-btn.sel{border-color:#2440D9;background:#E7ECFF}
   .day-btn.empty{opacity:.4;cursor:not-allowed}
@@ -384,6 +387,14 @@
 // ---------- аналитика (события воронки) ----------
 function track(e,p){try{window.dataLayer=window.dataLayer||[];window.dataLayer.push({event:e,...p});}catch(x){}try{console.log('[GA4]',e,p||{});}catch(x){}}
 track('view_page',{variant:'school2'});
+
+// шапка появляется после 30px скролла
+(function(){
+  const hdr=document.querySelector('header');
+  function upd(){hdr.classList.toggle('shown',window.scrollY>30);}
+  window.addEventListener('scroll',upd,{passive:true});
+  upd();
+})();
 
 // ---------- ИСТОРИИ ----------
 function initialPortrait(letter,bg){
