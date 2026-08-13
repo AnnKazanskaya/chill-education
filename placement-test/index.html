@@ -92,9 +92,9 @@ async function sendTestResults({ name, contact, level, answers, speaking }){
       method:"POST", headers:{"Content-Type":"application/json"},
       body: JSON.stringify({ chat_id: TG_CHAT_ID, text })
     }).catch(()=>{});
-    if(speaking && speaking.audioUrl){
+    if(speaking && (speaking.audioBlob || speaking.audioUrl)){
       try{
-        const blob = await (await fetch(speaking.audioUrl)).blob();
+        const blob = speaking.audioBlob || await (await fetch(speaking.audioUrl)).blob();
         const m = speaking.mime || blob.type || "";
         const ext = (m.indexOf("mp4")>=0||m.indexOf("m4a")>=0) ? "m4a" : m.indexOf("ogg")>=0 ? "ogg" : m.indexOf("wav")>=0 ? "wav" : "webm";
         const fd = new FormData();
@@ -609,14 +609,14 @@ function SpeakingBlock({ prompt, onComplete }){
   const [mime, setMime] = useState("audio/webm");
   const [text, setText] = useState("");
   const recRef = useRef(null); const chunksRef = useRef([]); const timerRef = useRef(null); const streamRef = useRef(null);
+  const blobRef = useRef(null); // сам файл записи — живёт дольше компонента, нужен для отправки в Telegram
 
   const supported = typeof navigator!=="undefined" && navigator.mediaDevices && navigator.mediaDevices.getUserMedia && typeof window!=="undefined" && "MediaRecorder" in window;
 
-  useEffect(()=>()=>{ // cleanup
+  useEffect(()=>()=>{ // cleanup (ссылку не отзываем: она нужна плееру в отчёте и отправке после записи на урок)
     try{ clearInterval(timerRef.current); }catch(e){}
     try{ streamRef.current && streamRef.current.getTracks().forEach(t=>t.stop()); }catch(e){}
-    try{ audioUrl && URL.revokeObjectURL(audioUrl); }catch(e){}
-  },[audioUrl]);
+  },[]);
 
   const startRec = async ()=>{
     if(!supported){ setStatus("fallback"); return; }
@@ -629,6 +629,7 @@ function SpeakingBlock({ prompt, onComplete }){
       mr.onstop = ()=>{
         const type = mr.mimeType || "audio/webm";
         const blob = new Blob(chunksRef.current, { type });
+        blobRef.current = blob;
         const url = URL.createObjectURL(blob);
         setMime(type); setAudioUrl(url); setStatus("recorded");
         try{ stream.getTracks().forEach(t=>t.stop()); }catch(e){}
@@ -639,10 +640,10 @@ function SpeakingBlock({ prompt, onComplete }){
     }catch(e){ setStatus("fallback"); }
   };
   const stopRec = ()=>{ try{ clearInterval(timerRef.current); }catch(e){} try{ recRef.current && recRef.current.state!=="inactive" && recRef.current.stop(); }catch(e){} };
-  const reRec = ()=>{ try{ audioUrl && URL.revokeObjectURL(audioUrl); }catch(e){} setAudioUrl(null); setSeconds(0); setStatus("idle"); };
+  const reRec = ()=>{ try{ audioUrl && URL.revokeObjectURL(audioUrl); }catch(e){} blobRef.current=null; setAudioUrl(null); setSeconds(0); setStatus("idle"); };
 
   const hasAnswer = !!audioUrl || (status==="fallback" && text.trim().length>0);
-  const finish = ()=> onComplete({ audioUrl, mime, seconds, text: text.trim(), prompt: prompt.prompt, level: prompt.level });
+  const finish = ()=> onComplete({ audioBlob: blobRef.current, audioUrl, mime, seconds, text: text.trim(), prompt: prompt.prompt, level: prompt.level });
 
   return (
     <div className="elc-q">
@@ -1035,7 +1036,7 @@ function Report({ answers, speaking, name, track, startTime, endTime, back }){
         <div className="elc-note" style={{marginTop:12}}>Говорение оценивается преподавателем вручную (беглость, произношение, грамматика, словарный запас).</div>
       </div>
 
-      <div className="elc-disc" style={{marginTop:20}}>В рабочей версии этот отчёт автоматически сохраняется в админ-панели Chill Education и доступен преподавателю до урока. Здесь — демонстрация того, что видит школа.</div>
+      <div className="elc-disc" style={{marginTop:20}}>После записи на бесплатный урок этот отчёт вместе с записью говорения автоматически отправляется преподавателям Chill Education — они посмотрят его до вашего первого занятия.</div>
       <div className="elc-actions">
         <button className="elc-btn" onClick={()=>window.print()}>Печать / сохранить PDF</button>
         <button className="elc-restart" onClick={back}>← Назад к результату</button>
