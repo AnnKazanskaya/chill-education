@@ -55,11 +55,12 @@
     .btn-signup{padding:9px 14px!important;font-size:13px!important;border-radius:12px!important}
     .lbl-full{display:none}
     .lbl-short{display:inline}
-    /* мобайл: постер обычным блоком сверху, текст ниже — без наложений */
-    #top{min-height:0!important;display:block!important;padding:10px 0 30px!important}
-    .hero-visual{position:relative!important;inset:auto!important;padding-top:12px!important;margin-bottom:10px;overflow:hidden}
-    .hero-mascot{height:min(40vh,340px)!important;max-width:96%!important}
-    .alex-word{top:0!important;font-size:min(56vw,26vh)!important;transform:scaleY(2.2)!important}
+    /* мобайл: карточка колонкой — фото сверху, текст под ним */
+    #top{padding:76px 0 24px!important}
+    .hero-card{min-height:0!important;display:block!important;border-radius:28px!important;padding:22px 18px 24px!important}
+    .hero-card .alex-word{font-size:60vw!important;right:-4%!important;bottom:-2%!important}
+    .hero-card .hero-deco{display:none!important}
+    .hero-mascot{position:relative!important;right:auto!important;bottom:auto!important;height:min(34vh,300px)!important;margin:6px auto 12px!important;display:block}
     .hero-text .h-nunito{font-size:27px!important}
     .hero-hello,.hero-glow{display:none!important}
     .hero-visual img.hero-deco{width:30px!important}
@@ -101,30 +102,25 @@
   </header>
 
   <!-- ============ HERO ============ -->
-  <section id="top" style="position:relative;min-height:92svh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 0 44px">
-    <div class="hero-bleed" style="position:absolute;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);z-index:0;overflow:hidden">
-      <span aria-hidden="true" class="alex-word" style="position:absolute;left:50%;top:-1vh;transform:translateX(-50%);font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:46vw;line-height:.85;color:transparent;-webkit-text-stroke:3px rgba(36,64,217,.5);user-select:none;white-space:nowrap">ALEX</span>
-      <span aria-hidden="true" style="position:absolute;left:-1vw;bottom:-4vh;font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:18vw;line-height:.85;color:transparent;-webkit-text-stroke:2px rgba(36,64,217,.16);user-select:none;white-space:nowrap">ENGLISH</span>
-      <img src="https://chill.education/img/deco-0.png" alt="" class="floaty hero-deco" style="position:absolute;top:9%;left:12%;width:48px;transform:rotate(-14deg);animation-duration:4.2s;animation-delay:.3s">
-      <img src="https://chill.education/img/deco-0.png" alt="" class="floaty hero-deco" style="position:absolute;bottom:16%;right:9%;width:34px;transform:rotate(12deg);animation-duration:5.1s;animation-delay:1.3s">
-      <img src="https://chill.education/img/deco-8.png" alt="" class="floaty hero-deco" style="position:absolute;top:22%;left:38%;width:30px;animation-duration:4.6s;animation-delay:.6s">
-      <img src="https://chill.education/img/deco-5.png" alt="" class="floaty hero-deco" style="position:absolute;top:34%;left:7%;width:52px;animation-duration:5.5s;animation-delay:.9s">
-      <img src="https://chill.education/img/deco-3.png" alt="" class="floaty hero-deco" style="position:absolute;top:6%;right:30%;width:26px;animation-duration:4s;animation-delay:1.5s">
-    </div>
+  <section id="top" style="position:relative;padding:96px 0 34px">
+    <div class="hero-card" style="position:relative;min-height:82vh;background:linear-gradient(150deg,#2F50E6,#2440D9 55%,#1B2E8A);border-radius:44px;padding:clamp(28px,4vw,56px);display:flex;align-items:center;overflow:hidden;box-shadow:0 50px 100px -50px rgba(36,64,217,.7)">
+      <span aria-hidden="true" class="alex-word" style="position:absolute;right:-2%;bottom:-7%;font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:clamp(220px,30vw,430px);line-height:.8;color:rgba(255,255,255,.10);user-select:none;white-space:nowrap">ALEX</span>
+      <img src="https://chill.education/img/deco-0.png" alt="" class="floaty hero-deco" style="position:absolute;top:10%;right:27%;width:44px;transform:rotate(-14deg);animation-duration:4.2s;animation-delay:.3s">
+      <img src="https://chill.education/img/deco-2.png" alt="" class="floaty hero-deco" style="position:absolute;top:15%;left:46%;width:24px;animation-duration:4.6s;animation-delay:.6s">
+      <img src="https://chill.education/img/deco-0.png" alt="" class="floaty hero-deco" style="position:absolute;bottom:13%;left:40%;width:30px;transform:rotate(14deg);animation-duration:5.1s;animation-delay:1.3s">
+      <img src="https://chill.education/img/deco-2.png" alt="" class="floaty hero-deco" style="position:absolute;bottom:26%;right:4%;width:30px;animation-duration:5.5s;animation-delay:.9s">
+      <img src="img/alex-cut.png" alt="Алекс — преподаватель английского" class="hero-mascot" style="position:absolute;right:clamp(8px,4vw,64px);bottom:0;height:min(68vh,86%);width:auto;z-index:1">
 
-    <div class="hero-visual" style="position:absolute;right:0;bottom:0;display:flex;align-items:flex-end;justify-content:flex-end;pointer-events:none;z-index:1">
-      <img src="img/alex-cut.png" alt="Алекс — преподаватель английского" class="hero-mascot" style="height:min(82vh,800px);width:auto;display:block">
-    </div>
-
-    <div class="hero-text" style="position:relative;z-index:2;text-align:left;max-width:640px;margin:0">
-      <span style="display:inline-flex;align-items:center;gap:8px;background:#fff;color:#2440D9;font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase;padding:8px 14px;border-radius:999px">✦ Личные уроки · онлайн</span>
-      <h1 class="h-nunito" style="font-weight:900;font-size:clamp(30px,3.8vw,50px);line-height:1.02;letter-spacing:-1px;margin:16px 0 0;color:#1A1E33">Заговори <span style="color:#2440D9">на английском</span><br>и перестань бояться ошибок</h1>
-      <p style="max-width:520px;margin:16px 0 24px;font-size:17px;line-height:1.55;color:#5A5F7D">Индивидуальные уроки один на один под твои цели: работа, поездки, общение с друзьями из других стран. <span style="color:#FF7A1A;font-weight:700">Готовлю и к IELTS.</span></p>
-      <a href="#calendar" class="hero-cta" style="display:inline-block;background:#FF7A1A;color:#fff;font-weight:700;font-size:16px;padding:16px 28px;border-radius:14px;text-decoration:none;box-shadow:0 8px 20px rgba(255,122,26,.32)">Выбрать время для вводного</a>
-      <div style="display:flex;align-items:center;gap:8px;margin-top:16px;flex-wrap:wrap">
-        <span style="font-size:13px;font-weight:600;color:#5A5F7D">10 лет преподаю</span><span style="color:#C7CCE6">·</span>
-        <span style="font-size:13px;font-weight:600;color:#5A5F7D">мой IELTS 8</span><span style="color:#C7CCE6">·</span>
-        <span style="font-size:13px;font-weight:600;color:#5A5F7D">веду уроки из Лондона</span>
+      <div class="hero-text" style="position:relative;z-index:2;text-align:left;max-width:600px;margin:0">
+        <span style="display:inline-flex;align-items:center;gap:8px;background:#fff;color:#2440D9;font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase;padding:8px 14px;border-radius:999px">✦ Личные уроки · онлайн</span>
+        <h1 class="h-nunito" style="font-weight:900;font-size:clamp(30px,3.8vw,50px);line-height:1.02;letter-spacing:-1px;margin:16px 0 0;color:#fff">Заговори <span style="color:#FFB47A">на английском</span><br>и перестань бояться ошибок</h1>
+        <p style="max-width:500px;margin:16px 0 24px;font-size:17px;line-height:1.55;color:rgba(255,255,255,.85)">Индивидуальные уроки один на один под твои цели: работа, поездки, общение с друзьями из других стран. <span style="color:#FFB47A;font-weight:700">Готовлю и к IELTS.</span></p>
+        <a href="#calendar" class="hero-cta" style="display:inline-block;background:#FF7A1A;color:#fff;font-weight:700;font-size:16px;padding:16px 28px;border-radius:14px;text-decoration:none;box-shadow:0 12px 26px rgba(0,0,0,.25)">Выбрать время для вводного</a>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:16px;flex-wrap:wrap">
+          <span style="font-size:13px;font-weight:600;color:rgba(255,255,255,.8)">10 лет преподаю</span><span style="color:rgba(255,255,255,.4)">·</span>
+          <span style="font-size:13px;font-weight:600;color:rgba(255,255,255,.8)">мой IELTS 8</span><span style="color:rgba(255,255,255,.4)">·</span>
+          <span style="font-size:13px;font-weight:600;color:rgba(255,255,255,.8)">веду уроки из Лондона</span>
+        </div>
       </div>
     </div>
   </section>
