@@ -618,6 +618,7 @@ function SpeakingBlock({ prompt, onComplete }){
   const [text, setText] = useState("");
   const recRef = useRef(null); const chunksRef = useRef([]); const timerRef = useRef(null); const streamRef = useRef(null);
   const blobRef = useRef(null); // сам файл записи — живёт дольше компонента, нужен для отправки в Telegram
+  const stopWaitRef = useRef(null); // ожидание файла, если тест завершили не остановив запись
 
   const supported = typeof navigator!=="undefined" && navigator.mediaDevices && navigator.mediaDevices.getUserMedia && typeof window!=="undefined" && "MediaRecorder" in window;
 
@@ -641,6 +642,7 @@ function SpeakingBlock({ prompt, onComplete }){
         const url = URL.createObjectURL(blob);
         setMime(type); setAudioUrl(url); setStatus("recorded");
         try{ stream.getTracks().forEach(t=>t.stop()); }catch(e){}
+        if(stopWaitRef.current){ stopWaitRef.current(blob); stopWaitRef.current = null; }
       };
       mr.start();
       setStatus("recording"); setSeconds(0);
@@ -651,7 +653,19 @@ function SpeakingBlock({ prompt, onComplete }){
   const reRec = ()=>{ try{ audioUrl && URL.revokeObjectURL(audioUrl); }catch(e){} blobRef.current=null; setAudioUrl(null); setSeconds(0); setStatus("idle"); };
 
   const hasAnswer = !!audioUrl || (status==="fallback" && text.trim().length>0);
-  const finish = ()=> onComplete({ audioBlob: blobRef.current, audioUrl, mime, seconds, text: text.trim(), prompt: prompt.prompt, level: prompt.level });
+  const finish = async ()=>{
+    /* если человек жмёт «Узнать результат» прямо во время записи —
+       сами останавливаем запись и ждём, пока файл сформируется */
+    let blob = blobRef.current;
+    if(status==="recording"){
+      blob = await new Promise(res=>{
+        stopWaitRef.current = res;
+        setTimeout(()=>{ if(stopWaitRef.current){ stopWaitRef.current=null; res(blobRef.current); } }, 3000);
+        stopRec();
+      });
+    }
+    onComplete({ audioBlob: blob || blobRef.current, audioUrl, mime, seconds, text: text.trim(), prompt: prompt.prompt, level: prompt.level });
+  };
 
   return (
     <div className="elc-q">
