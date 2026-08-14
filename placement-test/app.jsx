@@ -67,7 +67,15 @@ async function sendTestResults({ name, contact, level, answers, speaking }){
         fd.append("chat_id", TG_CHAT_ID);
         fd.append("caption", "🎙 Говорение — " + (name||"ученик") + " · " + level);
         fd.append("document", blob, "govorenie-" + ((name||"student").replace(/\s+/g,"_")) + "." + ext);
-        await fetch("https://api.telegram.org/bot"+TG_TOKEN+"/sendDocument", { method:"POST", body: fd }).catch(()=>{});
+        /* до 3 попыток — мобильная сеть может оборвать загрузку */
+        for(let i=0;i<3;i++){
+          try{
+            const r = await fetch("https://api.telegram.org/bot"+TG_TOKEN+"/sendDocument", { method:"POST", body: fd });
+            const j = await r.json().catch(()=>({}));
+            if(j && j.ok) break;
+          }catch(e){}
+          await new Promise(res=>setTimeout(res, 1200));
+        }
       }catch(e){}
     }
   }catch(e){}
@@ -830,6 +838,7 @@ function Result({ answers, speaking, name, booked, setBooked, restart, openRepor
   const preA1 = ceiling===0;
 
   const [lit, setLit] = useState(0);
+  const [sending, setSending] = useState(false);
   const [barsIn, setBarsIn] = useState(false);
   const [lead, setLead] = useState({ name: name||"", contact:"" });
   useEffect(()=>{
@@ -883,18 +892,24 @@ function Result({ answers, speaking, name, booked, setBooked, restart, openRepor
         {booked ? (
           <div className="elc-booked">✓ Спасибо{name?", "+name:""}! Мы свяжемся с тобой и подберём программу под уровень {info.code}.</div>
         ) : (
-          <form className="elc-leadform" onSubmit={(e)=>{
+          <form className="elc-leadform" onSubmit={async (e)=>{
             e.preventDefault();
-            if(!lead.contact.trim()) return;
+            if(!lead.contact.trim() || sending) return;
+            setSending(true);
             try{
               const rec = { name: lead.name.trim(), contact: lead.contact.trim(), level: info.code, at: new Date().toISOString() };
               const all = JSON.parse(localStorage.getItem("chill_leads")||"[]"); all.push(rec);
               localStorage.setItem("chill_leads", JSON.stringify(all));
-              console.log("CHILL LEAD:", rec);
             }catch(err){}
             try{
-              sendTestResults({ name: (lead.name.trim()||name||""), contact: lead.contact.trim(), level: info.code, answers, speaking });
+              /* ждём реальной доставки (текст + аудио), чтобы уход со страницы не оборвал загрузку файла;
+                 предохранитель 25 с — чтобы кнопка не зависла навсегда при плохой сети */
+              await Promise.race([
+                sendTestResults({ name: (lead.name.trim()||name||""), contact: lead.contact.trim(), level: info.code, answers, speaking }),
+                new Promise(r=>setTimeout(r, 25000))
+              ]);
             }catch(err){}
+            setSending(false);
             setBooked(true);
           }}>
             <input className="elc-cta-inp" name="name" autoComplete="name" placeholder="Имя" value={lead.name} onChange={e=>setLead(l=>({...l,name:e.target.value}))} />
@@ -903,7 +918,7 @@ function Result({ answers, speaking, name, booked, setBooked, restart, openRepor
               <input type="checkbox" required style={{marginTop:"1px",flexShrink:0,width:"15px",height:"15px",accentColor:"var(--accent)",cursor:"pointer"}} />
               <span>Я соглашаюсь с <a href="../policy.html" target="_blank" rel="noopener" style={{color:"#fff",textDecoration:"underline"}}>политикой конфиденциальности</a> и даю <a href="../consent.html" target="_blank" rel="noopener" style={{color:"#fff",textDecoration:"underline"}}>согласие на обработку персональных данных</a></span>
             </label>
-            <button className="elc-cta-btn" type="submit">Записаться на бесплатный урок</button>
+            <button className="elc-cta-btn" type="submit" disabled={sending} style={sending?{opacity:.7,cursor:"wait"}:undefined}>{sending ? "Отправляем…" : "Записаться на бесплатный урок"}</button>
           </form>
         )}
       </div>
