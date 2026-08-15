@@ -24,6 +24,8 @@
   .h-nunito{font-family:'Nunito',sans-serif}
   .lbl-short{display:none}
   .hero-float{display:none}
+  .sec{position:relative}
+  .page-deco{position:absolute;pointer-events:none;z-index:0}
   .day-btn{flex:0 0 auto;min-width:62px;text-align:center;border:1.5px solid #E2E5F4;border-radius:14px;padding:10px 6px;cursor:pointer;background:#fff;transition:border-color .15s,background .15s}
   .day-btn.sel{border-color:#2440D9;background:#E7ECFF}
   .day-btn.empty{opacity:.4;cursor:not-allowed}
@@ -53,6 +55,8 @@
     .lbl-short{display:inline}
     #top{grid-template-columns:1fr!important;padding-top:14px!important;gap:16px!important}
     .hero-visual{display:none!important}
+    /* плюшевый декор на мобильном прячем — он налезал на текст */
+    .page-deco{display:none!important}
     .hero-float{display:block!important;float:right;width:104px;height:104px;border-radius:50%;object-fit:cover;object-position:center 18%;shape-outside:circle(50%);margin:8px 0 8px 10px;box-shadow:0 14px 30px -14px rgba(36,64,217,.45)}
     .hero-text h1{font-size:32px!important;line-height:1.06!important}
     .hero-deco,.hero-hello,.hero-glow{display:none!important}
@@ -89,7 +93,7 @@
       <a href="#about" style="font-weight:600;font-size:15px;color:#42476A;text-decoration:none">Обо мне</a>
       <a href="#format" style="font-weight:600;font-size:15px;color:#42476A;text-decoration:none">Как всё устроено</a>
       <a href="#reviews" style="font-weight:600;font-size:15px;color:#42476A;text-decoration:none">Истории</a>
-      <a href="#calendar" style="font-weight:600;font-size:15px;color:#42476A;text-decoration:none">Цена</a>
+      <a href="#pricing" style="font-weight:600;font-size:15px;color:#42476A;text-decoration:none">Цена</a>
     </nav>
     <a href="#calendar" class="btn-signup" style="display:inline-flex;align-items:center;gap:8px;background:#FF7A1A;color:#fff;font-weight:700;font-size:15px;padding:12px 22px;border-radius:14px;text-decoration:none;box-shadow:0 8px 20px rgba(255,122,26,.32)"><span class="lbl-full">Выбрать время для вводного</span><span class="lbl-short">Выбрать время</span></a>
   </header>
@@ -122,27 +126,32 @@
 
   <!-- ============ FEATURES (Как всё устроено) ============ -->
   <section id="format" class="sec" style="padding:48px 0 20px">
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px">
-      <div style="background:#fff;border-radius:26px;padding:30px 28px;box-shadow:0 24px 50px -34px rgba(36,64,217,.35)">
-        <div style="display:grid;place-items:center;width:74px;height:74px;border-radius:20px;background:#EEF0FB;margin-bottom:18px"><img src="https://chill.education/img/feature-2.png" alt="" style="width:52px;height:52px;object-fit:contain"></div>
-        <h3 class="h-nunito" style="font-weight:800;font-size:21px;margin-bottom:8px;letter-spacing:-.3px">Живые уроки в Zoom</h3>
-        <p style="font-size:15px;line-height:1.5;color:#5A5F7D">Один на один, 45–50 минут. Без зубрёжки правил ради правил.</p>
-      </div>
-      <div style="background:#fff;border-radius:26px;padding:30px 28px;box-shadow:0 24px 50px -34px rgba(36,64,217,.35)">
-        <div style="display:grid;place-items:center;width:74px;height:74px;border-radius:20px;background:#EEF0FB;margin-bottom:18px"><img src="https://chill.education/img/feature-3.png" alt="" style="width:52px;height:52px;object-fit:contain"></div>
-        <h3 class="h-nunito" style="font-weight:800;font-size:21px;margin-bottom:8px;letter-spacing:-.3px">Интерактивная платформа</h3>
-        <p style="font-size:15px;line-height:1.5;color:#5A5F7D">Встроенный словарь, интерактивные задания и домашка — всё нужное собрано в одном месте.</p>
-      </div>
-      <div style="background:#fff;border-radius:26px;padding:30px 28px;box-shadow:0 24px 50px -34px rgba(36,64,217,.35)">
-        <div style="display:grid;place-items:center;width:74px;height:74px;border-radius:20px;background:#EEF0FB;margin-bottom:18px"><img src="https://chill.education/img/feature-1.png" alt="" style="width:52px;height:52px;object-fit:contain"></div>
-        <h3 class="h-nunito" style="font-weight:800;font-size:21px;margin-bottom:8px;letter-spacing:-.3px">Много живой речи</h3>
-        <p style="font-size:15px;line-height:1.5;color:#5A5F7D">Ты много говоришь и набираешь живые фразы, а не зубришь правила в отрыве от речи.</p>
+    <img src="https://chill.education/img/deco-0.png" alt="" class="floaty page-deco" style="top:6px;right:3%;width:34px;transform:rotate(12deg);animation-duration:5.3s">
+    <div style="background:linear-gradient(150deg,#2F50E6,#2440D9);border-radius:34px;padding:clamp(18px,3vw,28px);box-shadow:0 40px 80px -40px rgba(36,64,217,.6)">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:clamp(14px,2vw,20px)">
+        <div style="background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);border-radius:24px;padding:28px 26px">
+          <div style="display:grid;place-items:center;width:74px;height:74px;border-radius:20px;background:rgba(255,255,255,.92);margin-bottom:18px"><img src="https://chill.education/img/feature-2.png" alt="" style="width:52px;height:52px;object-fit:contain"></div>
+          <h3 class="h-nunito" style="font-weight:800;font-size:21px;margin-bottom:8px;letter-spacing:-.3px;color:#fff">Живые уроки в Zoom</h3>
+          <p style="font-size:15px;line-height:1.5;color:rgba(255,255,255,.82)">Один на один, 45–50 минут. Без зубрёжки правил ради правил.</p>
+        </div>
+        <div style="background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);border-radius:24px;padding:28px 26px">
+          <div style="display:grid;place-items:center;width:74px;height:74px;border-radius:20px;background:rgba(255,255,255,.92);margin-bottom:18px"><img src="https://chill.education/img/feature-3.png" alt="" style="width:52px;height:52px;object-fit:contain"></div>
+          <h3 class="h-nunito" style="font-weight:800;font-size:21px;margin-bottom:8px;letter-spacing:-.3px;color:#fff">Интерактивная платформа</h3>
+          <p style="font-size:15px;line-height:1.5;color:rgba(255,255,255,.82)">Встроенный словарь, интерактивные задания и домашка — всё нужное собрано в одном месте.</p>
+        </div>
+        <div style="background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);border-radius:24px;padding:28px 26px">
+          <div style="display:grid;place-items:center;width:74px;height:74px;border-radius:20px;background:rgba(255,255,255,.92);margin-bottom:18px"><img src="https://chill.education/img/feature-1.png" alt="" style="width:52px;height:52px;object-fit:contain"></div>
+          <h3 class="h-nunito" style="font-weight:800;font-size:21px;margin-bottom:8px;letter-spacing:-.3px;color:#fff">Много живой речи</h3>
+          <p style="font-size:15px;line-height:1.5;color:rgba(255,255,255,.82)">Ты много говоришь и набираешь живые фразы, а не зубришь правила в отрыве от речи.</p>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- ============ ОБО МНЕ ============ -->
   <section id="about" class="sec" style="padding:64px 0">
+    <img src="https://chill.education/img/deco-3.png" alt="" class="floaty page-deco" style="top:70px;left:2%;width:40px;animation-duration:5.8s;animation-delay:.4s">
+    <img src="https://chill.education/img/deco-2.png" alt="" class="floaty page-deco" style="bottom:9%;right:4%;width:26px;animation-duration:4.4s;animation-delay:1s">
     <div class="shead" style="text-align:center;max-width:620px;margin:0 auto 40px">
       <span style="font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#2440D9">Обо мне</span>
       <h2 class="h-nunito" style="font-weight:900;font-size:clamp(30px,4vw,46px);line-height:1.02;letter-spacing:-1px;margin-top:12px">Кто я и как мы<br>будем работать</h2>
@@ -156,8 +165,8 @@
         <div style="background:#fff;border-radius:22px;padding:24px 26px;box-shadow:0 24px 50px -38px rgba(36,64,217,.35)">
           <p style="font-size:16px;line-height:1.6;color:#3A3F5C">Работаю в миксе лексического и коммуникативного подходов. Если по-простому: <b>ты много говоришь</b> и набираешь живые фразы, а не зубришь правила в отрыве от речи. Мой балл IELTS — <b>8</b>: если тебе нужен экзамен, я знаю эту кухню изнутри.</p>
         </div>
-        <div style="background:#E4ECFF;border-radius:22px;padding:24px 26px">
-          <p style="font-size:16px;line-height:1.6;color:#2E3358">За что меня ценят ученики: <b>интересные уроки</b>, честная нагрузка без переработок и без халявы, и методика, которая реально работает.</p>
+        <div style="background:linear-gradient(150deg,#2F50E6,#2440D9);border-radius:22px;padding:24px 26px;box-shadow:0 24px 50px -30px rgba(36,64,217,.55)">
+          <p style="font-size:16px;line-height:1.6;color:#fff">За что меня ценят ученики: <b>интересные уроки</b>, честная нагрузка без переработок и без халявы, и методика, которая реально работает.</p>
         </div>
       </div>
     </div>
@@ -173,6 +182,7 @@
 
   <!-- ============ ВИДЕО ВВОДНОГО УРОКА ============ -->
   <section id="video" class="sec" style="padding:20px 0 64px">
+    <img src="https://chill.education/img/deco-5.png" alt="" class="floaty page-deco" style="top:34%;right:6%;width:44px;animation-duration:5.5s;animation-delay:.7s">
     <div class="shead" style="text-align:center;max-width:620px;margin:0 auto 40px">
       <h2 class="h-nunito" style="font-weight:900;font-size:clamp(30px,4vw,46px);line-height:1.02;letter-spacing:-1px">Посмотри, как проходит<br>вводный урок</h2>
     </div>
@@ -183,6 +193,8 @@
 
   <!-- ============ ИСТОРИИ УЧЕНИКОВ ============ -->
   <section id="reviews" class="sec" style="padding:64px 0">
+    <img src="https://chill.education/img/deco-0.png" alt="" class="floaty page-deco" style="top:60px;left:5%;width:28px;transform:rotate(-16deg);animation-duration:4.8s;animation-delay:.3s">
+    <img src="https://chill.education/img/deco-8.png" alt="" class="floaty page-deco" style="bottom:6%;right:3%;width:30px;animation-duration:5.1s;animation-delay:1.2s">
     <div class="shead" style="text-align:center;max-width:620px;margin:0 auto 44px">
       <span style="font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#2440D9">Отзывы</span>
       <h2 class="h-nunito" style="font-weight:900;font-size:clamp(30px,4vw,46px);line-height:1.02;letter-spacing:-1px;margin-top:12px">Истории моих учеников</h2>
@@ -228,6 +240,7 @@
 
   <!-- ============ КАЛЕНДАРЬ / ЗАПИСЬ ============ -->
   <section id="calendar" class="sec" style="padding:64px 0">
+    <img src="https://chill.education/img/deco-3.png" alt="" class="floaty page-deco" style="top:9%;right:8%;width:34px;transform:rotate(14deg);animation-duration:5.6s;animation-delay:.5s">
     <div class="shead" style="text-align:center;max-width:620px;margin:0 auto 40px">
       <span style="font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#2440D9">Запись</span>
       <h2 class="h-nunito" style="font-weight:900;font-size:clamp(30px,4vw,46px);line-height:1.02;letter-spacing:-1px;margin-top:12px">Выбери удобное время</h2>
@@ -319,6 +332,50 @@
     </div>
   </section>
 
+  <!-- ============ ЦЕНЫ ============ -->
+  <section id="pricing" class="sec" style="padding:0 0 64px">
+    <img src="https://chill.education/img/deco-0.png" alt="" class="floaty page-deco" style="top:40px;left:4%;width:30px;transform:rotate(-12deg);animation-duration:5s;animation-delay:.4s">
+    <div class="shead" style="text-align:center;max-width:620px;margin:0 auto 28px">
+      <span style="font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#2440D9">Цены</span>
+      <h2 class="h-nunito" style="font-weight:900;font-size:clamp(30px,4vw,46px);line-height:1.02;letter-spacing:-1px;margin-top:12px">Сколько стоят занятия</h2>
+    </div>
+    <div style="display:flex;justify-content:center;margin-bottom:26px">
+      <div style="display:inline-flex;gap:4px;background:#fff;padding:5px;border-radius:14px;box-shadow:0 10px 26px -16px rgba(36,64,217,.3)">
+        <button id="pr-alex" class="pr-tab" style="border:none;cursor:pointer;font-family:'Manrope';font-weight:700;font-size:14px;padding:10px 20px;border-radius:10px;background:#2440D9;color:#fff">Занятия с Алексом</button>
+        <button id="pr-school" class="pr-tab" style="border:none;cursor:pointer;font-family:'Manrope';font-weight:700;font-size:14px;padding:10px 20px;border-radius:10px;background:transparent;color:#5A5F7D">В школе Chat &amp; Chill</button>
+      </div>
+    </div>
+
+    <div id="panel-alex" style="max-width:640px;margin:0 auto">
+      <div style="background:linear-gradient(150deg,#2F50E6,#2440D9);border-radius:26px;padding:28px clamp(20px,3vw,32px);box-shadow:0 30px 60px -30px rgba(36,64,217,.6);color:#fff">
+        <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+          <span class="h-nunito" style="font-weight:900;font-size:38px;letter-spacing:-.5px">2 250 ₽</span>
+          <s style="color:rgba(255,255,255,.6);font-size:18px">4 500 ₽</s>
+          <span style="background:#FF7A1A;color:#fff;font-weight:700;font-size:13px;padding:4px 12px;border-radius:999px">вводное · −50%</span>
+        </div>
+        <p style="font-size:15px;line-height:1.55;color:rgba(255,255,255,.85);margin:10px 0 16px">Обычный урок — <b style="color:#fff">4 500 ₽</b>. Оплата за месяц вперёд: занимаешься 2 раза в неделю — оплачиваешь 8 уроков. Оплаченные уроки действуют 2 месяца.</p>
+        <a href="#calendar" style="display:block;text-align:center;background:#FF7A1A;color:#fff;font-weight:700;font-size:16px;padding:15px;border-radius:14px;text-decoration:none;box-shadow:0 8px 18px rgba(0,0,0,.25)">Выбрать время для вводного</a>
+      </div>
+    </div>
+
+    <div id="panel-school" style="max-width:640px;margin:0 auto;display:none">
+      <div style="background:#fff;border-radius:26px;padding:28px clamp(20px,3vw,32px);box-shadow:0 30px 60px -30px rgba(36,64,217,.4)">
+        <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+          <span class="h-nunito" style="font-weight:900;font-size:38px;letter-spacing:-.5px;color:#1A1E33">от 2 000 ₽</span>
+          <span style="color:#5A5F7D;font-size:15px">за урок в пакете</span>
+          <span style="background:#E9F7EE;color:#1FA85A;font-weight:700;font-size:13px;padding:4px 12px;border-radius:999px">вводный — бесплатно</span>
+        </div>
+        <p style="font-size:15px;line-height:1.55;color:#5A5F7D;margin:10px 0 8px">Те же материалы и та же методика — с преподавателями, которых Алекс сам отобрал и обучил. Свободных окон больше.</p>
+        <ul style="margin:0 0 16px 20px;font-size:14px;line-height:1.8;color:#3A3F5C">
+          <li>4 урока — 10 000 ₽ <span style="color:#8C90AC">(2 500 ₽/урок)</span></li>
+          <li>8 уроков — 18 500 ₽ <span style="color:#8C90AC">(≈2 300 ₽/урок)</span></li>
+          <li>12 уроков — 24 000 ₽ <span style="color:#8C90AC">(2 000 ₽/урок)</span></li>
+        </ul>
+        <button id="pr-go-school" style="display:block;width:100%;border:none;cursor:pointer;background:#2440D9;color:#fff;font-family:'Manrope';font-weight:700;font-size:16px;padding:15px;border-radius:14px;box-shadow:0 8px 18px rgba(36,64,217,.32)">Перейти в школу →</button>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ ПРАВИЛА ============ -->
   <section class="sec" style="padding:0 0 80px">
     <details style="max-width:640px;margin:0 auto;background:#fff;border-radius:26px;box-shadow:0 24px 50px -36px rgba(36,64,217,.35);overflow:hidden">
@@ -394,21 +451,21 @@ function initialPortrait(letter,bg){
 }
 const STORIES = [
   { name:'Самал', letter:'С', bg:'#2440D9', photo:'img/student-samal.jpg', caption:'Подняла IELTS с 4.5 до 6.5', male:false,
-    wanted:'Поднять балл IELTS с 4.5.',
+    wanted:'Нужен был IELTS 6.5 для поступления на бакалавриат, а на подготовку оставалось 3 месяца.',
     work:'Разобрали все части экзамена, плотно тренировали speaking и writing, много работали над форматом, чтобы она чётко понимала, что и как оценивается.',
-    a:'IELTS 4.5.', b:'Сдала IELTS на Overall 6.5 (Listening 6.5, Reading 7.0, Writing 6.0, Speaking 7.0). Её слова: «Я так счастлива!»' },
+    a:'Overall 4.5. Сильнее всего проседали writing и speaking: на письме разваливалась структура эссе, в устной части отвечала короткими фразами и боялась ошибок.', b:'Сдала IELTS на Overall 6.5 (Listening 6.5, Reading 7.0, Writing 6.0, Speaking 7.0). Её слова: «Я так счастлива!»' },
   { name:'Глеб', letter:'Г', bg:'#FF7A1A', photo:'img/student-gleb.jpg', caption:'Сменил работу и говорит по-английски в офисе', male:true,
     wanted:'Подготовиться к интервью в международную компанию.',
-    work:'Разбирали реальные рабочие диалоги и учили бизнес-лексику, чтобы он уверенно прошёл интервью.',
-    a:'Уровень pre-intermediate.', b:'Получил новую работу, говорит на английском прямо в офисе.' },
+    work:'Разбирали реальные рабочие диалоги, собирали бизнес-лексику под его сферу, прогоняли mock-интервью с типовыми вопросами.',
+    a:'Pre-intermediate. Переписку понимал, но в разговоре терялся: не хватало рабочей лексики, на созвонах отвечал односложно.', b:'Получил новую работу, говорит на английском прямо в офисе.' },
   { name:'Даниил', letter:'Д', bg:'#1FA85A', photo:'img/student-daniil.jpg', caption:'Заговорил в путешествиях, без страха', male:true,
     wanted:'Понимать речь и свободно общаться в поездках.',
     work:'Фокусировались на том, чтобы выводить в живую речь то, что он уже знает, и обкатывать это в реальных ситуациях.',
     a:'Знал язык, но терялся в живом разговоре.', b:'Написал прямо из поездки по Таиланду: «Теперь понимаю, что они говорят. Проще самому вступить в диалог, страха больше нет.»' },
   { name:'Валерий', letter:'В', bg:'#7B5CE0', photo:'img/student-valeriy.jpg', caption:'Свободно общается и переехал жить в Лондон', male:true,
-    wanted:'Начать язык почти с нуля и дойти до свободного общения.',
+    wanted:'Хотел перестать зависеть от переводчика и спокойно жить и общаться за границей.',
     work:'Живые динамичные уроки с обсуждением того, что ему интересно: видеоигры, гаджеты, новости.',
-    a:'Начинал практически с нуля.', b:'Свободно поддерживает беседу и понимает речь, переехал жить в Лондон.' },
+    a:'Практически с нуля: знал отдельные слова, но фразу собрать не мог и терялся даже в простом small talk.', b:'Смотрит стримы и играет с иностранцами без перевода, болтает на любые темы. Решает бытовые вопросы в Лондоне сам, без переводчика.' },
 ];
 let storyIdx = 0;
 document.getElementById('review-avatars').innerHTML = STORIES.map((s,i)=>`
@@ -511,6 +568,20 @@ renderCcy();
 $('pay-btn').addEventListener('click',()=>{track('purchase',{currency:ccy});clearInterval(holdTimer);$('done-email').textContent=$('q-email').value||'почту';show('done');});
 $('school-btn').addEventListener('click',()=>track('go_to_school'));
 $('contact-btn').addEventListener('click',()=>track('contact_click'));
+
+// блок цен: переключатель Алекс / школа
+(function(){
+  const tA=$('pr-alex'), tS=$('pr-school'), pA=$('panel-alex'), pS=$('panel-school');
+  function setTab(alex){
+    pA.style.display=alex?'':'none'; pS.style.display=alex?'none':'';
+    tA.style.background=alex?'#2440D9':'transparent'; tA.style.color=alex?'#fff':'#5A5F7D';
+    tS.style.background=alex?'transparent':'#2440D9'; tS.style.color=alex?'#5A5F7D':'#fff';
+    track('pricing_toggle',{tab:alex?'alex':'school'});
+  }
+  tA.addEventListener('click',()=>setTab(true));
+  tS.addEventListener('click',()=>setTab(false));
+  $('pr-go-school').addEventListener('click',()=>{track('school_price_click');$('school-modal').style.display='flex';});
+})();
 
 // поп-ап школьных слотов
 ['school-modal-x','school-modal-close'].forEach(id=>$(id).addEventListener('click',()=>{$('school-modal').style.display='none';}));
