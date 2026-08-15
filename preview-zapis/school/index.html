@@ -425,9 +425,9 @@
   <div style="background:#fff;border-radius:26px;max-width:440px;width:100%;padding:30px 28px;box-shadow:0 40px 80px -30px rgba(0,0,0,.4);position:relative">
     <button id="school-modal-x" style="position:absolute;top:14px;right:16px;border:none;background:none;font-size:22px;color:#8C90AC;cursor:pointer" aria-label="Закрыть">×</button>
     <span style="display:inline-flex;align-items:center;gap:8px;background:#E7ECFF;color:#2440D9;font-weight:700;font-size:12px;letter-spacing:.04em;text-transform:uppercase;padding:7px 12px;border-radius:999px">Школа Chat &amp; Chill</span>
-    <h3 class="h-nunito" style="font-weight:900;font-size:24px;line-height:1.1;margin:14px 0 10px">Белые слоты — это преподаватели моей школы</h3>
+    <h3 id="school-modal-title" class="h-nunito" style="font-weight:900;font-size:24px;line-height:1.1;margin:14px 0 10px">Белые слоты — это преподаватели моей школы</h3>
     <p style="font-size:15px;line-height:1.6;color:#5A5F7D;margin-bottom:10px">Они работают по тем же материалам и той же методике, что и я: много живой речи, интерактивная платформа и никакой зубрёжки. Я сам их отбирал и обучал.</p>
-    <p style="font-size:15px;line-height:1.6;color:#5A5F7D;margin-bottom:18px">Свободных окон у них больше, а <b>вводный урок — бесплатный</b>.</p>
+    <p id="school-modal-p2" style="font-size:15px;line-height:1.6;color:#5A5F7D;margin-bottom:18px">Свободных окон у них больше, а <b>вводный урок — бесплатный</b>.</p>
     <a id="school-modal-go" href="https://chill.education/?utm_source=lichnye&utm_medium=referral&utm_campaign=school_slots" target="_blank" rel="noopener" style="display:block;text-align:center;background:#FF7A1A;color:#fff;font-weight:700;font-size:15px;padding:14px;border-radius:14px;text-decoration:none;box-shadow:0 8px 18px rgba(255,122,26,.32)">Познакомиться со школой</a>
     <button id="school-modal-close" style="display:block;width:100%;margin-top:8px;border:none;background:none;color:#8C90AC;font-family:'Manrope';font-weight:600;font-size:14px;cursor:pointer;padding:8px">Вернуться к выбору времени</button>
   </div>
@@ -533,7 +533,7 @@ function renderSlots(){
   }));
   document.querySelectorAll('#cal-slots .slot-school').forEach(el=>el.addEventListener('click',()=>{
     track('school_slot_click',{slot:new Date(+el.dataset.ts).toISOString()});
-    $('school-modal').style.display='flex';
+    openSchoolModal('slots');
   }));
 }
 function startHold(){
@@ -580,8 +580,25 @@ $('contact-btn').addEventListener('click',()=>track('contact_click'));
   }
   tA.addEventListener('click',()=>setTab(true));
   tS.addEventListener('click',()=>setTab(false));
-  $('pr-go-school').addEventListener('click',()=>{track('school_price_click');$('school-modal').style.display='flex';});
+  $('pr-go-school').addEventListener('click',()=>{track('school_price_click');openSchoolModal('pricing');});
 })();
+
+// поп-ап школы: текст зависит от того, откуда открыт
+function openSchoolModal(ctx){
+  const title=$('school-modal-title'), p2=$('school-modal-p2'), go=$('school-modal-go'), close=$('school-modal-close');
+  if(ctx==='pricing'){
+    title.textContent='Та же методика — дешевле';
+    p2.innerHTML='<b>Вводный урок у них бесплатный</b>, а уроки в пакетах — от 2 000 ₽ вместо 4 500 ₽.';
+    go.href='https://chill.education/?utm_source=lichnye&utm_medium=referral&utm_campaign=school_price';
+    close.textContent='Вернуться к ценам';
+  }else{
+    title.textContent='Белые слоты — это преподаватели моей школы';
+    p2.innerHTML='Свободных окон у них больше, а <b>вводный урок — бесплатный</b>.';
+    go.href='https://chill.education/?utm_source=lichnye&utm_medium=referral&utm_campaign=school_slots';
+    close.textContent='Вернуться к выбору времени';
+  }
+  $('school-modal').style.display='flex';
+}
 
 // поп-ап школьных слотов
 ['school-modal-x','school-modal-close'].forEach(id=>$(id).addEventListener('click',()=>{$('school-modal').style.display='none';}));
