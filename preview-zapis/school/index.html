@@ -259,6 +259,7 @@
       <div id="step-slots">
         <div id="cal-days" style="display:flex;gap:8px;overflow-x:auto;padding:2px 2px 12px"></div>
         <div id="cal-slots" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:9px;margin-top:4px"></div>
+        <button type="button" class="to-waitlist" style="display:block;margin:16px auto 0;background:none;border:none;color:#2440D9;font-family:'Manrope';font-weight:700;font-size:14px;cursor:pointer;text-decoration:underline">Не нашёл удобное время? Оставь заявку в лист ожидания →</button>
       </div>
 
       <!-- ШАГ 2: анкета -->
@@ -328,8 +329,35 @@
       <div id="step-noslots" style="display:none;text-align:center">
         <h3 class="h-nunito" style="font-weight:900;font-size:26px;margin-bottom:10px">Сейчас у меня всё занято</h3>
         <p style="font-size:15px;line-height:1.6;color:#5A5F7D;margin-bottom:18px">Свободные окна появляются не всегда — расписание ограничено. Если хочешь заниматься именно со мной, напиши мне: подскажу, когда освободится место.</p>
-        <a id="insist-btn" href="https://t.me/chilleducation" target="_blank" rel="noopener" style="display:block;background:#FF7A1A;color:#fff;font-weight:700;font-size:16px;padding:15px;border-radius:14px;text-decoration:none;box-shadow:0 8px 18px rgba(255,122,26,.32)">Написать Александру</a>
-        <a href="#school" style="display:block;margin-top:10px;background:#E9EBF5;color:#42476A;font-weight:700;font-size:15px;padding:14px;border-radius:14px;text-decoration:none">Посмотреть мою школу — там много свободных окон ↓</a>
+        <button type="button" class="to-waitlist" style="display:block;width:100%;border:none;cursor:pointer;background:#FF7A1A;color:#fff;font-family:'Manrope';font-weight:700;font-size:16px;padding:15px;border-radius:14px;box-shadow:0 8px 18px rgba(255,122,26,.32)">Встать в лист ожидания</button>
+        <a id="insist-btn" href="https://t.me/chilleducation" target="_blank" rel="noopener" style="display:block;margin-top:10px;background:#E9EBF5;color:#42476A;font-weight:700;font-size:15px;padding:14px;border-radius:14px;text-decoration:none">Написать Александру</a>
+        <a href="#school" style="display:block;margin-top:10px;color:#2440D9;font-weight:700;font-size:14px;text-decoration:underline">Или посмотреть мою школу — там много свободных окон ↓</a>
+      </div>
+
+      <!-- ЛИСТ ОЖИДАНИЯ → Google Форма начальника -->
+      <div id="step-waitlist" style="display:none">
+        <button type="button" class="back-b" data-back="slots" style="background:none;border:none;color:#5A5F7D;font-family:'Manrope';font-weight:600;font-size:14px;cursor:pointer;padding:0 0 12px">← К расписанию</button>
+        <h3 class="h-nunito" style="font-weight:800;font-size:22px;margin-bottom:6px">Лист ожидания</h3>
+        <p style="font-size:14px;color:#5A5F7D;margin-bottom:16px">Оставь контакты и удобное время — как только появится окно, я напишу.</p>
+        <form id="wl-form" style="display:flex;flex-direction:column;gap:12px">
+          <input class="inp2" id="wl-name" required autocomplete="name" placeholder="Как тебя зовут?">
+          <input class="inp2" id="wl-contact" required placeholder="Телефон, Telegram или Instagram — чем больше, тем лучше">
+          <input class="inp2" id="wl-time" required placeholder="Когда удобно заниматься? (по МСК, например: будни после 19:00)">
+          <select class="inp2" id="wl-level" required>
+            <option value="" disabled selected>Твой примерный уровень английского</option>
+            <option>Начинающий</option><option>A1–A2</option><option>B1–B2</option><option>C1 и выше</option><option>Не знаю</option>
+          </select>
+          <label style="display:flex;align-items:flex-start;gap:8px;font-size:12px;line-height:1.4;color:#8C90AC;cursor:pointer">
+            <input type="checkbox" id="wl-consent" required style="margin-top:1px;flex-shrink:0;width:15px;height:15px;accent-color:#2440D9;cursor:pointer">
+            <span>Я соглашаюсь с <a href="https://chill.education/policy.html" target="_blank" rel="noopener" style="color:#2440D9;text-decoration:underline">политикой конфиденциальности</a> и даю <a href="https://chill.education/consent.html" target="_blank" rel="noopener" style="color:#2440D9;text-decoration:underline">согласие на обработку данных</a></span>
+          </label>
+          <button id="wl-submit" type="submit" style="border:none;cursor:pointer;background:#FF7A1A;color:#fff;font-family:'Manrope';font-weight:700;font-size:16px;padding:15px;border-radius:14px;box-shadow:0 8px 18px rgba(255,122,26,.32)">Отправить</button>
+        </form>
+        <div id="wl-done" style="display:none;text-align:center;padding:10px 0">
+          <span style="display:inline-grid;place-items:center;width:56px;height:56px;border-radius:50%;background:#E9F7EE;color:#1FA85A;font-size:28px;margin-bottom:12px">✓</span>
+          <h3 class="h-nunito" style="font-weight:900;font-size:24px;margin-bottom:8px">Ты в листе ожидания!</h3>
+          <p style="font-size:15px;line-height:1.6;color:#5A5F7D">Как только появится свободное окно, я напишу тебе. А пока можно познакомиться с <a href="#school" style="color:#2440D9;font-weight:700">моей школой</a> — там свободные места есть уже сейчас.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -503,7 +531,25 @@ const days=buildSlots();
 let dayIdx=days.findIndex(d=>d.slots.length>0); if(dayIdx<0)dayIdx=0;
 let picked=null, holdUntil=null, holdTimer=null;
 const $=id=>document.getElementById(id);
-function show(step){['slots','form','pay','done','noslots'].forEach(s=>{$('step-'+s).style.display = s===step?'':'none';});}
+function show(step){['slots','form','pay','done','noslots','waitlist'].forEach(s=>{$('step-'+s).style.display = s===step?'':'none';});}
+
+// ---------- ЛИСТ ОЖИДАНИЯ → Google Форма «Лист ожидания» (та же таблица, что и старые анкеты) ----------
+const GFORM_URL='https://docs.google.com/forms/d/e/1FAIpQLScY1CZqO5Be7cUi-w3YI8bP5XASc7lNrUqgIqVqTC7KM_gwPw/formResponse';
+const GFORM={format:'entry.1861435943',name:'entry.182768777',contact:'entry.656315093',time:'entry.568523279',level:'entry.511437808'};
+document.querySelectorAll('.to-waitlist').forEach(b=>b.addEventListener('click',()=>{show('waitlist');track('waitlist_open');}));
+$('wl-form').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const btn=$('wl-submit'); btn.disabled=true; btn.textContent='Отправляем…';
+  const fd=new FormData();
+  fd.append(GFORM.format,'Индивидуальные занятия');
+  fd.append(GFORM.name,$('wl-name').value.trim());
+  fd.append(GFORM.contact,$('wl-contact').value.trim()+' · с сайта записи');
+  fd.append(GFORM.time,$('wl-time').value.trim());
+  fd.append(GFORM.level,$('wl-level').value);
+  try{ await fetch(GFORM_URL,{method:'POST',mode:'no-cors',body:fd}); }catch(err){}
+  track('waitlist_submit',{level:$('wl-level').value});
+  $('wl-form').style.display='none'; $('wl-done').style.display='';
+});
 function renderDays(){
   $('cal-days').innerHTML = days.map((d,i)=>`
     <div class="day-btn${i===dayIdx?' sel':''}" data-i="${i}">
