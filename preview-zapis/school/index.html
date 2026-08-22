@@ -209,7 +209,7 @@
       <div style="display:flex;gap:20px;align-items:flex-start">
         <div style="display:flex;flex-direction:column;gap:16px;padding-top:6px" id="review-avatars"></div>
         <div class="review-portrait" style="position:relative;width:300px;flex-shrink:0">
-          <img id="story-portrait" src="" alt="" style="display:block;width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:26px;background:#E4E7F8">
+          <img id="story-portrait" src="" alt="" style="display:block;width:100%;aspect-ratio:3/4;object-fit:cover;object-position:center top;border-radius:26px;background:#E4E7F8">
           <div style="position:absolute;left:18px;right:-14px;bottom:-22px;background:#fff;border:2px solid #DCE6FF;border-radius:20px;padding:16px 20px;box-shadow:0 20px 40px -22px rgba(36,64,217,.35)">
             <div class="h-nunito" id="story-name" style="font-weight:800;font-size:19px"></div>
             <div id="story-caption" style="font-size:14px;line-height:1.4;color:#5A5F7D;margin-top:4px"></div>
@@ -489,12 +489,12 @@ const STORIES = [
   { name:'Даниил', letter:'Д', bg:'#1FA85A', photo:'img/student-daniil.jpg', caption:'Заговорил в путешествиях, без страха', male:true,
     wanted:'Понимать речь и свободно общаться в поездках. Заказать еду, спросить дорогу, поболтать в отеле, чтобы язык не мешал отдыхать.',
     work:'Главный упор сделали на разговор: слова, которые он понимал при чтении, но не использовал сам, выводили в свободную речь и много практиковались на реальных ситуациях.',
-    a:'Учил английский не первый год, а в разговоре всё равно терялся. Быструю речь понимал через раз, отвечал коротко и неуверенно.', b:'Написал прямо из поездки по Таиланду: «Теперь понимаю, что они говорят. Проще самому вступить в диалог, страха больше нет.»' },
+    a:'Учил английский не первый год, а в разговоре всё равно терялся. Быструю речь понимал через раз, отвечал коротко и неуверенно.', b:'Написал прямо из поездки: «Теперь понимаю, что они говорят. Проще самому вступить в диалог, страха больше нет.»' },
 ];
 let storyIdx = 0;
 document.getElementById('review-avatars').innerHTML = STORIES.map((s,i)=>`
   <button data-idx="${i}" style="padding:0;border:none;background:none;cursor:pointer">
-    <img class="rev-ava-img" src="${s.photo||initialPortrait(s.letter,s.bg)}" alt="${s.name}" style="width:54px;height:54px;border-radius:16px;object-fit:cover;border:3px solid transparent;transition:all .2s">
+    <img class="rev-ava-img" src="${s.photo||initialPortrait(s.letter,s.bg)}" alt="${s.name}" style="width:54px;height:54px;border-radius:16px;object-fit:cover;object-position:center top;border:3px solid transparent;transition:all .2s">
   </button>`).join('');
 function renderReview(){
   const s = STORIES[storyIdx];
