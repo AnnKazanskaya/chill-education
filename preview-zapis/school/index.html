@@ -578,7 +578,19 @@ function initPhone(wrap){
   sel.innerHTML=COUNTRIES.map((c,i)=>`<option value="${i}">${c[1]} ${c[2]}</option>`).join('');
   let idx=0; try{ const lang=(navigator.language||'').toLowerCase(); const m={'kk':1,'be':2,'uk':3,'en-gb':4,'en-us':5,'de':7,'fr':8,'es':9,'it':10,'tr':29}; for(const k in m){ if(lang.startsWith(k)){ idx=m[k]; break; } } }catch(e){}
   sel.value=idx;
-  const fmt=()=>{ const c=COUNTRIES[+sel.value]; let d=inp.value.replace(/\D/g,''); if(c[0]==='OTHER'){ inp.value=d.slice(0,15); } else { inp.value=applyMask(d,c[3]); } inp.placeholder=c[3]?c[3].replace(/_/g,'•'):'Номер'; const need=c[3]?(c[3].match(/_/g)||[]).length:6; const have=inp.value.replace(/\D/g,'').length; inp.setCustomValidity(have && have<need?'Номер короче, чем нужно':''); hid.value=inp.value?(c[0]==='OTHER'?'+':c[2]+' ')+inp.value:''; wrap.dataset.full=hid.value; };
+  const fmt=()=>{ let c=COUNTRIES[+sel.value]; let d=inp.value.replace(/\D/g,''); const raw=inp.value.trim();
+    // автозаполнение браузера: пришёл полный номер с кодом страны (+7…, +44…, 8…) — разбираем его
+    const needOf=cc=>cc[3]?(cc[3].match(/_/g)||[]).length:0;
+    if(c[0]!=='OTHER' && d.length>needOf(c)){
+      const cur=c[2].replace('+','');
+      if(d.startsWith(cur) && d.length-cur.length===needOf(c)){ d=d.slice(cur.length); }
+      else if((c[2]==='+7') && d.length===11 && d[0]==='8'){ d=d.slice(1); }
+      else if(raw.startsWith('+') || raw.startsWith('00')){
+        let best=-1; COUNTRIES.forEach((cc,i)=>{ const code=cc[2].replace('+',''); if(code && d.startsWith(code) && d.length-code.length===needOf(cc) && (best<0 || code.length>COUNTRIES[best][2].length-1)) best=i; });
+        if(best>=0){ sel.value=best; c=COUNTRIES[best]; d=d.slice(c[2].length-1); }
+      }
+    }
+    if(c[0]==='OTHER'){ inp.value=d.slice(0,15); } else { inp.value=applyMask(d,c[3]); } inp.placeholder=c[3]?c[3].replace(/_/g,'•'):'Номер'; const need=c[3]?(c[3].match(/_/g)||[]).length:6; const have=inp.value.replace(/\D/g,'').length; inp.setCustomValidity(have && have<need?'Номер короче, чем нужно':''); hid.value=inp.value?(c[0]==='OTHER'?'+':c[2]+' ')+inp.value:''; wrap.dataset.full=hid.value; };
   inp.addEventListener('input',fmt); sel.addEventListener('change',()=>{ inp.value=''; fmt(); inp.focus(); }); fmt();
 }
 document.querySelectorAll('[data-phone]').forEach(initPhone);
