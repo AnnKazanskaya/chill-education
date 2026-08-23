@@ -35,6 +35,9 @@
   .cur-btn.active{background:#2440D9;color:#fff}
   .inp2{width:100%;border:none;outline:none;font-family:'Manrope';font-size:15px;font-weight:500;padding:13px 16px;border-radius:12px;background:#F4F5FC;color:#1A1E33}
   .inp2:focus{box-shadow:0 0 0 3px rgba(36,64,217,.35)}
+  .ph-wrap{display:flex;gap:8px;min-width:0}
+  .ph-cc{flex:0 0 auto;width:auto;max-width:132px;appearance:none;-webkit-appearance:none;padding-right:30px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' fill='none' stroke='%235A5F7D' stroke-width='1.6' stroke-linecap='round'/></svg>");background-repeat:no-repeat;background-position:right 12px center;cursor:pointer}
+  .ph-num{flex:1;min-width:0}
   @media(min-width:761px){
     .about-teacher{width:100%!important;max-width:440px!important;animation:none!important}
   }
@@ -277,6 +280,7 @@
           </select>
           <input class="inp2" id="q-why" required placeholder="Для чего тебе английский? (работа, путешествия…)">
           <input class="inp2" id="q-email" required type="email" autocomplete="email" placeholder="Куда прислать доступы к платформе? (email)">
+          <div class="ph-wrap" data-phone><select class="inp2 ph-cc" aria-label="Код страны"></select><input class="inp2 ph-num" id="q-phone" type="tel" inputmode="tel" autocomplete="tel-national" required placeholder="Телефон"><input type="hidden" name="phone"></div>
           <label style="display:flex;align-items:flex-start;gap:8px;font-size:12px;line-height:1.4;color:#8C90AC;cursor:pointer">
             <input type="checkbox" id="q-consent" required style="margin-top:1px;flex-shrink:0;width:15px;height:15px;accent-color:#2440D9;cursor:pointer">
             <span>Я соглашаюсь с <a href="https://chill.education/policy.html" target="_blank" rel="noopener" style="color:#2440D9;text-decoration:underline">политикой конфиденциальности</a> и <a href="https://chill.education/offer.html" target="_blank" rel="noopener" style="color:#2440D9;text-decoration:underline">офертой</a></span>
@@ -422,7 +426,7 @@
       <div style="font-weight:800;font-size:17px;margin:4px 0 10px">Записаться в школу на бесплатный вводный урок</div>
       <form id="school-lead" style="display:flex;flex-wrap:wrap;gap:10px;background:#F4F5FC;padding:8px;border-radius:18px;max-width:560px">
         <input name="name" type="text" autocomplete="name" placeholder="Имя" required style="flex:1;min-width:120px;border:none;outline:none;font-family:'Manrope';font-size:15px;font-weight:500;padding:13px 16px;border-radius:12px;background:#fff;color:#1A1E33">
-        <input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="Телефон" required style="flex:1.2;min-width:140px;border:none;outline:none;font-family:'Manrope';font-size:15px;font-weight:500;padding:13px 16px;border-radius:12px;background:#fff;color:#1A1E33">
+        <div class="ph-wrap" data-phone style="flex:1.6;min-width:220px"><select class="inp2 ph-cc" aria-label="Код страны" style="background-color:#fff"></select><input class="inp2 ph-num" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="Телефон" required style="background:#fff"><input type="hidden" name="phone"></div>
         <button type="submit" style="flex-shrink:0;border:none;cursor:pointer;background:#FF7A1A;color:#fff;font-family:'Manrope';font-weight:700;font-size:15px;padding:13px 22px;border-radius:12px;box-shadow:0 8px 18px rgba(255,122,26,.32)">Записаться</button>
         <label style="flex:1 0 100%;display:flex;align-items:flex-start;gap:8px;padding:2px 6px 4px;font-size:12px;line-height:1.4;color:#8C90AC;cursor:pointer">
           <input type="checkbox" name="consent" required style="margin-top:1px;flex-shrink:0;width:15px;height:15px;accent-color:#2440D9;cursor:pointer">
@@ -553,6 +557,32 @@ const days=buildSlots();
 let dayIdx=days.findIndex(d=>d.slots.length>0); if(dayIdx<0)dayIdx=0;
 let picked=null, holdUntil=null, holdTimer=null;
 const $=id=>document.getElementById(id);
+// ---------- ТЕЛЕФОН: выбор страны + маска ----------
+const COUNTRIES=[
+ ['RU','🇷🇺','+7','(___) ___-__-__'],['KZ','🇰🇿','+7','(___) ___-__-__'],['BY','🇧🇾','+375','(__) ___-__-__'],['UA','🇺🇦','+380','(__) ___-__-__'],
+ ['GB','🇬🇧','+44','____ ______'],['US','🇺🇸','+1','(___) ___-____'],['CA','🇨🇦','+1','(___) ___-____'],['DE','🇩🇪','+49','___ ________'],
+ ['FR','🇫🇷','+33','_ __ __ __ __'],['ES','🇪🇸','+34','___ ___ ___'],['IT','🇮🇹','+39','___ ___ ____'],['NL','🇳🇱','+31','_ ________'],
+ ['PT','🇵🇹','+351','___ ___ ___'],['PL','🇵🇱','+48','___ ___ ___'],['CZ','🇨🇿','+420','___ ___ ___'],['AT','🇦🇹','+43','___ _______'],
+ ['CH','🇨🇭','+41','__ ___ __ __'],['SE','🇸🇪','+46','__ ___ __ __'],['FI','🇫🇮','+358','__ ___ ____'],['LV','🇱🇻','+371','__ ___ ___'],
+ ['LT','🇱🇹','+370','___ _____'],['EE','🇪🇪','+372','____ ____'],['GE','🇬🇪','+995','___ __ __ __'],['AM','🇦🇲','+374','__ ______'],
+ ['AZ','🇦🇿','+994','__ ___ __ __'],['UZ','🇺🇿','+998','__ ___-__-__'],['KG','🇰🇬','+996','___ ___-___'],['TJ','🇹🇯','+992','__ ___ ____'],
+ ['MD','🇲🇩','+373','____ ____'],['TR','🇹🇷','+90','(___) ___-__-__'],['CY','🇨🇾','+357','__ ______'],['RS','🇷🇸','+381','__ ___-____'],
+ ['ME','🇲🇪','+382','__ ___-___'],['AE','🇦🇪','+971','__ ___ ____'],['IL','🇮🇱','+972','__-___-____'],['TH','🇹🇭','+66','__ ___ ____'],
+ ['ID','🇮🇩','+62','___-___-____'],['VN','🇻🇳','+84','__ ___ ____'],['IN','🇮🇳','+91','_____ _____'],['CN','🇨🇳','+86','___ ____ ____'],
+ ['JP','🇯🇵','+81','__ ____ ____'],['KR','🇰🇷','+82','__ ____ ____'],['AU','🇦🇺','+61','_ ____ ____'],['BR','🇧🇷','+55','(__) _____-____'],
+ ['MX','🇲🇽','+52','___ ___ ____'],['AR','🇦🇷','+54','(__) ____-____'],['EG','🇪🇬','+20','___ ___ ____'],['OTHER','🌍','+','']
+];
+function applyMask(digits,mask){ if(!mask) return digits.slice(0,15); let out='',i=0; for(const ch of mask){ if(i>=digits.length) break; out+= ch==='_'?digits[i++]:ch; } return out; }
+function initPhone(wrap){
+  const sel=wrap.querySelector('.ph-cc'), inp=wrap.querySelector('.ph-num'), hid=wrap.querySelector('input[type=hidden]');
+  sel.innerHTML=COUNTRIES.map((c,i)=>`<option value="${i}">${c[1]} ${c[2]}</option>`).join('');
+  let idx=0; try{ const lang=(navigator.language||'').toLowerCase(); const m={'kk':1,'be':2,'uk':3,'en-gb':4,'en-us':5,'de':7,'fr':8,'es':9,'it':10,'tr':29}; for(const k in m){ if(lang.startsWith(k)){ idx=m[k]; break; } } }catch(e){}
+  sel.value=idx;
+  const fmt=()=>{ const c=COUNTRIES[+sel.value]; let d=inp.value.replace(/\D/g,''); if(c[0]==='OTHER'){ inp.value=d.slice(0,15); } else { inp.value=applyMask(d,c[3]); } inp.placeholder=c[3]?c[3].replace(/_/g,'•'):'Номер'; const need=c[3]?(c[3].match(/_/g)||[]).length:6; const have=inp.value.replace(/\D/g,'').length; inp.setCustomValidity(have && have<need?'Номер короче, чем нужно':''); hid.value=inp.value?(c[0]==='OTHER'?'+':c[2]+' ')+inp.value:''; wrap.dataset.full=hid.value; };
+  inp.addEventListener('input',fmt); sel.addEventListener('change',()=>{ inp.value=''; fmt(); inp.focus(); }); fmt();
+}
+document.querySelectorAll('[data-phone]').forEach(initPhone);
+function phoneOf(wrap){ return wrap.dataset.full||''; }
 function show(step){['slots','form','pay','done','noslots','waitlist'].forEach(s=>{$('step-'+s).style.display = s===step?'':'none';});}
 
 // ---------- ЛИСТ ОЖИДАНИЯ → Google Форма «Лист ожидания» (та же таблица, что и старые анкеты) ----------
