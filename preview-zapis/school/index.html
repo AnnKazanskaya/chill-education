@@ -277,27 +277,12 @@
           </select>
           <input class="inp2" id="q-why" required placeholder="Для чего тебе английский? (работа, путешествия…)">
           <input class="inp2" id="q-email" required type="email" autocomplete="email" placeholder="Куда прислать доступы к платформе? (email)">
-          <input class="inp2" id="q-phone" required type="tel" inputmode="tel" autocomplete="tel" placeholder="Телефон — пришлём код подтверждения">
           <label style="display:flex;align-items:flex-start;gap:8px;font-size:12px;line-height:1.4;color:#8C90AC;cursor:pointer">
             <input type="checkbox" id="q-consent" required style="margin-top:1px;flex-shrink:0;width:15px;height:15px;accent-color:#2440D9;cursor:pointer">
             <span>Я соглашаюсь с <a href="https://chill.education/policy.html" target="_blank" rel="noopener" style="color:#2440D9;text-decoration:underline">политикой конфиденциальности</a> и <a href="https://chill.education/offer.html" target="_blank" rel="noopener" style="color:#2440D9;text-decoration:underline">офертой</a></span>
           </label>
           <button type="submit" style="border:none;cursor:pointer;background:#FF7A1A;color:#fff;font-family:'Manrope';font-weight:700;font-size:16px;padding:15px;border-radius:14px;box-shadow:0 8px 18px rgba(255,122,26,.32)">Перейти к оплате</button>
         </form>
-      </div>
-
-      <!-- ШАГ 2.5: подтверждение телефона -->
-      <div id="step-otp" style="display:none">
-        <button type="button" class="back-b" data-back="form" style="background:none;border:none;color:#5A5F7D;font-family:'Manrope';font-weight:600;font-size:14px;cursor:pointer;padding:0 0 12px">← Назад</button>
-        <h3 class="h-nunito" style="font-weight:800;font-size:22px;margin-bottom:6px">Подтверди номер</h3>
-        <p style="font-size:14px;color:#5A5F7D;margin-bottom:16px">Отправили код в SMS на <b id="otp-phone" style="color:#1A1E33"></b>. Введи его, чтобы закрепить запись за собой.</p>
-        <form id="otpform" style="display:flex;flex-direction:column;gap:12px">
-          <input class="inp2" id="otp-code" required inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="one-time-code" placeholder="Код из SMS" style="letter-spacing:.3em;font-size:20px;text-align:center">
-          <div id="otp-err" style="display:none;font-size:13px;color:#D93025">Код не подошёл, попробуй ещё раз.</div>
-          <button type="submit" style="border:none;cursor:pointer;background:#FF7A1A;color:#fff;font-family:'Manrope';font-weight:700;font-size:16px;padding:15px;border-radius:14px;box-shadow:0 8px 18px rgba(255,122,26,.32)">Подтвердить и перейти к оплате</button>
-          <button type="button" id="otp-resend" style="background:none;border:none;cursor:pointer;font-family:'Manrope';font-weight:600;font-size:14px;color:#2440D9">Отправить код ещё раз</button>
-        </form>
-        <p style="text-align:center;font-size:12px;color:#B0B3C9;margin-top:12px">Демо: SMS не отправляется, подходит код <b>1234</b>. На боевом сайте код придёт по SMS.</p>
       </div>
 
       <!-- ШАГ 3: оплата -->
@@ -568,7 +553,7 @@ const days=buildSlots();
 let dayIdx=days.findIndex(d=>d.slots.length>0); if(dayIdx<0)dayIdx=0;
 let picked=null, holdUntil=null, holdTimer=null;
 const $=id=>document.getElementById(id);
-function show(step){['slots','form','otp','pay','done','noslots','waitlist'].forEach(s=>{$('step-'+s).style.display = s===step?'':'none';});}
+function show(step){['slots','form','pay','done','noslots','waitlist'].forEach(s=>{$('step-'+s).style.display = s===step?'':'none';});}
 
 // ---------- ЛИСТ ОЖИДАНИЯ → Google Форма «Лист ожидания» (та же таблица, что и старые анкеты) ----------
 const GFORM_URL='https://docs.google.com/forms/d/e/1FAIpQLScY1CZqO5Be7cUi-w3YI8bP5XASc7lNrUqgIqVqTC7KM_gwPw/formResponse';
@@ -625,9 +610,7 @@ renderDays();renderSlots();
 if(!days.some(d=>d.slots.length)) { show('noslots'); track('no_slots_shown'); }
 
 // анкета → оплата
-$('qform').addEventListener('submit',e=>{e.preventDefault();track('submit_form',{level:$('q-level').value});$('otp-phone').textContent=$('q-phone').value;$('otp-code').value='';$('otp-err').style.display='none';show('otp');track('otp_sent');});
-$('otpform').addEventListener('submit',e=>{e.preventDefault();if($('otp-code').value.trim()==='1234'){track('otp_ok');show('pay');track('begin_checkout');}else{$('otp-err').style.display='';track('otp_fail');}});
-$('otp-resend').addEventListener('click',()=>{$('otp-resend').textContent='Код отправлен ещё раз ✓';setTimeout(()=>{$('otp-resend').textContent='Отправить код ещё раз';},3000);track('otp_resend');});
+$('qform').addEventListener('submit',e=>{e.preventDefault();track('submit_form',{level:$('q-level').value});show('pay');track('begin_checkout');});
 // заявка в школу → Telegram-группа «Заявки» (как на chill.education)
 (function(){const f=$('school-lead'); if(!f)return; f.addEventListener('submit',e=>{e.preventDefault();
   const name=(f.elements.namedItem('name').value||'').trim(), phone=(f.elements.namedItem('phone').value||'').trim();
