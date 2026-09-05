@@ -455,7 +455,7 @@ const LISTEN_POOL = {
       ]},
   ],
   mid: [
-    { id:"ls-mi-1", rate:0.92, audio:"Attention passengers. The ten fifteen train to Edinburgh has been delayed by approximately forty minutes, due to a signalling problem. We apologise for the inconvenience. Passengers who wish to travel sooner may take the ten thirty service to Glasgow and change at Carlisle. Refreshments are available in the station café.",
+    { id:"ls-mi-1", rate:0.92, file:"audio/ls-mi-1.mp3", audio:"Attention passengers. The ten fifteen train to Edinburgh has been delayed by approximately forty minutes, due to a signalling problem. We apologise for the inconvenience. Passengers who wish to travel sooner may take the ten thirty service to Glasgow and change at Carlisle. Refreshments are available in the station café.",
       q:[
         { id:"ls-mi-1a", skill:"listening", level:3, stem:"Why is the train delayed?", opts:["Bad weather","A signalling problem","Too many passengers","A staff shortage"], answer:1 },
         { id:"ls-mi-1b", skill:"listening", level:3, stem:"How can passengers travel sooner?", opts:["Wait forty minutes","Take the Glasgow train and change","Ask for a refund","Go to the café"], answer:1 },
@@ -561,15 +561,28 @@ function StopIcon(){ return (<svg width="26" height="26" viewBox="0 0 24 24" fil
 function fmt(s){ const m=Math.floor(s/60), ss=s%60; return m+":"+String(ss).padStart(2,"0"); }
 
 /* ---------------- Аудио-плеер (аудирование) ---------------- */
-function ListeningPlayer({ audio, rate }){
+function ListeningPlayer({ audio, rate, file }){
   const [status, setStatus] = useState("idle"); // idle | playing | paused
   const [showText, setShowText] = useState(false);
   const [supported, setSupported] = useState(true);
+  const audioRef = useRef(null);
   useEffect(()=>{
+    if(file){
+      const el = new Audio(file);
+      el.preload = "auto";
+      el.onended = ()=>setStatus("idle");
+      el.onerror = ()=>{ audioRef.current = null; }; // файл не загрузился — откатимся на синтез
+      audioRef.current = el;
+      return ()=>{ try{ el.pause(); }catch(e){} audioRef.current = null; };
+    }
     if(typeof window==="undefined" || !("speechSynthesis" in window)) setSupported(false);
     return ()=>{ try{ window.speechSynthesis && window.speechSynthesis.cancel(); }catch(e){} };
-  },[]);
+  },[file]);
   const play = ()=>{
+    if(audioRef.current){
+      const el = audioRef.current;
+      try{ el.currentTime = 0; el.play().then(()=>setStatus("playing")).catch(()=>{ audioRef.current=null; play(); }); return; }catch(e){ audioRef.current=null; }
+    }
     try{
       const synth = window.speechSynthesis; synth.cancel();
       const u = new SpeechSynthesisUtterance(audio);
@@ -582,6 +595,13 @@ function ListeningPlayer({ audio, rate }){
     }catch(e){ setSupported(false); setStatus("idle"); }
   };
   const toggle = ()=>{
+    if(audioRef.current){
+      const el = audioRef.current;
+      if(status==="playing"){ el.pause(); setStatus("paused"); }
+      else if(status==="paused"){ el.play().then(()=>setStatus("playing")).catch(()=>{}); }
+      else { play(); }
+      return;
+    }
     try{
       const synth = window.speechSynthesis;
       if(status==="playing"){ synth.pause(); setStatus("paused"); }
@@ -838,7 +858,7 @@ function PlacementTest(){
                   <div className="elc-read-t">{currentItem.passage}</div>
                 </div>
               )}
-              {currentItem.skill==="listening" && <ListeningPlayer audio={listenClip.audio} rate={listenClip.rate} />}
+              {currentItem.skill==="listening" && <ListeningPlayer audio={listenClip.audio} rate={listenClip.rate} file={listenClip.file} />}
               <div className="elc-stem">{currentItem.stem}</div>
               <div className="elc-opts">
                 {currentItem.opts.map((opt,i)=>(
