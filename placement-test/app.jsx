@@ -414,7 +414,7 @@ const LISTEN_POOL = {
         { id:"ls-lo-1a", skill:"listening", level:2, stem:"When is the appointment?", opts:["Tuesday morning","Tuesday evening","Thursday morning","Friday afternoon"], answer:0 },
         { id:"ls-lo-1b", skill:"listening", level:2, stem:"What should Mr Jones do if he can't come?", opts:["Send an email","Call the clinic","Come another day","Do nothing"], answer:1 },
       ]},
-    { id:"ls-lo-2", rate:0.82, audio:"Hi Tom, it's Sarah. I'm calling about tonight. I'm really sorry, but I have to work late, so I can't come to dinner at seven. Could we meet a bit later, maybe at half past eight? Give me a call back when you get this. Thanks, bye!",
+    { id:"ls-lo-2", rate:0.82, file:"audio/ls-lo-2.mp3", audio:"Hi Tom, it's Sarah. I'm calling about tonight. I'm really sorry, but I have to work late, so I can't come to dinner at seven. Could we meet a bit later, maybe at half past eight? Give me a call back when you get this. Thanks, bye!",
       q:[
         { id:"ls-lo-2a", skill:"listening", level:2, stem:"Why is Sarah calling?", opts:["She can't come at seven","She is lost","She wants to cancel completely","She will be early"], answer:0 },
         { id:"ls-lo-2b", skill:"listening", level:2, stem:"What time does Sarah suggest?", opts:["Seven o'clock","Half past seven","Eight o'clock","Half past eight"], answer:3 },
