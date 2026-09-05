@@ -409,7 +409,7 @@ const READ_POOL = {
 
 const LISTEN_POOL = {
   lower: [
-    { id:"ls-lo-1", rate:0.82, audio:"Hello. This is a message for Mr Jones. This is Doctor Smith's clinic. Your appointment is on Tuesday, the fifth of May, at half past ten in the morning. Please arrive ten minutes early. If you cannot come, call us on five five five, zero one eight two. Thank you.",
+    { id:"ls-lo-1", rate:0.82, file:"audio/ls-lo-1.mp3", audio:"Hello. This is a message for Mr Jones. This is Doctor Smith's clinic. Your appointment is on Tuesday, the fifth of May, at half past ten in the morning. Please arrive ten minutes early. If you cannot come, call us on five five five, zero one eight two. Thank you.",
       q:[
         { id:"ls-lo-1a", skill:"listening", level:2, stem:"When is the appointment?", opts:["Tuesday morning","Tuesday evening","Thursday morning","Friday afternoon"], answer:0 },
         { id:"ls-lo-1b", skill:"listening", level:2, stem:"What should Mr Jones do if he can't come?", opts:["Send an email","Call the clinic","Come another day","Do nothing"], answer:1 },
