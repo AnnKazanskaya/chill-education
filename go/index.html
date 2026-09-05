@@ -12,13 +12,16 @@
      источник: tg→telegram, ig→instagram, vk, yt→youtube, иное — как есть
      тип (необязателен, по умолчанию cpc): cpc | social | referral | email
      страница (необязательна): test → тест на уровень, pay → оплата
-     Примеры:  #tg.yaplakal_12_08   #ig.social.blogger_x   #test:tg.lentach */
+     Примеры:  #tg.yaplakal_12_08   #ig.social.blogger_x   #test:tg.lentach
+     Вместо # можно ? (для Instagram и приложений, которые ломают #):  /go?ig.social.main */
   var SRC={tg:'telegram',ig:'instagram',vk:'vk',yt:'youtube'};
   var MED=['cpc','social','referral','email'];
   var PAGES={test:'https://chill.education/placement-test/',pay:'https://chill.education/pay.html'};
   var base='https://chill.education/';
   try{
     var code=(location.hash||'').replace(/^#/,'');
+    if(!code) code=(location.search||'').replace(/^\?/,'').replace(/=+$/,'');  // вариант с ? — для инстаграма и мессенджеров, которые ломают #
+    code=decodeURIComponent(code);
     if(code){
       var m=code.match(/^([a-z]+):(.*)$/);
       if(m && PAGES[m[1]]){ base=PAGES[m[1]]; code=m[2]; }

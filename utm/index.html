@@ -174,7 +174,7 @@ $('gen').addEventListener('click',()=>{
   const PAGE_CODE={'https://chill.education/':'','https://chill.education/placement-test/':'test:','https://chill.education/pay.html':'pay:'};
   let shortUrl=null;
   if(PAGE_CODE[page]!==undefined){
-    shortUrl='https://chill.education/go#'+PAGE_CODE[page]+(SRC_CODE[source]||source)+(medium!=='cpc'?'.'+medium:'')+'.'+campaign+(content?'.'+content:'');
+    shortUrl='https://chill.education/go?'+PAGE_CODE[page]+(SRC_CODE[source]||source)+(medium!=='cpc'?'.'+medium:'')+'.'+campaign+(content?'.'+content:'');
   }
   $('short-block').style.display=shortUrl?'':'none';
   if(shortUrl){$('res-short').textContent=shortUrl;$('test-short').href=shortUrl;}

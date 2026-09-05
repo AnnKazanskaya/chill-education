@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<title>Chat &amp; Chill</title>
+<script>
+(function(){
+  // Instagram и некоторые приложения кодируют # как %23 — ловим /go%23код и чиним
+  var m=location.href.match(/\/go(?:\/)?(?:%23|#)([^?&]+)/i);
+  if(m){ location.replace('https://chill.education/go/?'+m[1]); return; }
+  location.replace('https://chill.education/');
+})();
+</script>
+</head>
+<body style="font-family:sans-serif;padding:40px;color:#1A1E33">
+Открываем сайт… <a href="https://chill.education/">Перейти вручную</a>
+</body>
+</html>
