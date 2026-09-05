@@ -227,6 +227,22 @@ const CSS = `
 .elc-name:focus{outline:none;border-color:var(--primary)}
 .elc-lbl{font-size:13px;font-weight:600;color:#4a4363;margin:0 0 8px}
 
+.elc-hero{display:grid;grid-template-columns:1.05fr .95fr;gap:10px 26px;align-items:center}
+.elc-hero-visual{position:relative;min-height:400px;align-self:stretch}
+.elc-hv-cat{position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);width:106%;max-width:430px;animation:elc-float 5.4s ease-in-out infinite}
+.elc-hv-bus{position:absolute;bottom:-4%;left:-6%;width:34%;max-width:150px;animation:elc-float 6.2s ease-in-out infinite;animation-delay:.7s}
+.elc-hv-cloud{position:absolute;top:0;right:-2%;width:26%;max-width:110px;animation:elc-float 7s ease-in-out infinite;animation-delay:.3s}
+@keyframes elc-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.elc-hv-cat{animation-name:elc-float-c}
+@keyframes elc-float-c{0%,100%{transform:translate(-50%,-52%)}50%{transform:translate(-50%,calc(-52% - 12px))}}
+@media (max-width:760px){
+  .elc-hero{grid-template-columns:1fr}
+  .elc-hero-visual{min-height:0;height:190px;order:-1;margin-bottom:4px}
+  .elc-hv-cat{max-width:230px;width:auto;height:112%}
+  .elc-hv-bus{left:0;bottom:0;max-width:88px}
+  .elc-hv-cloud{right:0;max-width:64px}
+}
+
 .elc-inter{min-height:236px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;animation:elc-fade-up .4s both}
 .elc-idots{display:flex;gap:9px;margin-bottom:20px}
 .elc-idots span{width:12px;height:12px;border-radius:50%;background:var(--primary);animation:elc-bounce 1.1s ease-in-out infinite}
@@ -824,19 +840,26 @@ function PlacementTest(){
 
           {/* INTRO */}
           {phase==="intro" && (
-            <div className="elc-q">
-              <div className="elc-eyebrow">Тест на уровень · CEFR</div>
-              <h1 className="elc-h1">Узнай свой уровень английского — без стресса</h1>
-              <p className="elc-p">Тест подстраивается под твои ответы: чем лучше справляешься, тем сложнее вопросы. Проверим грамматику и лексику, чтение, восприятие на слух и говорение — и покажем твой уровень по шкале A1–C1.</p>
-              <div className="elc-facts">
-                <span className="elc-fact"><span className="elc-fdot"/>≈ 15 минут</span>
-                <span className="elc-fact"><span className="elc-fdot"/>Адаптивный формат</span>
-                <span className="elc-fact"><span className="elc-fdot"/>Говорение голосом</span>
-                <span className="elc-fact"><span className="elc-fdot"/>Результат сразу</span>
+            <div className="elc-q elc-hero">
+              <div>
+                <div className="elc-eyebrow">Тест на уровень · CEFR</div>
+                <h1 className="elc-h1">Узнай свой уровень английского — без стресса</h1>
+                <p className="elc-p">Тест подстраивается под твои ответы: чем лучше справляешься, тем сложнее вопросы. Проверим грамматику и лексику, чтение, восприятие на слух и говорение — и покажем твой уровень по шкале A1–C1.</p>
+                <div className="elc-facts">
+                  <span className="elc-fact"><span className="elc-fdot"/>≈ 15 минут</span>
+                  <span className="elc-fact"><span className="elc-fdot"/>Адаптивный формат</span>
+                  <span className="elc-fact"><span className="elc-fdot"/>Говорение голосом</span>
+                  <span className="elc-fact"><span className="elc-fdot"/>Результат сразу</span>
+                </div>
+                <div className="elc-lbl">Как тебя зовут? <span style={{color:"var(--ink-soft)",fontWeight:400}}>(необязательно)</span></div>
+                <input className="elc-name" value={name} onChange={e=>setName(e.target.value)} placeholder="Твоё имя" />
+                <div><button className="elc-btn" onClick={start}>Начать тест</button></div>
               </div>
-              <div className="elc-lbl">Как тебя зовут? <span style={{color:"var(--ink-soft)",fontWeight:400}}>(необязательно)</span></div>
-              <input className="elc-name" value={name} onChange={e=>setName(e.target.value)} placeholder="Твоё имя" />
-              <div><button className="elc-btn" onClick={start}>Начать тест</button></div>
+              <div className="elc-hero-visual" aria-hidden="true">
+                <img className="elc-hv-cloud" src="img/cloud.jpg" alt="" />
+                <img className="elc-hv-cat" src="img/cat-test.jpg" alt="" />
+                <img className="elc-hv-bus" src="img/bus.jpg" alt="" />
+              </div>
             </div>
           )}
 
