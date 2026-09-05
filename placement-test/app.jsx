@@ -195,8 +195,8 @@ const CSS = `
 
 .elc-hero{display:grid;grid-template-columns:1.05fr .95fr;gap:10px 26px;align-items:center}
 .elc-hero-visual{position:relative;min-height:400px;align-self:stretch}
-.elc-hv-cat{position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);width:106%;max-width:430px;animation:elc-float 5.4s ease-in-out infinite}
-.elc-hv-bus{position:absolute;bottom:-4%;left:-6%;width:34%;max-width:150px;animation:elc-float 6.2s ease-in-out infinite;animation-delay:.7s}
+.elc-hv-cat{position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);width:106%;max-width:430px;z-index:2;animation:elc-float 5.4s ease-in-out infinite}
+.elc-hv-bus{position:absolute;bottom:-4%;left:-6%;width:34%;max-width:150px;z-index:1;animation:elc-float 6.2s ease-in-out infinite;animation-delay:.7s}
 .elc-hv-cloud{position:absolute;top:0;right:-2%;width:26%;max-width:110px;animation:elc-float 7s ease-in-out infinite;animation-delay:.3s}
 @keyframes elc-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
 .elc-hv-cat{animation-name:elc-float-c}
