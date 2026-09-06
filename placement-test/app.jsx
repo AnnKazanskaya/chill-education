@@ -122,7 +122,7 @@ const CSS = `
 .elc-card-open{overflow:visible}
 
 .elc-prog-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:14px}
-.elc-section{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--primary)}
+.elc-section{font-size:14px;font-weight:700;color:var(--primary)}
 .elc-count{font-size:12.5px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
 .elc-bar{height:7px;background:var(--primary-tint);border-radius:999px;overflow:hidden;margin-bottom:26px}
 .elc-bar-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:999px;transition:width .5s cubic-bezier(.4,0,.2,1)}
@@ -148,7 +148,7 @@ const CSS = `
 .elc-btn-ghost:hover{background:var(--primary-tint)}
 
 .elc-read{background:linear-gradient(180deg,#FDFCFF,#F8F5FE);border:1px solid var(--line);border-left:4px solid var(--primary);border-radius:16px;padding:18px 20px;margin:0 0 22px}
-.elc-read-l{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--primary);margin-bottom:9px}
+.elc-read-l{font-size:13.5px;font-weight:700;color:var(--primary);margin-bottom:9px}
 .elc-read-t{font-size:15.5px;line-height:1.62;color:#3A3455}
 
 .elc-listen{background:linear-gradient(180deg,#FDFCFF,#F8F5FE);border:1px solid var(--line);border-radius:18px;padding:20px;margin:0 0 22px}
@@ -170,7 +170,7 @@ const CSS = `
 
 /* speaking */
 .elc-sp-prompt{background:linear-gradient(180deg,#FFF7FB,#FEEFF5);border:1px solid var(--accent-soft);border-left:4px solid var(--accent);border-radius:16px;padding:18px 20px;margin:0 0 20px}
-.elc-sp-l{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:9px}
+.elc-sp-l{font-size:13.5px;font-weight:700;color:var(--accent);margin-bottom:9px}
 .elc-sp-t{font-family:var(--font-display);font-weight:500;font-size:19px;line-height:1.4;color:#3A3455}
 .elc-sp-hint{font-size:13px;color:var(--ink-soft);margin-top:8px}
 .elc-rec{display:flex;flex-direction:column;align-items:center;gap:14px;padding:8px 0 4px}
@@ -229,7 +229,7 @@ const CSS = `
 .elc-rung.cur .elc-rung-bar{background:linear-gradient(90deg,var(--primary),var(--accent));height:22px}
 .elc-rc{font-size:12px;font-weight:700;color:var(--ink-soft);width:24px}
 .elc-rung.cur .elc-rc{color:var(--primary)}
-.elc-badge{flex:1}
+.elc-badge{flex:1;text-align:right}
 .elc-level{font-family:var(--font-display);font-weight:700;font-size:62px;line-height:1;letter-spacing:-.02em;color:var(--primary)}
 .elc-lname{font-size:15px;color:var(--ink-soft);margin-top:4px;font-weight:600}
 .elc-desc{font-size:15.5px;line-height:1.6;color:#3a3455;margin:16px 0 22px}
@@ -265,7 +265,7 @@ const CSS = `
 .elc-rep-lvl b{font-family:var(--font-display);font-size:30px;color:var(--primary);display:block;line-height:1}
 .elc-rep-meta{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 22px}
 .elc-rep-mchip{font-size:12.5px;font-weight:600;color:#4a4363;background:#F7F3FD;border:1px solid var(--line);border-radius:999px;padding:6px 12px}
-.elc-sec-h{font-family:var(--font-display);font-weight:600;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--primary);margin:22px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--primary-tint)}
+.elc-sec-h{font-family:var(--font-display);font-weight:700;font-size:15px;color:var(--primary);margin:22px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--primary-tint)}
 .elc-ctx{font-size:13.5px;line-height:1.55;color:#4a4363;background:#FAF8FD;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 0 12px}
 .elc-ctx b{color:var(--ink)}
 .elc-item{border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px}
