@@ -231,16 +231,16 @@ const CSS = `
 
 .elc-hero{display:grid;grid-template-columns:1.05fr .95fr;gap:10px 26px;align-items:center}
 .elc-hero-visual{position:relative;min-height:400px;align-self:stretch}
-.elc-hv-cat{position:absolute;top:-22px;left:50%;transform:translateX(-50%);width:106%;max-width:430px;z-index:2;animation:elc-float-c 5.4s ease-in-out infinite}
+.elc-hv-ben{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);height:110%;max-height:600px;z-index:2;animation:elc-float-b 6s ease-in-out infinite}
 .elc-hv-bus{position:absolute;bottom:-4%;left:-6%;width:34%;max-width:150px;z-index:1;animation:elc-float 6.2s ease-in-out infinite;animation-delay:.7s}
 .elc-hv-cloud{position:absolute;top:0;right:-2%;width:26%;max-width:110px;animation:elc-float 7s ease-in-out infinite;animation-delay:.3s}
 @keyframes elc-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
 .elc-hv-cat{animation-name:elc-float-c}
-@keyframes elc-float-c{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-12px)}}
+@keyframes elc-float-b{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,calc(-50% - 10px))}}
 @media (max-width:760px){
   .elc-hero{grid-template-columns:1fr}
   .elc-hero-visual{min-height:0;height:190px;order:-1;margin-bottom:4px}
-  .elc-hv-cat{max-width:230px;width:auto;height:112%}
+  .elc-hv-ben{height:118%;max-height:none}
   .elc-hv-bus{left:0;bottom:0;max-width:88px}
   .elc-hv-cloud{right:0;max-width:64px}
 }
@@ -858,7 +858,7 @@ function PlacementTest(){
                 <div><button className="elc-btn" onClick={start}>Начать тест</button></div>
               </div>
               <div className="elc-hero-visual" aria-hidden="true">
-                <img className="elc-hv-cat" src="img/cat-test.jpg?v=2" alt="" />
+                <img className="elc-hv-ben" src="img/bigben.jpg?v=2" alt="" />
               </div>
             </div>
           )}
