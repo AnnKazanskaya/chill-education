@@ -812,7 +812,7 @@ export default function PlacementTest(){
             <div className="elc-q elc-hero">
               <div>
                 <div className="elc-eyebrow">Тест на уровень английского · <b>шкала CEFR</b></div>
-                <h1 className="elc-h1">Узнай свой уровень английского — без стресса</h1>
+                <h1 className="elc-h1">Узнай свой уровень английского <span style={{whiteSpace:"nowrap"}}>— без стресса</span></h1>
                 <p className="elc-p">Тест подстраивается под твои ответы: чем лучше справляешься, тем сложнее вопросы. Проверим грамматику и лексику, чтение, восприятие на слух и говорение — и покажем твой уровень по шкале A1–C1.</p>
                 <div className="elc-facts">
                   <span className="elc-fact"><span className="elc-fdot"/>≈ 15 минут</span>
