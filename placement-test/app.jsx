@@ -199,6 +199,7 @@ const CSS = `
 .elc-hero{display:grid;grid-template-columns:1.05fr .95fr;gap:10px 26px;align-items:center}
 .elc-hero-visual{position:relative;min-height:400px;align-self:stretch}
 .elc-hv-ben{position:absolute;top:44%;left:58%;transform:translate(-50%,-50%);height:110%;max-height:600px;z-index:2;animation:elc-float-b 6s ease-in-out infinite}
+.elc-ben-float{display:none}
 .elc-hv-bus{position:absolute;bottom:-4%;left:-6%;width:34%;max-width:150px;z-index:1;animation:elc-float 6.2s ease-in-out infinite;animation-delay:.7s}
 .elc-hv-cloud{position:absolute;top:0;right:-2%;width:26%;max-width:110px;animation:elc-float 7s ease-in-out infinite;animation-delay:.3s}
 @keyframes elc-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
@@ -206,8 +207,8 @@ const CSS = `
 @keyframes elc-float-b{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,calc(-50% - 10px))}}
 @media (max-width:760px){
   .elc-hero{grid-template-columns:1fr}
-  .elc-hero-visual{min-height:0;height:210px;order:-1;margin-bottom:2px}
-  .elc-hv-ben{top:46%;left:50%;height:124%;max-height:none}
+  .elc-hero-visual{display:none}
+  .elc-ben-float{display:block;float:right;width:128px;margin:-46px -10px 10px 14px;animation:elc-float 6s ease-in-out infinite}
   .elc-hero .elc-h1{font-size:26px;margin:8px 0 10px}
   .elc-hero .elc-p{font-size:14.5px;line-height:1.55;margin-bottom:14px}
   .elc-hero .elc-facts{gap:8px;margin-bottom:16px}
@@ -815,6 +816,7 @@ export default function PlacementTest(){
           {phase==="intro" && (
             <div className="elc-q elc-hero">
               <div>
+                <img className="elc-ben-float" src="img/bigben-trim.png?v=1" alt="" aria-hidden="true" />
                 <div className="elc-eyebrow">Тест на уровень английского · <b>шкала CEFR</b></div>
                 <h1 className="elc-h1">Узнай свой уровень английского <span style={{whiteSpace:"nowrap"}}>— без стресса</span></h1>
                 <p className="elc-p">Тест подстраивается под твои ответы: чем лучше справляешься, тем сложнее вопросы. Проверим грамматику и лексику, чтение, восприятие на слух и говорение — и покажем твой уровень по шкале A1–C1.</p>
