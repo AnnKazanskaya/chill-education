@@ -206,10 +206,14 @@ const CSS = `
 @keyframes elc-float-b{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,calc(-50% - 10px))}}
 @media (max-width:760px){
   .elc-hero{grid-template-columns:1fr}
-  .elc-hero-visual{min-height:0;height:190px;order:-1;margin-bottom:4px}
-  .elc-hv-ben{height:118%;max-height:none}
-  .elc-hv-bus{left:0;bottom:0;max-width:88px}
-  .elc-hv-cloud{right:0;max-width:64px}
+  .elc-hero-visual{min-height:0;height:210px;order:-1;margin-bottom:2px}
+  .elc-hv-ben{top:46%;left:50%;height:124%;max-height:none}
+  .elc-hero .elc-h1{font-size:26px;margin:8px 0 10px}
+  .elc-hero .elc-p{font-size:14.5px;line-height:1.55;margin-bottom:14px}
+  .elc-hero .elc-facts{gap:8px;margin-bottom:16px}
+  .elc-hero .elc-fact{font-size:12.5px;padding:7px 11px;white-space:nowrap}
+  .elc-hero .elc-name{max-width:none;margin-bottom:14px}
+  .elc-hero .elc-btn{width:100%;padding:15px 28px}
 }
 
 .elc-inter{min-height:236px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;animation:elc-fade-up .4s both}
