@@ -188,6 +188,7 @@ const CSS = `
 .elc-h1{font-family:var(--font-display);font-weight:600;font-size:33px;line-height:1.12;letter-spacing:-.015em;margin:10px 0 14px}
 .elc-p{font-size:15.5px;line-height:1.62;color:var(--ink-soft);margin:0 0 20px;max-width:54ch}
 .elc-facts{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 22px}
+@media (min-width:761px){.elc-hero .elc-facts{display:grid;grid-template-columns:repeat(2,auto);justify-content:start}}
 .elc-fact{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:#4a4363;background:#F7F3FD;border:1px solid var(--line);border-radius:999px;padding:8px 14px}
 .elc-fdot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
 .elc-name{width:100%;max-width:340px;border:1.5px solid var(--line);border-radius:14px;padding:13px 16px;font-family:var(--font-body);font-size:15.5px;color:var(--ink);background:#FCFBFF;margin:0 0 22px}
@@ -196,12 +197,12 @@ const CSS = `
 
 .elc-hero{display:grid;grid-template-columns:1.05fr .95fr;gap:10px 26px;align-items:center}
 .elc-hero-visual{position:relative;min-height:400px;align-self:stretch}
-.elc-hv-cat{position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);width:106%;max-width:430px;z-index:2;animation:elc-float 5.4s ease-in-out infinite}
+.elc-hv-cat{position:absolute;top:50%;left:50%;transform:translate(-50%,-62%);width:106%;max-width:430px;z-index:2;animation:elc-float 5.4s ease-in-out infinite}
 .elc-hv-bus{position:absolute;bottom:-4%;left:-6%;width:34%;max-width:150px;z-index:1;animation:elc-float 6.2s ease-in-out infinite;animation-delay:.7s}
 .elc-hv-cloud{position:absolute;top:0;right:-2%;width:26%;max-width:110px;animation:elc-float 7s ease-in-out infinite;animation-delay:.3s}
 @keyframes elc-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
 .elc-hv-cat{animation-name:elc-float-c}
-@keyframes elc-float-c{0%,100%{transform:translate(-50%,-52%)}50%{transform:translate(-50%,calc(-52% - 12px))}}
+@keyframes elc-float-c{0%,100%{transform:translate(-50%,-62%)}50%{transform:translate(-50%,calc(-62% - 12px))}}
 @media (max-width:760px){
   .elc-hero{grid-template-columns:1fr}
   .elc-hero-visual{min-height:0;height:190px;order:-1;margin-bottom:4px}
