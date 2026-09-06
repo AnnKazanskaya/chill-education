@@ -183,7 +183,8 @@ const CSS = `
 .elc-ta:focus{outline:none;border-color:var(--primary)}
 .elc-note{font-size:12.5px;line-height:1.5;color:var(--ink-soft);background:#F7F4FC;border:1px solid var(--line);border-radius:12px;padding:11px 13px;margin-top:12px}
 
-.elc-eyebrow{font-family:var(--font-display);font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--primary)}
+.elc-eyebrow{font-size:14px;font-weight:600;color:var(--ink-soft)}
+.elc-eyebrow b{color:var(--primary);font-weight:700}
 .elc-h1{font-family:var(--font-display);font-weight:600;font-size:33px;line-height:1.12;letter-spacing:-.015em;margin:10px 0 14px}
 .elc-p{font-size:15.5px;line-height:1.62;color:var(--ink-soft);margin:0 0 20px;max-width:54ch}
 .elc-facts{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 22px}
@@ -808,7 +809,7 @@ export default function PlacementTest(){
           {phase==="intro" && (
             <div className="elc-q elc-hero">
               <div>
-                <div className="elc-eyebrow">Тест на уровень · CEFR</div>
+                <div className="elc-eyebrow">Тест на уровень английского · <b>шкала CEFR</b></div>
                 <h1 className="elc-h1">Узнай свой уровень английского — без стресса</h1>
                 <p className="elc-p">Тест подстраивается под твои ответы: чем лучше справляешься, тем сложнее вопросы. Проверим грамматику и лексику, чтение, восприятие на слух и говорение — и покажем твой уровень по шкале A1–C1.</p>
                 <div className="elc-facts">
