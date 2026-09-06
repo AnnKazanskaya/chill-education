@@ -183,7 +183,7 @@ const CSS = `
 .elc-ta:focus{outline:none;border-color:var(--primary)}
 .elc-note{font-size:12.5px;line-height:1.5;color:var(--ink-soft);background:#F7F4FC;border:1px solid var(--line);border-radius:12px;padding:11px 13px;margin-top:12px}
 
-.elc-eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--primary)}
+.elc-eyebrow{font-family:var(--font-display);font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--primary)}
 .elc-h1{font-family:var(--font-display);font-weight:600;font-size:33px;line-height:1.12;letter-spacing:-.015em;margin:10px 0 14px}
 .elc-p{font-size:15.5px;line-height:1.62;color:var(--ink-soft);margin:0 0 20px;max-width:54ch}
 .elc-facts{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 22px}
