@@ -119,6 +119,7 @@ const CSS = `
 .elc-bs{font-size:12.5px;color:var(--ink-soft);margin-top:3px}
 
 .elc-card{background:var(--surface);border:1px solid var(--line);border-radius:26px;box-shadow:0 26px 60px -30px rgba(36,64,217,.28);padding:32px 32px 30px;position:relative;overflow:hidden}
+.elc-card-open{overflow:visible}
 
 .elc-prog-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:14px}
 .elc-section{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--primary)}
@@ -197,7 +198,7 @@ const CSS = `
 
 .elc-hero{display:grid;grid-template-columns:1.05fr .95fr;gap:10px 26px;align-items:center}
 .elc-hero-visual{position:relative;min-height:400px;align-self:stretch}
-.elc-hv-ben{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);height:110%;max-height:600px;z-index:2;animation:elc-float-b 6s ease-in-out infinite}
+.elc-hv-ben{position:absolute;top:44%;left:58%;transform:translate(-50%,-50%);height:110%;max-height:600px;z-index:2;animation:elc-float-b 6s ease-in-out infinite}
 .elc-hv-bus{position:absolute;bottom:-4%;left:-6%;width:34%;max-width:150px;z-index:1;animation:elc-float 6.2s ease-in-out infinite;animation-delay:.7s}
 .elc-hv-cloud{position:absolute;top:0;right:-2%;width:26%;max-width:110px;animation:elc-float 7s ease-in-out infinite;animation-delay:.3s}
 @keyframes elc-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
@@ -795,7 +796,7 @@ export default function PlacementTest(){
           <div className="elc-bs">Английский без стресса · тест на уровень</div>
         </div>
 
-        <div className="elc-card">
+        <div className={"elc-card"+(phase==="intro"?" elc-card-open":"")}>
           {(phase==="router"||phase==="core"||phase==="listen") && (
             <>
               <div className="elc-prog-row">
