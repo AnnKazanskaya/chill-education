@@ -274,6 +274,7 @@
         <h3 class="h-nunito" style="font-weight:800;font-size:22px;margin-bottom:6px">Пара вопросов перед стартом</h3>
         <p style="font-size:14px;color:#5A5F7D;margin-bottom:16px">Это поможет мне подготовиться к нашему первому уроку.</p>
         <form id="qform" style="display:flex;flex-direction:column;gap:12px">
+          <input class="inp2" id="q-name" required type="text" autocomplete="name" placeholder="Как тебя зовут?">
           <select class="inp2" id="q-level" required>
             <option value="" disabled selected>Как ты оцениваешь свой уровень?</option>
             <option>Начинающий</option><option>A1–A2</option><option>B1–B2</option><option>C1 и выше</option><option>Не знаю</option>
@@ -281,6 +282,13 @@
           <input class="inp2" id="q-why" required placeholder="Для чего тебе английский? (работа, путешествия…)">
           <input class="inp2" id="q-email" required type="email" autocomplete="email" placeholder="Куда прислать доступы к платформе? (email)">
           <div class="ph-wrap" data-phone><select class="inp2 ph-cc" aria-label="Код страны"></select><input class="inp2 ph-num" id="q-phone" type="tel" inputmode="tel" autocomplete="tel-national" required placeholder="Телефон"><input type="hidden" name="phone"></div>
+          <select class="inp2" id="q-messenger" required>
+            <option value="" disabled selected>В какой соцсети тебя можно найти по этому номеру?</option>
+            <option>Telegram</option>
+            <option>WhatsApp</option>
+            <option>Telegram и WhatsApp</option>
+            <option value="Ни в какой">Ни в какой — напишите мне на почту</option>
+          </select>
           <label style="display:flex;align-items:flex-start;gap:8px;font-size:12px;line-height:1.4;color:#8C90AC;cursor:pointer">
             <input type="checkbox" id="q-consent" required style="margin-top:1px;flex-shrink:0;width:15px;height:15px;accent-color:#2440D9;cursor:pointer">
             <span>Я соглашаюсь с <a href="https://chill.education/policy.html" target="_blank" rel="noopener" style="color:#2440D9;text-decoration:underline">политикой конфиденциальности</a> и <a href="https://chill.education/offer.html" target="_blank" rel="noopener" style="color:#2440D9;text-decoration:underline">офертой</a></span>
@@ -707,7 +715,8 @@ $('pay-btn').addEventListener('click',async()=>{
   if(USING_API && picked && SLOT_IDS[picked]){
     const w=document.querySelector('#qform [data-phone]');
     await fetch(API+'/book',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
-      slot_id:SLOT_IDS[picked], email:$('q-email').value.trim(), phone:(w&&w.dataset.full)||'',
+      slot_id:SLOT_IDS[picked], name:$('q-name').value.trim(), email:$('q-email').value.trim(),
+      phone:((w&&w.dataset.full)||'')+($('q-messenger').value?' · '+$('q-messenger').value:''),
       level:$('q-level').value, why:$('q-why').value.trim(), currency:ccy
     })}).catch(()=>{});
   }
