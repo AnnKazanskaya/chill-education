@@ -551,8 +551,26 @@ function buildSlots(){
     out.push({ts:day.getTime(),slots,school});}
   return out;
 }
-const days=buildSlots();
-let dayIdx=days.findIndex(d=>d.slots.length>0); if(dayIdx<0)dayIdx=0;
+let days=[], SLOT_IDS={}, USING_API=false;
+const API=(location.hostname.endsWith('netlify.app')||location.hostname==='localhost')?'/api':'https://chill-booking.netlify.app/api';
+async function loadSlots(){
+  try{
+    const r=await fetch(API+'/slots'); if(!r.ok) throw 0;
+    const rows=await r.json(); USING_API=true; SLOT_IDS={};
+    const byDay={};
+    rows.forEach(x=>{const ts=new Date(x.starts_at).getTime(); SLOT_IDS[ts]=x.id;
+      const key=new Intl.DateTimeFormat('en-CA',{timeZone:MSK}).format(new Date(ts));
+      (byDay[key]=byDay[key]||[]).push(ts);});
+    const base=new Date(); base.setUTCHours(0,0,0,0); const out=[];
+    for(let d=0;d<14;d++){const day=new Date(base.getTime()+d*86400000);
+      const key=new Intl.DateTimeFormat('en-CA',{timeZone:MSK}).format(day);
+      out.push({ts:day.getTime(),slots:(byDay[key]||[]).sort((a,b)=>a-b),school:[]});}
+    days=out;
+  }catch(e){ days=buildSlots(); } // API недоступен — показываем демо, чтобы страница не ломалась
+  dayIdx=days.findIndex(d=>d.slots.length>0); if(dayIdx<0)dayIdx=0;
+  renderDays(); renderSlots();
+}
+let dayIdx=0;
 let picked=null, holdUntil=null, holdTimer=null;
 const $=id=>document.getElementById(id);
 // ---------- ТЕЛЕФОН: выбор страны + маска ----------
@@ -628,8 +646,14 @@ function renderSlots(){
   const d=days[dayIdx];
   const alex=d.slots.map(ts=>`<div class="slot-btn slot-alex" data-ts="${ts}">${fT(ts)}</div>`).join('');
   $('cal-slots').innerHTML = alex || '<div style="grid-column:1/-1;text-align:center;color:#8C90AC;font-size:14px;padding:14px">На этот день окон нет — выбери другой</div>';
-  document.querySelectorAll('#cal-slots .slot-alex').forEach(el=>el.addEventListener('click',()=>{
+  document.querySelectorAll('#cal-slots .slot-alex').forEach(el=>el.addEventListener('click',async()=>{
     picked=+el.dataset.ts; track('select_slot',{slot:new Date(picked).toISOString()});
+    if(USING_API){
+      el.style.opacity=.5;
+      const r=await fetch(API+'/hold',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slot_id:SLOT_IDS[picked]})}).catch(()=>null);
+      el.style.opacity=1;
+      if(!r||!r.ok){ alert('Это время только что заняли — выбери, пожалуйста, другое'); loadSlots(); return; }
+    }
     holdUntil=Date.now()+900000; startHold();
     $('picked-label').textContent=fFull(picked);
     document.querySelectorAll('.picked-label2').forEach(n=>n.textContent=fFull(picked));
@@ -645,8 +669,13 @@ function startHold(){
     if(s<=0){clearInterval(holdTimer);picked=null;show('slots');}
   },1000);
 }
-document.querySelectorAll('.back-b').forEach(b=>b.addEventListener('click',()=>show(b.dataset.back)));
-renderDays();renderSlots();
+document.querySelectorAll('.back-b').forEach(b=>b.addEventListener('click',()=>{
+  if(b.dataset.back==='slots' && USING_API && picked && SLOT_IDS[picked]){
+    fetch(API+'/release',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slot_id:SLOT_IDS[picked]})}).catch(()=>{});
+    clearInterval(holdTimer); loadSlots();
+  }
+  show(b.dataset.back);}));
+loadSlots();
 if(!days.some(d=>d.slots.length)) { show('noslots'); track('no_slots_shown'); }
 
 // анкета → оплата
@@ -672,7 +701,22 @@ function renderCcy(){
 renderCcy();
 
 // оплата (демо)
-$('pay-btn').addEventListener('click',()=>{track('purchase',{currency:ccy});clearInterval(holdTimer);window.open(PR[ccy].link,'_blank','noopener');$('done-email').textContent=$('q-email').value||'почту';show('done');});
+$('pay-btn').addEventListener('click',async()=>{
+  track('purchase',{currency:ccy});
+  const btn=$('pay-btn'); btn.disabled=true; btn.textContent='Секунду…';
+  if(USING_API && picked && SLOT_IDS[picked]){
+    const w=document.querySelector('#qform [data-phone]');
+    await fetch(API+'/book',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      slot_id:SLOT_IDS[picked], email:$('q-email').value.trim(), phone:(w&&w.dataset.full)||'',
+      level:$('q-level').value, why:$('q-why').value.trim(), currency:ccy
+    })}).catch(()=>{});
+  }
+  btn.disabled=false; btn.textContent='Оплатить и записаться';
+  clearInterval(holdTimer);
+  window.open(PR[ccy].link,'_blank','noopener');
+  $('done-email').textContent=$('q-email').value||'почту';
+  show('done');
+});
 $('contact-btn').addEventListener('click',()=>track('contact_click'));
 
 $('insist-btn')&&$('insist-btn').addEventListener('click',()=>track('insist_alex'));
