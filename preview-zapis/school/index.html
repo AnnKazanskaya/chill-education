@@ -571,6 +571,12 @@ async function loadSlots(){
   }catch(e){ days=buildSlots(); } // API недоступен — показываем демо, чтобы страница не ломалась
   dayIdx=days.findIndex(d=>d.slots.length>0); if(dayIdx<0)dayIdx=0;
   renderDays(); renderSlots();
+  // переключаем экран только если человек сейчас на календаре, а не в анкете/оплате
+  const onCal = $('step-slots').style.display!=='none' || $('step-noslots').style.display!=='none';
+  if(onCal){
+    if(!days.some(d=>d.slots.length)){ show('noslots'); track('no_slots_shown'); }
+    else show('slots');
+  }
 }
 let dayIdx=0;
 let picked=null, holdUntil=null, holdTimer=null;
@@ -678,7 +684,6 @@ document.querySelectorAll('.back-b').forEach(b=>b.addEventListener('click',()=>{
   }
   show(b.dataset.back);}));
 loadSlots();
-if(!days.some(d=>d.slots.length)) { show('noslots'); track('no_slots_shown'); }
 
 // анкета → оплата
 $('qform').addEventListener('submit',e=>{e.preventDefault();track('submit_form',{level:$('q-level').value});show('pay');track('begin_checkout');});
