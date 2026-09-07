@@ -552,7 +552,7 @@ function buildSlots(){
   return out;
 }
 let days=[], SLOT_IDS={}, USING_API=false;
-const API=(location.hostname.endsWith('netlify.app')||location.hostname==='localhost')?'/api':'https://chill-booking.netlify.app/api';
+const API=(location.hostname.endsWith('netlify.app')||location.hostname==='zapis.chill.education'||location.hostname==='localhost')?'/api':'https://zapis.chill.education/api';
 async function loadSlots(){
   try{
     const r=await fetch(API+'/slots'); if(!r.ok) throw 0;
