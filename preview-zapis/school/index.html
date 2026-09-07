@@ -488,12 +488,6 @@
 
 </div>
 
-<!-- демо-переключатель -->
-<div style="position:fixed;left:0;right:0;bottom:0;background:#1A1E33;color:#fff;font-size:12px;padding:8px 12px;display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;z-index:60">
-  Прототип · демо-данные
-  <button id="demo-noslots" style="background:rgba(255,255,255,.16);color:#fff;border:none;border-radius:8px;padding:5px 10px;font-family:'Manrope';font-size:12px;cursor:pointer">Показать «нет слотов»</button>
-</div>
-
 <script>
 // ---------- аналитика (события воронки) ----------
 function track(e,p){try{window.dataLayer=window.dataLayer||[];window.dataLayer.push({event:e,...p});}catch(x){}try{console.log('[GA4]',e,p||{});}catch(x){}}
@@ -732,8 +726,7 @@ $('insist-btn')&&$('insist-btn').addEventListener('click',()=>track('insist_alex
 $('school-block-go')&&$('school-block-go').addEventListener('click',()=>track('go_to_school',{from:'school_block'}));
 
 // демо: нет слотов
-let forced=false;
-$('demo-noslots').addEventListener('click',function(){forced=!forced;this.textContent=forced?'Показать со слотами':'Показать «нет слотов»';show(forced?'noslots':'slots');if(forced)track('no_slots_shown');document.getElementById('calendar').scrollIntoView({behavior:'smooth'});});
+
 </script>
 </body>
 </html>
