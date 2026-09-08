@@ -253,6 +253,7 @@ const CSS = `
 .elc-cta-btn{background:var(--accent);color:#fff;font-weight:700;border:none;border-radius:14px;padding:13px 24px;font-family:var(--font-display);font-size:15px;cursor:pointer;transition:transform .06s,filter .15s}
 .elc-leadform{display:flex;flex-direction:column;gap:10px;max-width:420px}
 .elc-cta-inp{width:100%;border:none;border-radius:12px;padding:13px 15px;font-family:var(--font-body);font-size:15px;color:var(--ink);background:#fff}
+select.elc-cta-inp{min-width:0;max-width:100%;text-overflow:ellipsis;cursor:pointer;appearance:none;-webkit-appearance:none}
 .elc-cta-inp:focus{outline:none;box-shadow:0 0 0 3px rgba(255,122,26,.5)}
 .elc-cta-inp::placeholder{color:#9AA0B8}
 .elc-cta-btn:hover{filter:brightness(1.06)}
