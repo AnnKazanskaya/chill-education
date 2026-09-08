@@ -1003,7 +1003,7 @@ function Result({ answers, speaking, name, booked, setBooked, restart, openRepor
               /* ждём реальной доставки (текст + аудио), чтобы уход со страницы не оборвал загрузку файла;
                  предохранитель 25 с — чтобы кнопка не зависла навсегда при плохой сети */
               await Promise.race([
-                sendTestResults({ name: (lead.name.trim()||name||""), contact: lead.contact.trim(), level: info.code, answers, speaking }),
+                sendTestResults({ name: (lead.name.trim()||name||""), contact: lead.contact.trim()+(lead.messenger?" · "+lead.messenger:""), level: info.code, answers, speaking }),
                 new Promise(r=>setTimeout(r, 25000))
               ]);
             }catch(err){}
@@ -1012,6 +1012,11 @@ function Result({ answers, speaking, name, booked, setBooked, restart, openRepor
           }}>
             <input className="elc-cta-inp" name="name" autoComplete="name" placeholder="Имя" value={lead.name} onChange={e=>setLead(l=>({...l,name:e.target.value}))} />
             <input className="elc-cta-inp" name="phone" type="tel" inputMode="tel" autoComplete="tel" placeholder="Телефон или telegram" value={lead.contact} onChange={e=>setLead(l=>({...l,contact:e.target.value}))} required />
+            <select className="elc-cta-inp" name="messenger" required value={lead.messenger||""} onChange={e=>setLead(l=>({...l,messenger:e.target.value}))} style={{cursor:"pointer",color:lead.messenger?undefined:"#8C90AC"}}>
+              <option value="" disabled>В какой соцсети тебя можно найти по этому номеру?</option>
+              <option>Telegram</option><option>WhatsApp</option><option>Telegram и WhatsApp</option>
+              <option value="Ни в какой">Ни в какой</option>
+            </select>
             <label style={{display:"flex",alignItems:"flex-start",gap:"8px",fontFamily:"var(--font-body)",fontSize:"12px",lineHeight:1.4,color:"rgba(255,255,255,.75)",cursor:"pointer"}}>
               <input type="checkbox" required style={{marginTop:"1px",flexShrink:0,width:"15px",height:"15px",accentColor:"var(--accent)",cursor:"pointer"}} />
               <span>Я соглашаюсь с <a href="../policy.html" target="_blank" rel="noopener" style={{color:"#fff",textDecoration:"underline"}}>политикой конфиденциальности</a> и даю <a href="../consent.html" target="_blank" rel="noopener" style={{color:"#fff",textDecoration:"underline"}}>согласие на обработку персональных данных</a></span>

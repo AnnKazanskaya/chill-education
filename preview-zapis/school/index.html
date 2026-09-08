@@ -355,6 +355,7 @@
           <input class="inp2" id="wl-name" required autocomplete="name" placeholder="Как тебя зовут?">
           <input class="inp2" id="wl-email" required type="email" autocomplete="email" placeholder="Email">
           <input class="inp2" id="wl-contact" required placeholder="Телефон, Telegram или Instagram — чем больше, тем лучше">
+          <select class="inp2" id="wl-messenger" required onchange="this.style.color='#1A1E33'" style="color:#8C90AC;cursor:pointer"><option value="" disabled selected>В какой соцсети тебя можно найти по этому номеру?</option><option>Telegram</option><option>WhatsApp</option><option>Telegram и WhatsApp</option><option value="Ни в какой">Ни в какой</option></select>
           <input class="inp2" id="wl-time" required placeholder="Когда удобно заниматься? (по МСК, например: будни после 19:00)">
           <select class="inp2" id="wl-level" required>
             <option value="" disabled selected>Твой примерный уровень английского</option>
@@ -434,6 +435,7 @@
       <form id="school-lead" style="display:flex;flex-wrap:wrap;gap:10px;background:#F4F5FC;padding:8px;border-radius:18px;max-width:560px">
         <input name="name" type="text" autocomplete="name" placeholder="Имя" required style="flex:1 0 100%;min-width:0;border:none;outline:none;font-family:'Manrope';font-size:15px;font-weight:500;padding:13px 16px;border-radius:12px;background:#fff;color:#1A1E33">
         <div class="ph-wrap" data-phone style="flex:1 0 100%;min-width:0"><select class="inp2 ph-cc" aria-label="Код страны" style="background-color:#fff"></select><input class="inp2 ph-num" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="Телефон" required style="background:#fff"><input type="hidden" name="phone"></div>
+        <select name="messenger" required onchange="this.style.color='#1A1E33'" style="flex:1 0 100%;border:none;outline:none;font-family:'Manrope';font-size:15px;font-weight:500;padding:13px 16px;border-radius:12px;background:#fff;color:#8C90AC;appearance:none;-webkit-appearance:none;cursor:pointer"><option value="" disabled selected>В какой соцсети тебя можно найти по этому номеру?</option><option>Telegram</option><option>WhatsApp</option><option>Telegram и WhatsApp</option><option value="Ни в какой">Ни в какой</option></select>
         <button type="submit" style="flex:1 0 100%;border:none;cursor:pointer;background:#FF7A1A;color:#fff;font-family:'Manrope';font-weight:700;font-size:15px;padding:13px 22px;border-radius:12px;box-shadow:0 8px 18px rgba(255,122,26,.32)">Записаться</button>
         <label style="flex:1 0 100%;display:flex;align-items:flex-start;gap:8px;padding:2px 6px 4px;font-size:12px;line-height:1.4;color:#8C90AC;cursor:pointer">
           <input type="checkbox" name="consent" required style="margin-top:1px;flex-shrink:0;width:15px;height:15px;accent-color:#2440D9;cursor:pointer">
@@ -633,7 +635,7 @@ $('wl-form').addEventListener('submit',async e=>{
   fd.append('emailAddress',$('wl-email').value.trim());
   fd.append(GFORM.format,'Индивидуальные занятия');
   fd.append(GFORM.name,$('wl-name').value.trim());
-  fd.append(GFORM.contact,$('wl-contact').value.trim()+' · с сайта записи');
+  fd.append(GFORM.contact,$('wl-contact').value.trim()+' ('+$('wl-messenger').value+') · с сайта записи');
   fd.append(GFORM.time,$('wl-time').value.trim());
   fd.append(GFORM.level,$('wl-level').value);
   fd.append('fvv','1'); fd.append('pageHistory','0'); fd.append('submissionTimestamp','-1');
@@ -689,7 +691,7 @@ loadSlots();
 $('qform').addEventListener('submit',e=>{e.preventDefault();track('submit_form',{level:$('q-level').value});show('pay');track('begin_checkout');});
 // заявка в школу → Telegram-группа «Заявки» (как на chill.education)
 (function(){const f=$('school-lead'); if(!f)return; f.addEventListener('submit',e=>{e.preventDefault();
-  const name=(f.elements.namedItem('name').value||'').trim(), phone=(f.elements.namedItem('phone').value||'').trim();
+  const name=(f.elements.namedItem('name').value||'').trim(), phone=(f.elements.namedItem('phone').value||'').trim()+((f.elements.namedItem('messenger')||{}).value?' · '+f.elements.namedItem('messenger').value:'');
   track('school_lead');
   fetch('https://api.telegram.org/bot7777868493:AAED1sSl-K1M63_h8urrS5F2bR6OvuwvX3A/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:'-1004289091014',text:'🔔 Новая заявка с сайта\n👤 Имя: '+(name||'—')+'\n📞 Телефон: '+phone+'\n📍 Источник: Сайт личных уроков Алекса — блок «Школа»'})}).catch(()=>{});
   f.outerHTML='<div style="display:flex;align-items:center;gap:14px;background:#F4F5FC;border-radius:18px;padding:18px 22px;max-width:560px"><span style="display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:#E9F7EE;color:#1FA85A;font-size:22px;flex-shrink:0">✓</span><div><div class="h-nunito" style="font-weight:800;font-size:17px;color:#1A1E33">Заявка отправлена!</div><div style="font-size:14px;color:#5A5F7D">Преподаватель школы свяжется с тобой в течение дня 🙌</div></div></div>';
