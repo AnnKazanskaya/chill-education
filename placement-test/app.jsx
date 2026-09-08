@@ -953,9 +953,9 @@ function Result({ answers, speaking, name, booked, setBooked, restart, openRepor
 
       <div className="elc-cta">
         <div className="elc-cta-h">Забронируй бесплатный пробный урок</div>
-        <div className="elc-cta-p">Преподаватель послушает твоё говорение, разберёт ошибки и подберёт программу под уровень {info.code}. Никакой оплаты — просто знакомство.</div>
+        <div className="elc-cta-p">Преподаватель послушает твоё говорение, разберёт ошибки и подберёт программу под уровень {info.code}. Никакой оплаты — просто знакомство. <a href="https://chill.education/?utm_source=test&utm_medium=referral&utm_campaign=result_cta" target="_blank" rel="noopener" style={{color:"#fff",textDecoration:"underline",fontWeight:600,whiteSpace:"nowrap"}}>Подробнее о школе</a></div>
         {booked ? (
-          <div className="elc-booked">✓ Спасибо{name?", "+name:""}! Мы свяжемся с тобой и подберём программу под уровень {info.code}.</div>
+          <div className="elc-booked">✓ Спасибо{name?", "+name:""}! Мы свяжемся с тобой и подберём программу под уровень {info.code}. <a href="https://chill.education/?utm_source=test&utm_medium=referral&utm_campaign=result_cta" target="_blank" rel="noopener" style={{color:"inherit",textDecoration:"underline",fontWeight:600}}>А пока — загляни на сайт школы</a></div>
         ) : (
           <form className="elc-leadform" onSubmit={async (e)=>{
             e.preventDefault();
@@ -1089,7 +1089,11 @@ function Report({ answers, speaking, name, track, startTime, endTime, back }){
 
       <div className="elc-disc" style={{marginTop:20}}>После записи на бесплатный урок этот отчёт вместе с записью говорения автоматически отправляется преподавателям Chill Education — они посмотрят его до вашего первого занятия.</div>
       <div className="elc-actions">
-        <button className="elc-btn" onClick={()=>window.print()}>Печать / сохранить PDF</button>
+        <button className="elc-btn" onClick={()=>{
+          const inApp=/Instagram|FBAN|FBAV|FB_IAB|Telegram|TelegramBot|VKClient|WhatsApp|Line\//i.test(navigator.userAgent||'');
+          if(inApp){ alert('Страница открыта во встроенном браузере — печать здесь не работает. Нажми ⋯ и выбери «Открыть в браузере» (Safari или Chrome), затем нажми кнопку ещё раз.'); return; }
+          try{ window.print(); }catch(e){ alert('Не получилось открыть печать. Открой страницу в Safari или Chrome и попробуй ещё раз.'); }
+        }}>Печать / сохранить PDF</button>
         <button className="elc-restart" onClick={back}>← Назад к результату</button>
       </div>
     </div>
