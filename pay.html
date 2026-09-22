@@ -71,11 +71,11 @@ const CURRENCIES = [
 const OPTIONS = [
   { name: 'Пробный урок', note: '1 урок · знакомство', free: true,
     price: { RUB: 'Бесплатно', KZT: 'Бесплатно', USD: 'Бесплатно' }, url: 'index.html#lead', popular: false },
-  { name: 'Chill Basic', note: '4 урока · 1 в неделю', price: { RUB: '10 000 ₽', KZT: '65 000 ₸', USD: '130 $' },
+  { name: 'Chill Basic', note: '4 урока · 1 в неделю', price: { RUB: '10 000 ₽', KZT: '55 000 ₸', USD: '125 $' },
     url: 'https://chill10k.tb.ru/', urlAlt: 'https://c.tiptoppay.kz/payments/50c11d42c7564a398eaddd9606ef6cad', popular: false },
-  { name: 'Chill Plus', note: '8 уроков · 2 в неделю', price: { RUB: '18 500 ₽', KZT: '120 000 ₸', USD: '240 $' },
+  { name: 'Chill Plus', note: '8 уроков · 2 в неделю', price: { RUB: '18 500 ₽', KZT: '100 000 ₸', USD: '225 $' },
     url: 'https://chill18500.tb.ru/', urlAlt: 'https://c.tiptoppay.kz/payments/acd04eeb774c4f93aa65cf44e178ffdd', popular: true },
-  { name: 'Chill Pro', note: '12 уроков · 3 в неделю', price: { RUB: '24 000 ₽', KZT: '155 000 ₸', USD: '310 $' },
+  { name: 'Chill Pro', note: '12 уроков · 3 в неделю', price: { RUB: '24 000 ₽', KZT: '130 000 ₸', USD: '290 $' },
     url: 'https://chill24k.tb.ru/', urlAlt: 'https://c.tiptoppay.kz/payments/2004691b4c21403380f2d79dab49a30e', popular: false },
 ];
 let curCurrency = 'RUB';
@@ -124,7 +124,7 @@ function usdModal(o) {
       <h3 class="h-nunito" style="font-weight:900;font-size:22px;letter-spacing:-.4px;margin-bottom:12px">Запишись на занятие — это займёт минуту</h3>
       <p style="font-size:15px;line-height:1.6;color:#3A3F5C;margin-bottom:6px">Ссылка на оплату откроется через несколько секунд.</p>
       <p style="font-size:15px;line-height:1.6;color:#3A3F5C;margin-bottom:6px">Мы — казахстанская компания, поэтому вы увидите сумму в тенге.</p>
-      <p style="font-size:15px;line-height:1.6;color:#3A3F5C;margin-bottom:14px"><b>Курс: 1 $ ≈ 500 ₸</b></p>
+      <p style="font-size:15px;line-height:1.6;color:#3A3F5C;margin-bottom:14px"><b>Курс: 1 $ ≈ 470 ₸</b></p>
       <p style="font-size:13.5px;line-height:1.6;color:#8C90AC;margin-bottom:18px">Есть вопросы? Напиши нам — <a href="mailto:support@chill.education" style="color:#2440D9;font-weight:600">support@chill.education</a> · тг: <a href="https://t.me/chilleducation" style="color:#2440D9;font-weight:600">@chilleducation</a></p>
       <a href="${o.urlAlt}" style="display:block;text-align:center;text-decoration:none;font-weight:700;font-size:15px;padding:14px;border-radius:14px;background:#2440D9;color:#fff">Перейти к оплате · <span data-cnt>5</span> с</a>
     </div>`;
