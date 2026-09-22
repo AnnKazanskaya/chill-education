@@ -341,13 +341,13 @@ const PLANS = [
   { name: 'Find your Chill', lessons: 'Пробный урок', free: true, pay: '#lead',
     tags: ['пробный', 'бесплатно'], price: { RUB: 'Бесплатно', KZT: 'Бесплатно', USD: 'Бесплатно' },
     features: ['Знакомство с преподавателем', 'Определение уровня по CEFR', 'Персональный план обучения'] },
-  { name: 'Chill Basic', lessons: '4 урока', pay: 'https://chill10k.tb.ru/',
+  { name: 'Chill Basic', lessons: '4 урока', pay: 'https://chill10k.tb.ru/', payAlt: 'https://c.tiptoppay.kz/payments/50c11d42c7564a398eaddd9606ef6cad',
     tags: ['базовый', '1-на-1'], price: { RUB: '10 000 ₽', KZT: '55 000 ₸', USD: '125 $' },
     features: ['Один урок в неделю', 'Поддержание уровня', 'Материалы и домашка с проверкой', 'Прогресс-тесты'] },
-  { name: 'Chill Plus', lessons: '8 уроков', pay: 'https://chill18500.tb.ru/',
+  { name: 'Chill Plus', lessons: '8 уроков', pay: 'https://chill18500.tb.ru/', payAlt: 'https://c.tiptoppay.kz/payments/acd04eeb774c4f93aa65cf44e178ffdd',
     tags: ['популярный', '1-на-1'], price: { RUB: '18 500 ₽', KZT: '100 000 ₸', USD: '225 $' },
     features: ['Два урока в неделю', 'Стабильный прогресс', 'Всё из тарифа Basic', 'Гибкий график занятий'] },
-  { name: 'Chill Pro', lessons: '12 уроков', pay: 'https://chill24k.tb.ru/',
+  { name: 'Chill Pro', lessons: '12 уроков', pay: 'https://chill24k.tb.ru/', payAlt: 'https://c.tiptoppay.kz/payments/2004691b4c21403380f2d79dab49a30e',
     tags: ['продвинутый', '1-на-1'], price: { RUB: '24 000 ₽', KZT: '130 000 ₸', USD: '290 $' },
     features: ['Три урока в неделю', 'Подготовка к экзамену или собесу', 'Всё из тарифа Plus'] },
 ];
@@ -481,9 +481,12 @@ function renderPricing() {
       btnBg: '#EEF0FB', btnColor: '#2440D9', shadow: '0 24px 50px -36px rgba(36,64,217,.35)'
     };
     const pl = perLesson(p);
-    const btn = p.free
-      ? `<a href="#lead" style="display:block;text-align:center;text-decoration:none;font-weight:700;font-size:15px;padding:13px;border-radius:14px;background:${c.btnBg};color:${c.btnColor}">Записаться</a>`
-      : `<a href="${p.pay}" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none;font-weight:700;font-size:15px;padding:13px;border-radius:14px;background:${c.btnBg};color:${c.btnColor}">Оплатить</a>`;
+    const btnCss = `display:block;width:100%;text-align:center;text-decoration:none;font-weight:700;font-size:15px;padding:13px;border-radius:14px;background:${c.btnBg};color:${c.btnColor};border:none;cursor:pointer;font-family:'Manrope'`;
+    let btn;
+    if (p.free) btn = `<a href="#lead" style="${btnCss}">Записаться</a>`;
+    else if (curCurrency === 'RUB') btn = `<a href="${p.pay}" target="_blank" rel="noopener" style="${btnCss}">Оплатить</a>`;
+    else if (curCurrency === 'KZT') btn = `<a href="${p.payAlt}" target="_blank" rel="noopener" style="${btnCss}">Оплатить</a>`;
+    else btn = `<button data-usd-plan="${p.name}" style="${btnCss}">Оплатить</button>`;
     return `
     <div style="position:relative;display:flex;flex-direction:column;background:${c.cardBg};border-radius:26px;padding:26px 22px;box-shadow:${c.shadow}">
       <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
@@ -506,6 +509,30 @@ function renderPricing() {
   document.querySelectorAll('#currency-switch button').forEach(b => {
     b.addEventListener('click', () => { curCurrency = b.dataset.cur; renderPricing(); });
   });
+  document.querySelectorAll('#plans button[data-usd-plan]').forEach(b => b.addEventListener('click', () => usdPayModal(PLANS.find(x => x.name === b.dataset.usdPlan))));
+}
+
+// дисклеймер для оплаты в долларах: сумма спишется в тенге по курсу
+function usdPayModal(p) {
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'position:fixed;inset:0;background:rgba(26,30,51,.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:99';
+  wrap.innerHTML = `
+    <div style="background:#fff;border-radius:24px;padding:28px 26px;max-width:430px;width:100%;box-shadow:0 30px 70px -30px rgba(0,0,0,.45)">
+      <h3 class="h-nunito" style="font-weight:900;font-size:22px;letter-spacing:-.4px;margin-bottom:12px">Запишись на занятие — это займёт минуту</h3>
+      <p style="font-size:15px;line-height:1.6;color:#3A3F5C;margin-bottom:6px">Ссылка на оплату откроется через несколько секунд.</p>
+      <p style="font-size:15px;line-height:1.6;color:#3A3F5C;margin-bottom:6px">Мы — казахстанская компания, поэтому вы увидите сумму в тенге.</p>
+      <p style="font-size:15px;line-height:1.6;color:#3A3F5C;margin-bottom:14px"><b>Курс: 1 $ ≈ 470 ₸</b></p>
+      <p style="font-size:13.5px;line-height:1.6;color:#8C90AC;margin-bottom:18px">Есть вопросы? Напиши нам — <a href="mailto:support@chill.education" style="color:#2440D9;font-weight:600">support@chill.education</a> · тг: <a href="https://t.me/chilleducation" style="color:#2440D9;font-weight:600">@chilleducation</a></p>
+      <a href="${p.payAlt}" style="display:block;text-align:center;text-decoration:none;font-weight:700;font-size:15px;padding:14px;border-radius:14px;background:#2440D9;color:#fff">Перейти к оплате · <span data-cnt>60</span> с</a>
+    </div>`;
+  document.body.appendChild(wrap);
+  wrap.addEventListener('click', e => { if (e.target === wrap) { clearInterval(t); wrap.remove(); } });
+  let n = 60;
+  const t = setInterval(() => {
+    n--; const el = wrap.querySelector('[data-cnt]');
+    if (el) el.textContent = n;
+    if (n <= 0) { clearInterval(t); location.href = p.payAlt; }
+  }, 1000);
 }
 renderPricing();
 setupCarousel(document.getElementById('plans'), document.getElementById('plans-dots'), PLANS.length);
