@@ -40,7 +40,13 @@
       <p style="font-size:17px;line-height:1.5;color:#5A5F7D">Выбери свой пакет и перейди к безопасной оплате. После оплаты напиши нам в <a href="https://t.me/chilleducation" style="color:#2440D9;text-decoration:none;font-weight:600">Telegram</a> — сразу откроем уроки и согласуем расписание.</p>
     </div>
 
+    <div style="display:flex;justify-content:center;margin-bottom:26px">
+      <div id="currency-switch" style="display:inline-flex;gap:4px;background:#fff;padding:5px;border-radius:14px;box-shadow:0 12px 30px -18px rgba(36,64,217,.35)"></div>
+    </div>
+
     <div class="pay-grid" id="pay-cards"></div>
+
+    <p id="pay-alt-note" style="display:none;text-align:center;font-size:15px;color:#5A5F7D;margin-top:22px;line-height:1.6">Оплата в тенге и долларах проходит по платёжной ссылке — напиши нам в <a href="https://t.me/chilleducation" style="color:#2440D9;text-decoration:none;font-weight:700">Telegram</a>, пришлём её сразу после выбора пакета.</p>
 
     <p style="text-align:center;font-size:14px;color:#8C90AC;margin-top:28px">Оплата проходит на защищённой странице. Оплачивая, вы принимаете условия <a href="offer.html" style="color:#2440D9;text-decoration:none;font-weight:600">публичной оферты</a>. Остались вопросы? Напиши в <a href="https://t.me/chilleducation" style="color:#2440D9;text-decoration:none;font-weight:600">Telegram</a>.</p>
   </section>
@@ -57,28 +63,50 @@
 </div>
 
 <script>
-const OPTIONS = [
-  { name: 'Chill Basic', note: '4 урока · 1 в неделю', price: '10 000 ₽', url: 'https://chill10k.tb.ru/', popular: false },
-  { name: 'Chill Plus', note: '8 уроков · 2 в неделю', price: '18 500 ₽', url: 'https://chill18500.tb.ru/', popular: true },
-  { name: 'Chill Pro', note: '12 уроков · 3 в неделю', price: '24 000 ₽', url: 'https://chill24k.tb.ru/', popular: false },
+const CURRENCIES = [
+  { code: 'RUB', label: '₽ RUB' },
+  { code: 'KZT', label: '₸ KZT' },
+  { code: 'USD', label: '$ USD' },
 ];
+const OPTIONS = [
+  { name: 'Разовый урок', note: '1 урок · без пакета', price: { RUB: '1 500 ₽' }, url: 'https://chill1500.tb.ru/', popular: false },
+  { name: 'Chill Basic', note: '4 урока · 1 в неделю', price: { RUB: '10 000 ₽', KZT: '65 000 ₸', USD: '130 $' }, url: 'https://chill10k.tb.ru/', popular: false },
+  { name: 'Chill Plus', note: '8 уроков · 2 в неделю', price: { RUB: '18 500 ₽', KZT: '120 000 ₸', USD: '240 $' }, url: 'https://chill18500.tb.ru/', popular: true },
+  { name: 'Chill Pro', note: '12 уроков · 3 в неделю', price: { RUB: '24 000 ₽', KZT: '155 000 ₸', USD: '310 $' }, url: 'https://chill24k.tb.ru/', popular: false },
+];
+let curCurrency = 'RUB';
 
-document.getElementById('pay-cards').innerHTML = OPTIONS.map(o => {
-  const pop = o.popular;
-  const cardBg = pop ? 'linear-gradient(160deg,#16236B,#2D4BE6)' : '#fff';
-  const title = pop ? '#fff' : '#1A1E33';
-  const note = pop ? 'rgba(255,255,255,.75)' : '#8C90AC';
-  const btnBg = pop ? '#FF7A1A' : '#2440D9';
-  const shadow = pop ? '0 30px 60px -30px rgba(36,64,217,.6)' : '0 24px 50px -36px rgba(36,64,217,.35)';
-  return `
-  <div style="position:relative;display:flex;flex-direction:column;background:${cardBg};border-radius:26px;padding:28px 24px;box-shadow:${shadow}">
-    ${pop ? '<span style="position:absolute;top:22px;right:22px;background:#FF7A1A;color:#fff;font-weight:800;font-size:12px;padding:5px 12px;border-radius:999px">★ Хит</span>' : ''}
-    <h3 class="h-nunito" style="font-weight:800;font-size:22px;letter-spacing:-.3px;color:${title}">${o.name}</h3>
-    <p style="font-size:14px;color:${note};margin:6px 0 22px">${o.note}</p>
-    <div class="h-nunito" style="font-weight:900;font-size:30px;letter-spacing:-.5px;color:${title};margin-top:auto">${o.price}</div>
-    <a href="${o.url}" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none;font-weight:700;font-size:15px;padding:14px;border-radius:14px;background:${btnBg};color:#fff;margin-top:18px">Оплатить</a>
-  </div>`;
-}).join('');
+function renderPay() {
+  document.getElementById('currency-switch').innerHTML = CURRENCIES.map(c => {
+    const active = c.code === curCurrency;
+    return `<button data-cur="${c.code}" style="border:none;cursor:pointer;font-family:'Manrope';font-weight:700;font-size:14px;padding:9px 18px;border-radius:10px;background:${active ? '#2440D9' : 'transparent'};color:${active ? '#fff' : '#5A5F7D'}">${c.label}</button>`;
+  }).join('');
+  document.querySelectorAll('#currency-switch button').forEach(b => b.addEventListener('click', () => { curCurrency = b.dataset.cur; renderPay(); }));
+
+  const isRub = curCurrency === 'RUB';
+  document.getElementById('pay-alt-note').style.display = isRub ? 'none' : '';
+
+  document.getElementById('pay-cards').innerHTML = OPTIONS.filter(o => o.price[curCurrency]).map(o => {
+    const pop = o.popular;
+    const cardBg = pop ? 'linear-gradient(160deg,#16236B,#2D4BE6)' : '#fff';
+    const title = pop ? '#fff' : '#1A1E33';
+    const note = pop ? 'rgba(255,255,255,.75)' : '#8C90AC';
+    const btnBg = pop ? '#FF7A1A' : '#2440D9';
+    const shadow = pop ? '0 30px 60px -30px rgba(36,64,217,.6)' : '0 24px 50px -36px rgba(36,64,217,.35)';
+    const btn = isRub
+      ? `<a href="${o.url}" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none;font-weight:700;font-size:15px;padding:14px;border-radius:14px;background:${btnBg};color:#fff;margin-top:18px">Оплатить</a>`
+      : `<a href="https://t.me/chilleducation" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none;font-weight:700;font-size:15px;padding:14px;border-radius:14px;background:${btnBg};color:#fff;margin-top:18px">Получить ссылку на оплату</a>`;
+    return `
+    <div style="position:relative;display:flex;flex-direction:column;background:${cardBg};border-radius:26px;padding:28px 24px;box-shadow:${shadow}">
+      ${pop ? '<span style="position:absolute;top:22px;right:22px;background:#FF7A1A;color:#fff;font-weight:800;font-size:12px;padding:5px 12px;border-radius:999px">★ Хит</span>' : ''}
+      <h3 class="h-nunito" style="font-weight:800;font-size:22px;letter-spacing:-.3px;color:${title}">${o.name}</h3>
+      <p style="font-size:14px;color:${note};margin:6px 0 22px">${o.note}</p>
+      <div class="h-nunito" style="font-weight:900;font-size:30px;letter-spacing:-.5px;color:${title};margin-top:auto">${o.price[curCurrency]}</div>
+      ${btn}
+    </div>`;
+  }).join('');
+}
+renderPay();
 </script>
 </body>
 </html>
