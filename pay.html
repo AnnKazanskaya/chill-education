@@ -126,11 +126,11 @@ function usdModal(o) {
       <p style="font-size:15px;line-height:1.6;color:#3A3F5C;margin-bottom:6px">Мы — казахстанская компания, поэтому вы увидите сумму в тенге.</p>
       <p style="font-size:15px;line-height:1.6;color:#3A3F5C;margin-bottom:14px"><b>Курс: 1 $ ≈ 470 ₸</b></p>
       <p style="font-size:13.5px;line-height:1.6;color:#8C90AC;margin-bottom:18px">Есть вопросы? Напиши нам — <a href="mailto:support@chill.education" style="color:#2440D9;font-weight:600">support@chill.education</a> · тг: <a href="https://t.me/chilleducation" style="color:#2440D9;font-weight:600">@chilleducation</a></p>
-      <a href="${o.urlAlt}" style="display:block;text-align:center;text-decoration:none;font-weight:700;font-size:15px;padding:14px;border-radius:14px;background:#2440D9;color:#fff">Перейти к оплате · <span data-cnt>5</span> с</a>
+      <a href="${o.urlAlt}" style="display:block;text-align:center;text-decoration:none;font-weight:700;font-size:15px;padding:14px;border-radius:14px;background:#2440D9;color:#fff">Перейти к оплате · <span data-cnt>30</span> с</a>
     </div>`;
   document.body.appendChild(wrap);
   wrap.addEventListener('click', e => { if (e.target === wrap) { clearInterval(t); wrap.remove(); } });
-  let n = 5;
+  let n = 30;
   const t = setInterval(() => {
     n--; const el = wrap.querySelector('[data-cnt]');
     if (el) el.textContent = n;
