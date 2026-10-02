@@ -37,6 +37,7 @@ function showResult() {
   const r = QUIZ.results[best];
   $('quiz').style.display = 'none';
   $('result').style.display = '';
+  $('res-img').style.display = '';
   $('res-img').src = r.img || QUIZ.resultImg;
   $('res-tag').textContent = r.tag;
   $('res-name').textContent = r.name;
