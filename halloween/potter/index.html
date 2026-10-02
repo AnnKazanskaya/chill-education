@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WZ42G8JVS3"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-WZ42G8JVS3');</script>
+<title>Кто ты из Гарри Поттера? — хэллоуин-тест Chat &amp; Chill</title>
+<meta name="description" content="Хэллоуинский тест от школы английского Chat & Chill: узнай, кто ты из мира Гарри Поттера, и забери подборку английских слов.">
+<link rel="stylesheet" href="../quiz.css">
+</head>
+<body>
+<img class="deco" src="../img/hw-deco.png" alt="" style="top:10%;left:3%;width:84px" onerror="this.remove()">
+<img class="deco" src="../img/hw-ghost.png" alt="" style="bottom:8%;right:4%;width:74px;animation-delay:.8s" onerror="this.remove()">
+<div class="wrap">
+  <header>
+    <a href="https://chill.education/"><img src="https://chill.education/img/logo.png" alt="Chat and Chill"></a>
+    <a href="https://chill.education/?utm_source=halloween&utm_medium=referral&utm_campaign=potter_quiz">На сайт школы</a>
+  </header>
+
+  <div class="card" id="intro">
+    <span class="kicker">🎃 Хэллоуин-тест · 2 минуты</span>
+    <h1>Кто ты из мира Гарри Поттера?</h1>
+    <img class="hero-img" src="../img/cat-wizard.png" alt="" onerror="this.remove()">
+    <p class="lead">Семь вопросов — и Волшебная Шляпа Chat &amp; Chill скажет, кто ты: храбрый герой, гений зельеварения или тот самый загадочный профессор. В конце — подборка английских слов под твой характер. Accio, тест!</p>
+    <button class="btn" id="start-btn">Начать тест</button>
+  </div>
+
+  <div class="card" id="quiz" style="display:none">
+    <div class="prog"><span id="prog-n"></span><span>🧙 Хэллоуин-тест</span></div>
+    <div class="bar"><i id="bar-i"></i></div>
+    <div class="q" id="q-text"></div>
+    <div id="q-opts"></div>
+  </div>
+
+  <div class="card" id="result" style="display:none">
+    <img class="hero-img" id="res-img" src="" alt="" onerror="this.style.display='none'">
+    <span class="res-tag" id="res-tag"></span>
+    <div class="res-name" id="res-name"></div>
+    <p class="res-text" id="res-text"></p>
+    <div class="vocab" id="res-vocab"></div>
+    <a class="btn blue" href="https://chill.education/placement-test/?utm_source=halloween&utm_medium=referral&utm_campaign=potter_quiz">Узнать свой уровень английского</a>
+    <button class="again" id="again">Пройти ещё раз</button>
+  </div>
+
+  <a class="other-quiz" href="../horror/">А какой ты персонаж из фильмов ужасов? 👻</a>
+  <p class="foot">Тест сделан с любовью к магии и английскому · <a href="https://chill.education/">Chat &amp; Chill</a></p>
+</div>
+
+<script>
+const QUIZ = {
+  gaName: 'hw_potter',
+  order: ['harry','hermione','ron','luna','snape','draco'],
+  questions: [
+    { t: 'Хэллоуинская вечеринка. Ты…', o: [
+      { e:'🗡️', t:'В центре событий — кто-то же должен спасать вечер', k:'harry' },
+      { e:'📚', t:'Рассказываю всем историю праздника Samhain', k:'hermione' },
+      { e:'🍬', t:'Дежурю у стола со сладостями', k:'ron' },
+      { e:'🌙', t:'Вышел(ла) во двор смотреть на луну — там интереснее', k:'luna' },
+    ]},
+    { t: 'Твой идеальный костюм на Хэллоуин:', o: [
+      { e:'🖤', t:'Весь в чёрном. Это не костюм, я так всегда хожу', k:'snape' },
+      { e:'👑', t:'Что-то дорогое и эффектное, чтобы все обзавидовались', k:'draco' },
+      { e:'🦉', t:'Что-то странное, что никто не поймёт, но мне нравится', k:'luna' },
+      { e:'🧣', t:'Классика: мантия, шарф, очки — просто и по делу', k:'harry' },
+    ]},
+    { t: 'В тёмном коридоре слышен странный звук. Твои действия:', o: [
+      { e:'🔦', t:'Иду проверять первым(ой), конечно', k:'harry' },
+      { e:'🧠', t:'Сначала вспоминаю, что читал(а) про такие звуки', k:'hermione' },
+      { e:'😱', t:'Громко предлагаю пойти туда кому-нибудь другому', k:'ron' },
+      { e:'😏', t:'Делаю вид, что мне не страшно. Мне не страшно. Почти', k:'draco' },
+    ]},
+    { t: 'Какой предмет ты бы выбрал(а) в школе магии?', o: [
+      { e:'⚗️', t:'Зельеварение — точность и никакой суеты', k:'snape' },
+      { e:'🛡️', t:'Защита от тёмных искусств', k:'harry' },
+      { e:'🔮', t:'Прорицания — вдруг там правда что-то есть', k:'luna' },
+      { e:'📖', t:'Все. Вообще все. Можно расписание поплотнее?', k:'hermione' },
+    ]},
+    { t: 'Твоя роль в компании друзей:', o: [
+      { e:'😂', t:'Душа компании и генератор шуток', k:'ron' },
+      { e:'🗺️', t:'Мозг операции: без меня все давно бы пропали', k:'hermione' },
+      { e:'✨', t:'Тихий наблюдатель, который внезапно говорит мудрое', k:'luna' },
+      { e:'💅', t:'Икона стиля и здоровой самоуверенности', k:'draco' },
+    ]},
+    { t: 'Тебе дарят волшебную палочку. Первое заклинание?', o: [
+      { e:'🍫', t:'Наколдовать побольше еды', k:'ron' },
+      { e:'🚪', t:'Открыть все запертые двери — что там прячут?', k:'harry' },
+      { e:'🤫', t:'Никому не скажу. Это личное', k:'snape' },
+      { e:'🪄', t:'Сначала изучу инструкцию и технику безопасности', k:'hermione' },
+    ]},
+    { t: 'Выбери хэллоуинское угощение:', o: [
+      { e:'🎃', t:'Тыквенный пирог, классика', k:'harry' },
+      { e:'🫘', t:'Конфеты с сюрпризом — обожаю риск в мелочах', k:'ron' },
+      { e:'🍏', t:'Что-то странное на вид, но вкусное. Как я', k:'luna' },
+      { e:'🥂', t:'Только эксклюзив. Остальное пусть едят остальные', k:'draco' },
+    ]},
+  ],
+  results: {
+    harry: { tag:'Храбрость 11/10', name:'Ты — Гарри!', img:'../img/cat-wizard.png',
+      text:'Ты идёшь первым туда, откуда все разбегаются, и держишься за друзей крепче, чем за здравый смысл. Приключения сами тебя находят — и, честно говоря, им с тобой повезло.',
+      vocab:['brave — храбрый','scar — шрам','lightning — молния','to dare — осмелиться','chosen one — избранный'] },
+    hermione: { tag:'Мозг операции', name:'Ты — Гермиона!', img:'../img/cat-wizard.png',
+      text:'Ты сначала читаешь, потом делаешь — и поэтому делаешь лучше всех. Друзья считают тебя занудой ровно до момента, когда нужно срочно всех спасать знанием из книги, которую читал(а) только ты.',
+      vocab:['clever — умный','spell — заклинание','library — библиотека','to figure out — разобраться','know-it-all — всезнайка'] },
+    ron: { tag:'Верный друг', name:'Ты — Рон!', img:'../img/cat-wizard.png',
+      text:'С тобой не страшно даже в самом тёмном лесу — потому что ты превратишь любой ужас в шутку. Ты вечно голоден, слегка паникуешь, но в решающий момент всегда рядом. Это и есть магия.',
+      vocab:['loyal — верный','to joke — шутить','spider — паук','hungry — голодный','best mate — лучший друг'] },
+    luna: { tag:'Самый загадочный результат', name:'Ты — Полумна!', img:'../img/cat-wizard.png',
+      text:'Ты видишь то, чего не замечают другие, и совершенно не переживаешь, что о тебе подумают. Твоя странность — это суперсила: рядом с тобой мир становится добрее и интереснее.',
+      vocab:['dreamy — мечтательный','weird — странный (в хорошем смысле)','to believe — верить','moon — луна','one of a kind — единственный в своём роде'] },
+    snape: { tag:'Тёмная лошадка', name:'Ты — Снейп!', img:'../img/cat-wizard.png',
+      text:'Снаружи — лёд и сарказм, внутри — преданность, о которой никто не догадывается. Ты говоришь мало, делаешь точно и помнишь всё. Always.',
+      vocab:['mysterious — загадочный','potion — зелье','sarcasm — сарказм','to protect — защищать','always — всегда'] },
+    draco: { tag:'Дерзкий и стильный', name:'Ты — Драко!', img:'../img/cat-wizard.png',
+      text:'У тебя идеальная укладка даже в дождь и комментарий на любой случай жизни. Да, характер не сахар — зато с тобой никогда не скучно, а под бронёй прячется кто-то вполне живой.',
+      vocab:['proud — гордый','smirk — ухмылка','rich — богатый','to show off — выпендриваться','frenemy — друг-соперник'] },
+  },
+};
+</script>
+<script src="../quiz.js"></script>
+</body>
+</html>
