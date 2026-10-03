@@ -186,7 +186,7 @@
     <div style="max-width:980px;margin:0 auto;background:#fff;border:1px solid rgba(36,64,217,.35);border-radius:26px;padding:32px clamp(24px,4vw,44px);box-shadow:0 24px 50px -36px rgba(36,64,217,.35)">
       <h3 class="h-nunito" style="font-weight:800;font-size:24px;letter-spacing:-.3px;margin-bottom:10px">Что будет на вводном уроке</h3>
       <p style="font-size:16px;line-height:1.6;color:#5A5F7D">На первом уроке мы знакомимся: я определяю твой уровень, а ты изнутри смотришь платформу, формат заданий и то, как проходят занятия. К концу тебе будет понятно, с чего начнём и как будем двигаться дальше.</p>
-      <p style="margin-top:14px;font-size:15px;font-weight:700;color:#2440D9">Вводный урок: 30 минут, 2 250 ₽ / 27 $ / 23 €</p>
+      <p style="margin-top:14px;font-size:15px;font-weight:700;color:#2440D9">Вводный урок: 30 минут, 2 250 ₽ / 27 $ / 23 € / 13 000 ₸</p>
     </div>
   </section>
 
@@ -387,7 +387,7 @@
       <div class="price-grid" style="display:grid;grid-template-columns:1fr 1.15fr;gap:16px;align-items:stretch">
         <div style="background:#fff;border:1px solid #E2E5F4;border-radius:26px;padding:26px clamp(20px,3vw,30px);box-shadow:0 24px 50px -36px rgba(36,64,217,.3);display:flex;flex-direction:column">
           <span style="font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#5A5F7D">Обычный урок</span>
-          <div class="h-nunito" style="font-weight:900;font-size:clamp(26px,3vw,32px);letter-spacing:-.5px;line-height:1.1;margin:14px 0 4px;color:#1A1E33">4 500 ₽ / 55 $ / 47 €</div>
+          <div class="h-nunito" style="font-weight:900;font-size:clamp(26px,3vw,32px);letter-spacing:-.5px;line-height:1.1;margin:14px 0 4px;color:#1A1E33">4 500 ₽ / 55 $ / 47 € / 26 000 ₸</div>
           <p style="font-size:15px;line-height:1.55;color:#5A5F7D;margin:12px 0 0">45–50 минут.</p>
         </div>
         <div style="background:linear-gradient(150deg,#2F50E6,#2440D9);border:2px solid #2440D9;border-radius:26px;padding:26px clamp(20px,3vw,30px);box-shadow:0 30px 60px -30px rgba(36,64,217,.6);color:#fff;display:flex;flex-direction:column">
@@ -395,8 +395,8 @@
             <span style="font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.8)">Вводный урок</span>
             <span style="background:#FF7A1A;color:#fff;font-weight:700;font-size:13px;padding:4px 12px;border-radius:999px">первый урок · −50%</span>
           </div>
-          <div class="h-nunito" style="font-weight:900;font-size:clamp(30px,3.4vw,38px);letter-spacing:-.5px;line-height:1.1;margin:14px 0 4px">2 250 ₽ / 27 $ / 23 €</div>
-          <s style="color:rgba(255,255,255,.6);font-size:15px">4 500 ₽ / 55 $ / 47 €</s>
+          <div class="h-nunito" style="font-weight:900;font-size:clamp(30px,3.4vw,38px);letter-spacing:-.5px;line-height:1.1;margin:14px 0 4px">2 250 ₽ / 27 $ / 23 € / 13 000 ₸</div>
+          <s style="color:rgba(255,255,255,.6);font-size:15px">4 500 ₽ / 55 $ / 47 € / 26 000 ₸</s>
           <p style="font-size:15px;line-height:1.55;color:rgba(255,255,255,.85);margin:12px 0 0">30 минут, знакомство и определение уровня.</p>
         </div>
       </div>
@@ -698,7 +698,7 @@ $('qform').addEventListener('submit',e=>{e.preventDefault();track('submit_form',
 });})();
 
 // валюта
-const PR={RUB:{c:'₽',full:'4 500',intro:'2 250',m:'Карта РФ — оплата на странице Т-Банка.',link:'https://trial.tb.ru/'},USD:{c:'$',full:'55',intro:'27',m:'Международная карта — оплата через TipTop Pay.',link:'https://c.tiptoppay.kz/payments/7501c2678b9a4abfb76385046b40fc98'}};
+const PR={RUB:{c:'₽',full:'4 500',intro:'2 250',m:'Карта РФ — оплата на странице Т-Банка.',link:'https://trial.tb.ru/'},KZT:{c:'₸',full:'26 000',intro:'13 000',m:'Карта Казахстана или международная — оплата через TipTop Pay.',link:'https://c.tiptoppay.kz/payments/7501c2678b9a4abfb76385046b40fc98'},USD:{c:'$',full:'55',intro:'27',m:'Международная карта — оплата через TipTop Pay (сумма спишется в тенге по курсу ≈ 470 ₸ за 1 $).',link:'https://c.tiptoppay.kz/payments/7501c2678b9a4abfb76385046b40fc98'}};
 let ccy='RUB';
 function renderCcy(){
   $('pay-currency').innerHTML=Object.keys(PR).map(k=>`<button class="cur-btn${k===ccy?' active':''}" data-c="${k}">${PR[k].c} ${k}</button>`).join('');
