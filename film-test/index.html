@@ -80,7 +80,17 @@ const LEVELS = [
       { q: 'Какой фразой парень заканчивает разговор?', o: ['«See you tomorrow» — «До завтра»', '«I hope you enjoy disappointment» — «Надеюсь, тебе понравится разочарование»', '«I\'ll tell you everything» — «Я всё тебе расскажу»', '«Just forget about it» — «Просто забудь»'], a: 1 },
     ],
   },
-  { title: 'Уровень 3 · Как носитель', clip: null, hint: '', questions: [] },
+  {
+    title: 'Уровень 3 · Как носитель', clip: 'clip3.mp4?v=1',
+    hint: 'Финал: тихая быстрая речь. Слушай внимательно — дальше нужно закончить фразы героев.',
+    questions: [
+      { q: 'Закончи фразу: «This is the skin of a …»', o: ['…hero', '…killer', '…monster', '…stranger'], a: 1 },
+      { q: 'Закончи фразу: «I\'m the world\'s most dangerous …»', o: ['…creature', '…vampire', '…predator', '…animal'], a: 2 },
+      { q: 'Закончи фразу: «Everything about me invites you in. My voice, my face, even my …»', o: ['…smile', '…eyes', '…skin', '…smell'], a: 3 },
+      { q: 'Закончи фразу: «I\'ve never wanted a human\'s … so much in my life»', o: ['…blood', '…love', '…trust', '…life'], a: 0 },
+      { q: 'Она говорит: «I trust you». Что он отвечает?', o: ['«Good» — «Хорошо»', '«Don\'t» — «Не стоит»', '«Why?» — «Почему?»', '«Thank you» — «Спасибо»'], a: 1 },
+    ],
+  },
 ];
 
 let lvl = 0, qi = 0, correct = 0, chosen = null;
