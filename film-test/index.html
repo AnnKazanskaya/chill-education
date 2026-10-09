@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WZ42G8JVS3"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-WZ42G8JVS3');</script>
+<title>Сможешь ли ты смотреть фильмы в оригинале? — Chat &amp; Chill</title>
+<meta name="description" content="Осенний тест от школы Chat & Chill: проверь, готов ли ты смотреть кино на английском без перевода.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Nunito:wght@800;900&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Manrope',sans-serif;color:#1A1E33;background:#EEF0FB;-webkit-font-smoothing:antialiased;min-height:100vh}
+.h-nunito{font-family:'Nunito',sans-serif}
+.wrap{max-width:680px;margin:0 auto;padding:0 20px 70px}
+header{display:flex;align-items:center;justify-content:space-between;padding:16px 0 8px}
+header img{height:48px;width:auto}
+header a{font-weight:700;font-size:14px;color:#5A5F7D;text-decoration:none}
+.card{background:#fff;border-radius:26px;padding:28px 26px;box-shadow:0 24px 55px -30px rgba(36,64,217,.35);margin-top:18px}
+.kicker{font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#FF7A1A}
+h1{font-family:'Nunito';font-weight:900;font-size:clamp(26px,6vw,36px);line-height:1.08;letter-spacing:-.8px;margin:10px 0 12px}
+.lead{font-size:15.5px;line-height:1.6;color:#5A5F7D}
+.btn{display:block;width:100%;border:none;cursor:pointer;background:#FF7A1A;color:#fff;font-family:'Manrope';font-weight:700;font-size:16px;padding:15px;border-radius:14px;margin-top:20px;box-shadow:0 10px 24px -10px rgba(255,122,26,.6);text-align:center;text-decoration:none}
+.btn.blue{background:#2440D9;box-shadow:0 10px 24px -10px rgba(36,64,217,.6)}
+.lvl-pill{display:inline-block;background:#E7ECFF;color:#2440D9;font-weight:800;font-size:13px;padding:6px 14px;border-radius:999px;margin-bottom:10px}
+video{display:block;width:100%;border-radius:18px;background:#000;margin:14px 0 6px}
+.note{font-size:12.5px;color:#8C90AC;margin-top:6px}
+.q{font-family:'Nunito';font-weight:800;font-size:19px;line-height:1.35;letter-spacing:-.3px;margin:20px 0 12px}
+.opt{display:block;width:100%;text-align:left;font-family:'Manrope';font-weight:600;font-size:15px;color:#1A1E33;background:#FCFBFF;border:1.5px solid #E2E5F4;border-radius:14px;padding:13px 16px;cursor:pointer;margin-bottom:9px;transition:border-color .15s}
+.opt:hover{border-color:#2440D9}
+.opt.sel{border-color:#2440D9;background:#E7ECFF}
+.prog{font-size:13px;font-weight:700;color:#8C90AC;margin-bottom:8px}
+.res-big{font-family:'Nunito';font-weight:900;font-size:28px;letter-spacing:-.6px;color:#2440D9;margin:8px 0 10px}
+.steps{display:flex;gap:8px;margin-bottom:14px}
+.steps span{flex:1;height:8px;border-radius:99px;background:#E2E5F4}
+.steps span.on{background:#FF7A1A}
+.foot{text-align:center;font-size:12.5px;color:#8C90AC;margin-top:24px}
+.draft{background:#FFF6EE;border:1px solid #FFE0C4;color:#8A4B10;border-radius:14px;padding:12px 16px;font-size:13.5px;line-height:1.5;margin-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a href="https://chill.education/"><img src="../img/logo.png" alt="Chat and Chill"></a>
+    <a href="https://chill.education/?utm_source=filmtest&utm_medium=referral&utm_campaign=header">На сайт школы</a>
+  </header>
+
+  <div class="card" id="screen"></div>
+
+  <p class="foot">🍂 Осенний тест · Chat &amp; Chill</p>
+</div>
+
+<script>
+function track(n,p){try{gtag('event',n,p||{})}catch(e){}}
+const PASS = 4; // сколько правильных из 5 нужно для перехода дальше
+
+// ЧЕРНОВИК: вопросы сгенерированы по сцене, проверить и поправить с Демидом.
+const LEVELS = [
+  {
+    title: 'Уровень 1 · Разминка', clip: 'clip1.mp4?v=1',
+    hint: 'Посмотри фрагмент (можно дважды) и ответь на вопросы.',
+    questions: [
+      { q: 'Где происходит сцена?', o: ['В школьной лаборатории на уроке', 'В кафе', 'Дома на кухне', 'В библиотеке'], a: 0 },
+      { q: 'Что герои рассматривают в микроскоп?', o: ['Капли воды', 'Клетки на предметном стекле', 'Насекомых', 'Кристаллы соли'], a: 1 },
+      { q: 'Как герои работают над заданием?', o: ['Каждый сам по себе', 'По очереди, обсуждая ответы', 'Списывают у соседей', 'Просят учителя всё сделать'], a: 1 },
+      { q: 'В каком тоне идёт разговор героев?', o: ['Ссора на повышенных тонах', 'Вежливый разговор с лёгким напряжением', 'Деловая презентация', 'Телефонный разговор'], a: 1 },
+      { q: 'Чем заканчивается фрагмент?', o: ['Герои заканчивают разговор', 'Начинается контрольная', 'Все уходят из класса', 'Звенит звонок на обед'], a: 0 },
+    ],
+  },
+  { title: 'Уровень 2 · Средняя сложность', clip: null, hint: '', questions: [] },
+  { title: 'Уровень 3 · Как носитель', clip: null, hint: '', questions: [] },
+];
+
+let lvl = 0, qi = 0, correct = 0, chosen = null;
+const S = document.getElementById('screen');
+
+function stepsHtml(){ return '<div class="steps">'+LEVELS.map((_,i)=>`<span class="${i<lvl||(i===lvl)?'on':''}"></span>`).join('')+'</div>'; }
+
+function intro(){
+  S.innerHTML = `
+    <span class="kicker">🍂 Осенний тест · 5 минут</span>
+    <h1>Сможешь ли ты смотреть фильмы в оригинале?</h1>
+    <p class="lead">Три фрагмента из известного фильма — от простого к сложному. Смотри без субтитров и отвечай на вопросы. Пройдёшь все три уровня — значит, пора выключать перевод навсегда.</p>
+    <div class="draft">⚠️ Тестовая версия для внутренней проверки: фрагменты временные (заменим на YouTube-встройки перед публикацией), вопросы — черновик до согласования с Демидом. Уровни 2 и 3 ждут свои фрагменты.</div>
+    <button class="btn" onclick="startLevel(0)">Начать</button>`;
+}
+
+function startLevel(i){
+  lvl = i; qi = 0; correct = 0;
+  const L = LEVELS[i];
+  if(!L.clip){
+    S.innerHTML = `${stepsHtml()}<span class="lvl-pill">${L.title}</span>
+      <h1>Фрагмент в производстве</h1>
+      <p class="lead">Для этого уровня ещё не загружен видеофрагмент. Запиши его — и тест продолжится отсюда.</p>
+      <button class="btn blue" onclick="result(true)">Показать экран результата (для проверки)</button>`;
+    return;
+  }
+  track('filmtest_level_start',{level:i+1});
+  S.innerHTML = `${stepsHtml()}<span class="lvl-pill">${L.title}</span>
+    <p class="lead">${L.hint}</p>
+    <video src="${L.clip}" controls playsinline></video>
+    <p class="note">Смотри без пауз на вопросах — как в настоящем кино.</p>
+    <button class="btn" onclick="renderQ()">К вопросам</button>`;
+}
+
+function renderQ(){
+  const L = LEVELS[lvl], Q = L.questions[qi];
+  chosen = null;
+  S.innerHTML = `${stepsHtml()}<span class="lvl-pill">${L.title}</span>
+    <div class="prog">Вопрос ${qi+1} из ${L.questions.length}</div>
+    <div class="q">${Q.q}</div>
+    ${Q.o.map((o,i)=>`<button class="opt" data-i="${i}">${o}</button>`).join('')}
+    <button class="btn" id="next" style="opacity:.5" disabled>Ответить</button>`;
+  document.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));
+    b.classList.add('sel'); chosen = +b.dataset.i;
+    const n=document.getElementById('next'); n.disabled=false; n.style.opacity=1;
+  }));
+  document.getElementById('next').addEventListener('click',()=>{
+    if(chosen===null) return;
+    if(chosen===Q.a) correct++;
+    qi++;
+    if(qi < L.questions.length) renderQ(); else levelDone();
+  });
+}
+
+function levelDone(){
+  const L = LEVELS[lvl];
+  const passed = correct >= PASS;
+  track('filmtest_level_done',{level:lvl+1,correct,passed});
+  if(passed && lvl < LEVELS.length-1){
+    S.innerHTML = `${stepsHtml()}<span class="lvl-pill">${L.title} — пройден!</span>
+      <h1>${correct} из ${L.questions.length} — отлично! 🎉</h1>
+      <p class="lead">Ты понял(а) этот фрагмент. Дальше — сложнее: быстрее речь, больше разговорных фраз.</p>
+      <button class="btn" onclick="startLevel(${lvl+1})">Следующий уровень</button>`;
+  } else {
+    result(passed && lvl === LEVELS.length-1);
+  }
+}
+
+function result(champion){
+  track('filmtest_result',{level:lvl+1,correct,champion:!!champion});
+  const headline = champion
+    ? 'Ты готов(а) смотреть кино в оригинале! 🏆'
+    : (lvl===0 ? 'Хорошее начало — фильмы уже близко!' : 'Почти получилось — чуть-чуть практики!');
+  const text = champion
+    ? 'Все уровни пройдены: субтитры тебе больше не нужны. Хочешь понимать так любой фильм, а не только знакомые сцены? В Chat & Chill мы учим именно живому языку из кино и сериалов.'
+    : `Ты набрал(а) ${correct} из 5 на уровне ${lvl+1}. Это нормально: понимание на слух — навык, который быстро растёт с правильной практикой. Преподаватели Chat & Chill как раз учат слышать живую речь — сленг, скорость, акценты.`;
+  S.innerHTML = `${stepsHtml()}
+    <div class="res-big">${headline}</div>
+    <p class="lead">${text}</p>
+    <a class="btn" href="https://chill.education/placement-test/?utm_source=filmtest&utm_medium=referral&utm_campaign=result">Узнать свой уровень английского</a>
+    <a class="btn blue" href="https://chill.education/?utm_source=filmtest&utm_medium=referral&utm_campaign=result">Записаться на бесплатный урок</a>
+    <button class="btn" style="background:#EEF0FB;color:#2440D9;box-shadow:none" onclick="intro()">Пройти ещё раз</button>`;
+}
+
+intro();
+</script>
+</body>
+</html>
