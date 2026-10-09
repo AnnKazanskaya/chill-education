@@ -60,35 +60,35 @@ const PASS = 4; // сколько правильных из 5 нужно для 
 const LEVELS = [
   {
     title: 'Уровень 1 · Разминка', clip: 'clip1.mp4?v=1',
-    hint: 'Посмотри фрагмент (можно дважды) и ответь на вопросы.',
+    hint: 'Посмотри фрагмент (можно дважды) и выполни задания.',
     questions: [
-      { q: 'С чего Эдвард начинает разговор?', o: ['Спрашивает, нравится ли ей дождь', 'Приглашает её в кино', 'Спрашивает про домашнее задание', 'Делает комплимент её причёске'], a: 0 },
-      { q: 'Как Белла реагирует на его вопрос?', o: ['Сразу отвечает «да»', 'Удивлённо переспрашивает: «Ты спрашиваешь меня о погоде?»', 'Смеётся и меняет тему', 'Молча отворачивается'], a: 1 },
-      { q: 'Что Эдвард отвечает на её удивление?', o: ['«Yeah, I guess I am» — «Да, похоже на то»', '«No, never mind» — «Нет, забудь»', '«I\'m just joking» — «Я просто шучу»', '«It\'s for homework» — «Это для домашки»'], a: 0 },
-      { q: 'Как Белла относится к дождю?', o: ['Обожает дождь', 'Ей всё равно', 'Не любит: «I don\'t really like the rain»', 'Любит только летний дождь'], a: 2 },
-      { q: 'Что ещё не нравится Белле, по её словам?', o: ['Жара и солнце', 'Любые холодные и мокрые вещи — «any cold, wet thing»', 'Снег и лёд', 'Сильный ветер'], a: 1 },
+      { type:'mc', q:'С чего Эдвард начинает разговор?', o:['Спрашивает, нравится ли ей дождь','Приглашает её в кино','Спрашивает про домашнее задание','Делает комплимент её причёске'], a:0 },
+      { type:'who', q:'Кто говорит: «You\'re asking me about the weather?»', a:1 },
+      { type:'tf', q:'Белла говорит, что ей нравится дождь.', a:1 },
+      { type:'order', q:'Расставь реплики в том порядке, как они звучат:', lines:['So you\'re enjoying the rain?','You\'re asking me about the weather?','Yeah, I guess I am.','Well, I don\'t really like the rain.'] },
+      { type:'mc', q:'Что ещё не нравится Белле, по её словам?', o:['Жара и солнце','Любые холодные и мокрые вещи — «any cold, wet thing»','Снег и лёд','Сильный ветер'], a:1 },
     ],
   },
   {
     title: 'Уровень 2 · Средняя сложность', clip: 'clip2.mp4?v=1',
-    hint: 'Речь быстрее, реплик больше. Посмотри фрагмент и ответь на вопросы.',
+    hint: 'Речь быстрее, реплик больше. Слушай, кто что говорит.',
     questions: [
-      { q: 'Какой главный вопрос Белла задаёт в начале разговора?', o: ['Почему он опоздал на урок', 'Как он так быстро оказался рядом с ней', 'Где он был вчера вечером', 'Почему он с ней не разговаривает'], a: 1 },
-      { q: 'Как Эдвард объясняет случившееся?', o: ['«I was standing right next to you» — он стоял прямо рядом', '«I ran as fast as I could» — он быстро прибежал', '«Somebody pushed me» — его кто-то толкнул', '«I don\'t remember» — он ничего не помнит'], a: 0 },
-      { q: 'Что, по словам Беллы, Эдвард сделал на самом деле?', o: ['Оттащил её в сторону', 'Остановил фургон и оттолкнул его рукой', 'Закрыл её собой', 'Разбил окно фургона'], a: 1 },
-      { q: 'Чего хочет Белла, по её словам?', o: ['Рассказать всем о случившемся', 'Чтобы он извинился', 'Просто узнать правду — «I just need to know the truth»', 'Чтобы он проводил её домой'], a: 2 },
-      { q: 'Какой фразой Эдвард заканчивает разговор?', o: ['«See you tomorrow» — «До завтра»', '«I hope you enjoy disappointment» — «Надеюсь, тебе понравится разочарование»', '«I\'ll tell you everything» — «Я всё тебе расскажу»', '«Just forget about it» — «Просто забудь»'], a: 1 },
+      { type:'mc', q:'Какой главный вопрос Белла задаёт в начале разговора?', o:['Почему он опоздал на урок','Как он так быстро оказался рядом с ней','Где он был вчера вечером','Почему он с ней не разговаривает'], a:1 },
+      { type:'who', q:'Кто говорит: «I was standing right next to you»', a:0 },
+      { type:'gap', q:'Заполни пропуск: «Can\'t you just ___ me and get over it?»', o:['thank','forgive','trust','help'], a:0 },
+      { type:'order', q:'Расставь реплики в том порядке, как они звучат:', lines:['How did you get over to me so fast?','I was standing right next to you.','I know what I saw.','I hope you enjoy disappointment.'] },
+      { type:'who', q:'Кто говорит: «I wasn\'t gonna tell anybody»', a:1 },
     ],
   },
   {
     title: 'Уровень 3 · Как носитель', clip: 'clip3.mp4?v=1',
-    hint: 'Финал: тихая быстрая речь. Слушай внимательно — дальше нужно закончить фразы героев.',
+    hint: 'Финал: тихая быстрая речь. Закончи фразы героев — в двух заданиях слово нужно впечатать самому.',
     questions: [
-      { q: 'Закончи фразу: «This is the skin of a …»', o: ['…hero', '…killer', '…monster', '…stranger'], a: 1 },
-      { q: 'Закончи фразу: «I\'m the world\'s most dangerous …»', o: ['…creature', '…vampire', '…predator', '…animal'], a: 2 },
-      { q: 'Закончи фразу: «Everything about me invites you in. My voice, my face, even my …»', o: ['…smile', '…eyes', '…skin', '…smell'], a: 3 },
-      { q: 'Закончи фразу: «I\'ve never wanted a human\'s … so much in my life»', o: ['…blood', '…love', '…trust', '…life'], a: 0 },
-      { q: 'Белла говорит: «I trust you». Что отвечает Эдвард?', o: ['«Good» — «Хорошо»', '«Don\'t» — «Не стоит»', '«Why?» — «Почему?»', '«Thank you» — «Спасибо»'], a: 1 },
+      { type:'mc', q:'Закончи фразу: «This is the skin of a …»', o:['…hero','…killer','…monster','…stranger'], a:1 },
+      { type:'input', q:'Впиши слово, которое произносит Эдвард: «I\'m the world\'s most dangerous ___»', answers:['predator'], ph:'Впиши слово по-английски' },
+      { type:'mc', q:'Закончи фразу: «Everything about me invites you in. My voice, my face, even my …»', o:['…smile','…eyes','…skin','…smell'], a:3 },
+      { type:'input', q:'Впиши слово: «I\'ve never wanted a human\'s ___ so much in my life»', answers:['blood'], ph:'Впиши слово по-английски' },
+      { type:'mc', q:'Белла говорит: «I trust you». Что отвечает Эдвард?', o:['«Good» — «Хорошо»','«Don\'t» — «Не стоит»','«Why?» — «Почему?»','«Thank you» — «Спасибо»'], a:1 },
     ],
   },
 ];
@@ -126,23 +126,67 @@ function startLevel(i){
 
 function renderQ(){
   const L = LEVELS[lvl], Q = L.questions[qi];
-  chosen = null;
-  S.innerHTML = `${stepsHtml()}<span class="lvl-pill">${L.title}</span>
-    <div class="prog">Вопрос ${qi+1} из ${L.questions.length}</div>
-    <div class="q">${Q.q}</div>
-    ${Q.o.map((o,i)=>`<button class="opt" data-i="${i}">${o}</button>`).join('')}
-    <button class="btn" id="next" style="opacity:.5" disabled>Ответить</button>`;
-  document.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>{
-    document.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));
-    b.classList.add('sel'); chosen = +b.dataset.i;
-    const n=document.getElementById('next'); n.disabled=false; n.style.opacity=1;
-  }));
-  document.getElementById('next').addEventListener('click',()=>{
-    if(chosen===null) return;
-    if(chosen===Q.a) correct++;
-    qi++;
-    if(qi < L.questions.length) renderQ(); else levelDone();
-  });
+  const head = `${stepsHtml()}<span class="lvl-pill">${L.title}</span>
+    <div class="prog">Задание ${qi+1} из ${L.questions.length}</div>
+    <div class="q">${Q.q}</div>`;
+  const nextBtn = `<button class="btn" id="next" style="opacity:.5" disabled>Ответить</button>`;
+  const enable = ()=>{ const n=document.getElementById('next'); n.disabled=false; n.style.opacity=1; };
+  const finish = ok=>{ if(ok) correct++; qi++; if(qi<L.questions.length) renderQ(); else levelDone(); };
+
+  if(Q.type==='mc' || Q.type==='gap'){
+    S.innerHTML = head + Q.o.map((o,i)=>`<button class="opt" data-i="${i}">${o}</button>`).join('') + nextBtn;
+    let chosen=null;
+    document.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>{
+      document.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));
+      b.classList.add('sel'); chosen=+b.dataset.i; enable();
+    }));
+    document.getElementById('next').addEventListener('click',()=>{ if(chosen!==null) finish(chosen===Q.a); });
+  }
+  else if(Q.type==='who' || Q.type==='tf'){
+    const opts = Q.type==='who' ? ['🧛 Эдвард','👧 Белла'] : ['✔️ Правда','✖️ Ложь'];
+    S.innerHTML = head + `<div style="display:flex;gap:10px">` +
+      opts.map((o,i)=>`<button class="opt" style="flex:1;text-align:center;font-size:16px;padding:18px" data-i="${i}">${o}</button>`).join('') + `</div>` + nextBtn;
+    let chosen=null;
+    document.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>{
+      document.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));
+      b.classList.add('sel'); chosen=+b.dataset.i; enable();
+    }));
+    document.getElementById('next').addEventListener('click',()=>{ if(chosen!==null) finish(chosen===Q.a); });
+  }
+  else if(Q.type==='order'){
+    const idx = Q.lines.map((_,i)=>i);
+    for(let i=idx.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [idx[i],idx[j]]=[idx[j],idx[i]]; }
+    let picked=[];
+    S.innerHTML = head +
+      `<div id="ord-list">` + idx.map(i=>`<button class="opt" data-i="${i}"><span class="ord-n" style="display:inline-block;min-width:24px;font-weight:800;color:#FF7A1A"></span>${Q.lines[i]}</button>`).join('') + `</div>
+      <button class="opt" id="ord-reset" style="text-align:center;color:#2440D9;font-weight:700;background:#EEF0FB;border-color:#EEF0FB">Сбросить порядок</button>` + nextBtn;
+    const refresh=()=>{ document.querySelectorAll('#ord-list .opt').forEach(b=>{
+        const pos=picked.indexOf(+b.dataset.i);
+        b.querySelector('.ord-n').textContent = pos>=0 ? (pos+1)+'.' : '';
+        b.classList.toggle('sel',pos>=0);
+      });
+      if(picked.length===Q.lines.length) enable(); };
+    document.querySelectorAll('#ord-list .opt').forEach(b=>b.addEventListener('click',()=>{
+      const i=+b.dataset.i; if(picked.includes(i)) return; picked.push(i); refresh();
+    }));
+    document.getElementById('ord-reset').addEventListener('click',()=>{ picked=[]; refresh(); const n=document.getElementById('next'); n.disabled=true; n.style.opacity=.5; });
+    document.getElementById('next').addEventListener('click',()=>{
+      if(picked.length!==Q.lines.length) return;
+      finish(picked.every((v,k)=>v===k));
+    });
+  }
+  else if(Q.type==='input'){
+    S.innerHTML = head + `<input id="inp" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${Q.ph||'Впиши слово'}" style="width:100%;border:1.5px solid #E2E5F4;border-radius:14px;padding:14px 16px;font-family:'Manrope';font-size:16px;background:#FCFBFF;outline:none">` + nextBtn;
+    const inp=document.getElementById('inp');
+    inp.addEventListener('input',()=>{ if(inp.value.trim()) enable(); });
+    inp.addEventListener('keydown',e=>{ if(e.key==='Enter'&&inp.value.trim()) document.getElementById('next').click(); });
+    document.getElementById('next').addEventListener('click',()=>{
+      const v=inp.value.trim().toLowerCase().replace(/[^a-zа-яё]/gi,'');
+      if(!v) return;
+      finish(Q.answers.some(ans=>v===ans.toLowerCase()));
+    });
+    inp.focus();
+  }
 }
 
 function levelDone(){
