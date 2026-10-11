@@ -128,9 +128,36 @@ function renderPay() {
       <a href="${href}" target="_blank" rel="noopener" data-plan="${o.name}" style="display:block;text-align:center;text-decoration:none;font-weight:700;font-size:15px;padding:14px;border-radius:14px;background:${btnBg};color:#fff;margin-top:18px">${label}</a>
     </div>`;
   }).join('');
-  document.querySelectorAll('#pay-cards a[data-plan]').forEach(a => a.addEventListener('click', () => {
-    try { gtag('event', 'custom_pay_click', { plan: a.dataset.plan, currency: curCurrency }); } catch (e) {}
+  document.querySelectorAll('#pay-cards a[data-plan]').forEach(a => a.addEventListener('click', e => {
+    try { gtag('event', 'custom_pay_click', { plan: a.dataset.plan, currency: curCurrency }); } catch (err) {}
+    if (curCurrency === 'USD') {
+      e.preventDefault();
+      usdPayModal(OPTIONS.find(o => o.name === a.dataset.plan));
+    }
   }));
+}
+
+// дисклеймер для оплаты в долларах: сумма спишется в тенге по курсу
+function usdPayModal(o) {
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'position:fixed;inset:0;background:rgba(26,30,51,.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:99';
+  wrap.innerHTML = `
+    <div style="background:#fff;border-radius:24px;padding:28px 26px;max-width:430px;width:100%;box-shadow:0 30px 70px -30px rgba(0,0,0,.45)">
+      <h3 class="h-nunito" style="font-weight:900;font-size:22px;letter-spacing:-.4px;margin-bottom:12px">Запишись на занятие — это займёт минуту</h3>
+      <p style="font-size:15px;line-height:1.6;color:#3A3F5C;margin-bottom:6px">Ссылка на оплату откроется через несколько секунд.</p>
+      <p style="font-size:15px;line-height:1.6;color:#3A3F5C;margin-bottom:6px">Мы — казахстанская компания, поэтому вы увидите сумму в тенге.</p>
+      <p style="font-size:15px;line-height:1.6;color:#3A3F5C;margin-bottom:14px"><b>Курс: 1 $ ≈ 470 ₸</b></p>
+      <p style="font-size:13.5px;line-height:1.6;color:#8C90AC;margin-bottom:18px">Есть вопросы? Напиши нам — <a href="mailto:support@chill.education" style="color:#2440D9;font-weight:600">support@chill.education</a> · тг: <a href="https://t.me/chilleducation" style="color:#2440D9;font-weight:600">@chilleducation</a></p>
+      <a href="${o.urlAlt}" style="display:block;text-align:center;text-decoration:none;font-weight:700;font-size:15px;padding:14px;border-radius:14px;background:#2440D9;color:#fff">Перейти к оплате · <span data-cnt>60</span> с</a>
+    </div>`;
+  document.body.appendChild(wrap);
+  wrap.addEventListener('click', e => { if (e.target === wrap) { clearInterval(t); wrap.remove(); } });
+  let n = 60;
+  const t = setInterval(() => {
+    n--; const el = wrap.querySelector('[data-cnt]');
+    if (el) el.textContent = n;
+    if (n <= 0) { clearInterval(t); location.href = o.urlAlt; }
+  }, 1000);
 }
 renderPay();
 </script>
