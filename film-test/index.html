@@ -96,14 +96,19 @@ const LEVELS = [
 let lvl = 0, qi = 0, correct = 0, chosen = null;
 const S = document.getElementById('screen');
 
-function stepsHtml(){ return '<div class="steps">'+LEVELS.map((_,i)=>`<span class="${i<lvl||(i===lvl)?'on':''}"></span>`).join('')+'</div>'; }
+// полоски-ступени кликабельны: можно перейти на любой уровень
+function stepsHtml(){ return '<div class="steps">'+LEVELS.map((_,i)=>`<span class="${i<=lvl?'on':''}" onclick="startLevel(${i})" style="cursor:pointer" title="Уровень ${i+1}"></span>`).join('')+'</div>'; }
 
 function intro(){
   S.innerHTML = `
     <span class="kicker">🍂 Осенний тест · 5 минут</span>
     <h1>Сможешь ли ты смотреть фильмы в оригинале?</h1>
     <p class="lead">Три фрагмента из известного фильма — от простого к сложному. Смотри без субтитров и отвечай на вопросы. Пройдёшь все три уровня — значит, пора выключать перевод навсегда.</p>
-    <button class="btn" onclick="startLevel(0)">Начать</button>`;
+    <button class="btn" onclick="startLevel(0)">Начать</button>
+    <p class="note" style="text-align:center;margin-top:16px">Или выбери уровень сразу:</p>
+    <div style="display:flex;gap:10px">
+      ${LEVELS.map((L,i)=>`<button class="opt" style="flex:1;text-align:center;font-weight:700" onclick="startLevel(${i})">Уровень ${i+1}</button>`).join('')}
+    </div>`;
 }
 
 function startLevel(i){
@@ -117,16 +122,20 @@ function startLevel(i){
     return;
   }
   track('filmtest_level_start',{level:i+1});
+  // видео живёт вне #qa: при переходе между вопросами не перерисовывается и остаётся на экране
   S.innerHTML = `${stepsHtml()}<span class="lvl-pill">${L.title}</span>
     <p class="lead">${L.hint}</p>
     <video src="${L.clip}" controls playsinline></video>
-    <p class="note">Смотри без пауз на вопросах — как в настоящем кино.</p>
-    <button class="btn" onclick="renderQ()">К вопросам</button>`;
+    <div id="qa">
+      <p class="note">Смотри без пауз на вопросах — как в настоящем кино. Видео останется на экране — можно пересматривать.</p>
+      <button class="btn" onclick="renderQ()">К вопросам</button>
+    </div>`;
 }
 
 function renderQ(){
   const L = LEVELS[lvl], Q = L.questions[qi];
-  const head = `${stepsHtml()}<span class="lvl-pill">${L.title}</span>
+  const box = document.getElementById('qa');
+  const head = `
     <div class="prog">Задание ${qi+1} из ${L.questions.length}</div>
     <div class="q">${Q.q}</div>`;
   const nextBtn = `<button class="btn" id="next" style="opacity:.5" disabled>Ответить</button>`;
@@ -134,7 +143,7 @@ function renderQ(){
   const finish = ok=>{ if(ok) correct++; qi++; if(qi<L.questions.length) renderQ(); else levelDone(); };
 
   if(Q.type==='mc' || Q.type==='gap'){
-    S.innerHTML = head + Q.o.map((o,i)=>`<button class="opt" data-i="${i}">${o}</button>`).join('') + nextBtn;
+    box.innerHTML = head + Q.o.map((o,i)=>`<button class="opt" data-i="${i}">${o}</button>`).join('') + nextBtn;
     let chosen=null;
     document.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>{
       document.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));
@@ -144,7 +153,7 @@ function renderQ(){
   }
   else if(Q.type==='who' || Q.type==='tf'){
     const opts = Q.type==='who' ? ['🧛 Эдвард','👧 Белла'] : ['✔️ Правда','✖️ Ложь'];
-    S.innerHTML = head + `<div style="display:flex;gap:10px">` +
+    box.innerHTML = head + `<div style="display:flex;gap:10px">` +
       opts.map((o,i)=>`<button class="opt" style="flex:1;text-align:center;font-size:16px;padding:18px" data-i="${i}">${o}</button>`).join('') + `</div>` + nextBtn;
     let chosen=null;
     document.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>{
@@ -157,7 +166,7 @@ function renderQ(){
     const idx = Q.lines.map((_,i)=>i);
     for(let i=idx.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [idx[i],idx[j]]=[idx[j],idx[i]]; }
     let picked=[];
-    S.innerHTML = head +
+    box.innerHTML = head +
       `<div id="ord-list">` + idx.map(i=>`<button class="opt" data-i="${i}"><span class="ord-n" style="display:inline-block;min-width:24px;font-weight:800;color:#FF7A1A"></span>${Q.lines[i]}</button>`).join('') + `</div>
       <button class="opt" id="ord-reset" style="text-align:center;color:#2440D9;font-weight:700;background:#EEF0FB;border-color:#EEF0FB">Сбросить порядок</button>` + nextBtn;
     const refresh=()=>{ document.querySelectorAll('#ord-list .opt').forEach(b=>{
@@ -176,7 +185,7 @@ function renderQ(){
     });
   }
   else if(Q.type==='input'){
-    S.innerHTML = head + `<input id="inp" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${Q.ph||'Впиши слово'}" style="width:100%;border:1.5px solid #E2E5F4;border-radius:14px;padding:14px 16px;font-family:'Manrope';font-size:16px;background:#FCFBFF;outline:none">` + nextBtn;
+    box.innerHTML = head + `<input id="inp" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${Q.ph||'Впиши слово'}" style="width:100%;border:1.5px solid #E2E5F4;border-radius:14px;padding:14px 16px;font-family:'Manrope';font-size:16px;background:#FCFBFF;outline:none">` + nextBtn;
     const inp=document.getElementById('inp');
     inp.addEventListener('input',()=>{ if(inp.value.trim()) enable(); });
     inp.addEventListener('keydown',e=>{ if(e.key==='Enter'&&inp.value.trim()) document.getElementById('next').click(); });
