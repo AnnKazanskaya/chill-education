@@ -82,12 +82,12 @@ const LEVELS = [
   },
   {
     title: 'Уровень 3 · Как носитель', clip: 'clip3.mp4?v=1',
-    hint: 'Финал: тихая быстрая речь. Закончи фразы героев — в двух заданиях слово нужно впечатать самому.',
+    hint: 'Финал: тихая быстрая речь. Слушай внимательно и закончи фразы героев.',
     questions: [
       { type:'mc', q:'Закончи фразу: «This is the skin of a …»', o:['…hero','…killer','…monster','…stranger'], a:1 },
-      { type:'input', q:'Впиши слово, которое произносит Эдвард: «I\'m the world\'s most dangerous ___»', answers:['predator'], ph:'Впиши слово по-английски' },
+      { type:'gap', q:'Закончи фразу Эдварда: «I\'m the world\'s most dangerous ___»', o:['predator','monster','creature','vampire'], a:0 },
       { type:'mc', q:'Закончи фразу: «Everything about me invites you in. My voice, my face, even my …»', o:['…smile','…eyes','…skin','…smell'], a:3 },
-      { type:'input', q:'Впиши слово: «I\'ve never wanted a human\'s ___ so much in my life»', answers:['blood'], ph:'Впиши слово по-английски' },
+      { type:'gap', q:'Закончи фразу: «I\'ve never wanted a human\'s ___ so much in my life»', o:['attention','blood','love','trust'], a:1 },
       { type:'mc', q:'Белла говорит: «I trust you». Что отвечает Эдвард?', o:['«Good» — «Хорошо»','«Don\'t» — «Не стоит»','«Why?» — «Почему?»','«Thank you» — «Спасибо»'], a:1 },
     ],
   },
