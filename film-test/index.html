@@ -54,7 +54,7 @@ video{display:block;width:100%;border-radius:18px;background:#000;margin:14px 0 
 
 <script>
 function track(n,p){try{gtag('event',n,p||{})}catch(e){}}
-const PASS = 4; // сколько правильных из 5 нужно для перехода дальше
+const PASS = 4; // от скольких правильных из 5 считаем уровень пройденным (на следующий уровень пускаем в любом случае)
 
 // ЧЕРНОВИК: вопросы сгенерированы по сцене, проверить и поправить с Демидом.
 const LEVELS = [
@@ -193,13 +193,17 @@ function levelDone(){
   const L = LEVELS[lvl];
   const passed = correct >= PASS;
   track('filmtest_level_done',{level:lvl+1,correct,passed});
-  if(passed && lvl < LEVELS.length-1){
-    S.innerHTML = `${stepsHtml()}<span class="lvl-pill">${L.title} — пройден!</span>
-      <h1>${correct} из ${L.questions.length} — отлично! 🎉</h1>
-      <p class="lead">Ты понял(а) этот фрагмент. Дальше — сложнее: быстрее речь, больше разговорных фраз.</p>
+  if(lvl < LEVELS.length-1){
+    const praise = passed ? '— отлично! 🎉' : '— идём дальше!';
+    const note = passed
+      ? 'Ты понял(а) этот фрагмент. Дальше — сложнее: быстрее речь, больше разговорных фраз.'
+      : 'Кое-что ускользнуло — это нормально, на слух язык ловится с практикой. Дальше — сложнее: быстрее речь, больше разговорных фраз.';
+    S.innerHTML = `${stepsHtml()}<span class="lvl-pill">${L.title}</span>
+      <h1>${correct} из ${L.questions.length} ${praise}</h1>
+      <p class="lead">${note}</p>
       <button class="btn" onclick="startLevel(${lvl+1})">Следующий уровень</button>`;
   } else {
-    result(passed && lvl === LEVELS.length-1);
+    result(passed);
   }
 }
 
