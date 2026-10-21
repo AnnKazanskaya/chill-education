@@ -11,32 +11,35 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Nunito:wght@800;900&display=swap');
+:root{--red:#B3122E;--red-hi:#C8203C;--teal:#24474A;--mist:#E4ECEB;--text:#16201F;--muted:#55706C;--soft:#86A09C;--line:#D5E0DE}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Manrope',sans-serif;color:#1A1E33;background:#EEF0FB;-webkit-font-smoothing:antialiased;min-height:100vh}
+body{font-family:'Manrope',sans-serif;color:var(--text);background:var(--mist);-webkit-font-smoothing:antialiased;min-height:100vh}
 .h-nunito{font-family:'Nunito',sans-serif}
 .wrap{max-width:680px;margin:0 auto;padding:0 20px 70px}
 header{display:flex;align-items:center;justify-content:space-between;padding:16px 0 8px}
 header img{height:48px;width:auto}
-header a{font-weight:700;font-size:14px;color:#5A5F7D;text-decoration:none}
-.card{background:#fff;border-radius:26px;padding:28px 26px;box-shadow:0 24px 55px -30px rgba(36,64,217,.35);margin-top:18px}
-.kicker{font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#FF7A1A}
+header a{font-weight:700;font-size:14px;color:var(--muted);text-decoration:none}
+.card{background:#fff;border-radius:26px;padding:28px 26px;box-shadow:0 24px 55px -30px rgba(36,71,74,.45);margin-top:18px}
+.kicker{font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--red)}
 h1{font-family:'Nunito';font-weight:900;font-size:clamp(26px,6vw,36px);line-height:1.08;letter-spacing:-.8px;margin:10px 0 12px}
-.lead{font-size:15.5px;line-height:1.6;color:#5A5F7D}
-.btn{display:block;width:100%;border:none;cursor:pointer;background:#FF7A1A;color:#fff;font-family:'Manrope';font-weight:700;font-size:16px;padding:15px;border-radius:14px;margin-top:20px;box-shadow:0 10px 24px -10px rgba(255,122,26,.6);text-align:center;text-decoration:none}
-.btn.blue{background:#2440D9;box-shadow:0 10px 24px -10px rgba(36,64,217,.6)}
-.lvl-pill{display:inline-block;background:#E7ECFF;color:#2440D9;font-weight:800;font-size:13px;padding:6px 14px;border-radius:999px;margin-bottom:10px}
+.lead{font-size:15.5px;line-height:1.6;color:var(--muted)}
+.btn{display:block;width:100%;border:none;cursor:pointer;background:var(--red);color:#fff;font-family:'Manrope';font-weight:700;font-size:16px;padding:15px;border-radius:14px;margin-top:20px;box-shadow:0 10px 24px -10px rgba(179,18,46,.6);text-align:center;text-decoration:none}
+.btn.blue{background:var(--teal);box-shadow:0 10px 24px -10px rgba(36,71,74,.6)}
+.btn.ghost{background:var(--mist);color:var(--teal);box-shadow:none}
+.lvl-pill{display:inline-block;background:var(--mist);color:var(--teal);font-weight:800;font-size:13px;padding:6px 14px;border-radius:999px;margin-bottom:10px}
 video{display:block;width:100%;border-radius:18px;background:#000;margin:14px 0 6px}
-.note{font-size:12.5px;color:#8C90AC;margin-top:6px}
+.note{font-size:12.5px;color:var(--soft);margin-top:6px}
+.joke{font-size:13.5px;font-weight:700;font-style:italic;color:var(--teal);margin-top:8px}
 .q{font-family:'Nunito';font-weight:800;font-size:19px;line-height:1.35;letter-spacing:-.3px;margin:20px 0 12px}
-.opt{display:block;width:100%;text-align:left;font-family:'Manrope';font-weight:600;font-size:15px;color:#1A1E33;background:#FCFBFF;border:1.5px solid #E2E5F4;border-radius:14px;padding:13px 16px;cursor:pointer;margin-bottom:9px;transition:border-color .15s}
-.opt:hover{border-color:#2440D9}
-.opt.sel{border-color:#2440D9;background:#E7ECFF}
-.prog{font-size:13px;font-weight:700;color:#8C90AC;margin-bottom:8px}
-.res-big{font-family:'Nunito';font-weight:900;font-size:28px;letter-spacing:-.6px;color:#2440D9;margin:8px 0 10px}
+.opt{display:block;width:100%;text-align:left;font-family:'Manrope';font-weight:600;font-size:15px;color:var(--text);background:#FBFCFC;border:1.5px solid var(--line);border-radius:14px;padding:13px 16px;cursor:pointer;margin-bottom:9px;transition:border-color .15s}
+.opt:hover{border-color:var(--teal)}
+.opt.sel{border-color:var(--teal);background:var(--mist)}
+.prog{font-size:13px;font-weight:700;color:var(--soft);margin-bottom:8px}
+.res-big{font-family:'Nunito';font-weight:900;font-size:28px;letter-spacing:-.6px;color:var(--teal);margin:8px 0 10px}
 .steps{display:flex;gap:8px;margin-bottom:14px}
-.steps span{flex:1;height:8px;border-radius:99px;background:#E2E5F4}
-.steps span.on{background:#FF7A1A}
-.foot{text-align:center;font-size:12.5px;color:#8C90AC;margin-top:24px}
+.steps span{flex:1;height:8px;border-radius:99px;background:var(--line)}
+.steps span.on{background:var(--red)}
+.foot{text-align:center;font-size:12.5px;color:var(--soft);margin-top:24px}
 .draft{background:#FFF6EE;border:1px solid #FFE0C4;color:#8A4B10;border-radius:14px;padding:12px 16px;font-size:13.5px;line-height:1.5;margin-top:16px}
 </style>
 </head>
@@ -49,7 +52,7 @@ video{display:block;width:100%;border-radius:18px;background:#000;margin:14px 0 
 
   <div class="card" id="screen"></div>
 
-  <p class="foot">🍂 Осенний тест · Chat &amp; Chill</p>
+  <p class="foot">🍎 Тест по «Сумеркам» · Chat &amp; Chill</p>
 </div>
 
 <script>
@@ -61,6 +64,7 @@ const LEVELS = [
   {
     title: 'Уровень 1 · Разминка', clip: 'clip1.mp4?v=1',
     hint: 'Посмотри фрагмент (можно дважды) и выполни задания.',
+    joke: 'Если тяжело смотреть на игру Кристен Стюарт, крепись: Эдвард ждал её больше ста лет 🧛',
     questions: [
       { type:'mc', q:'С чего Эдвард начинает разговор?', o:['Спрашивает, нравится ли ей дождь','Приглашает её в кино','Спрашивает про домашнее задание','Делает комплимент её причёске'], a:0 },
       { type:'who', q:'Кто говорит: «You\'re asking me about the weather?»', a:1 },
@@ -82,13 +86,13 @@ const LEVELS = [
   },
   {
     title: 'Уровень 3 · Как носитель', clip: 'clip3.mp4?v=1',
-    hint: 'Финал: тихая быстрая речь. Слушай внимательно и закончи фразы героев.',
+    hint: 'Финал: тихая быстрая речь и длинный монолог Эдварда. Следи за смыслом и за тем, кто что говорит.',
     questions: [
-      { type:'mc', q:'Закончи фразу: «This is the skin of a …»', o:['…hero','…killer','…monster','…stranger'], a:1 },
-      { type:'gap', q:'Закончи фразу Эдварда: «I\'m the world\'s most dangerous ___»', o:['predator','monster','creature','vampire'], a:0 },
-      { type:'mc', q:'Закончи фразу: «Everything about me invites you in. My voice, my face, even my …»', o:['…smile','…eyes','…skin','…smell'], a:3 },
-      { type:'gap', q:'Закончи фразу: «I\'ve never wanted a human\'s ___ so much in my life»', o:['attention','blood','love','trust'], a:1 },
-      { type:'mc', q:'Белла говорит: «I trust you». Что отвечает Эдвард?', o:['«Good» — «Хорошо»','«Don\'t» — «Не стоит»','«Why?» — «Почему?»','«Thank you» — «Спасибо»'], a:1 },
+      { type:'tf', q:'В начале сцены Эдвард говорит Белле, что она красивая.', a:1 },
+      { type:'who', q:'Кто говорит: «I don\'t believe that»', a:1 },
+      { type:'mc', q:'Как Эдвард объясняет, почему он кажется Белле привлекательным?', o:['Это маскировка, чтобы заманить жертву','Он просто хорошо выглядит от природы','Так на него действует солнце','Это заслуга его семьи'], a:0 },
+      { type:'order', q:'Расставь реплики Эдварда в том порядке, как они звучат:', lines:['I\'m the world\'s most dangerous predator.','Everything about me invites you in.','As if you could outrun me!','I\'m designed to kill.'] },
+      { type:'mc', q:'Эдвард признаётся, что уже убивал людей. Что отвечает Белла?', o:['Что ей страшно','Что это не имеет значения','Что она ему не верит','Что ей нужно уйти'], a:1 },
     ],
   },
 ];
@@ -101,7 +105,7 @@ function stepsHtml(){ return '<div class="steps">'+LEVELS.map((_,i)=>`<span clas
 
 function intro(){
   S.innerHTML = `
-    <span class="kicker">🍂 Осенний тест · 5 минут</span>
+    <span class="kicker">🍎 Тест по «Сумеркам» · 5 минут</span>
     <h1>Сможешь ли ты смотреть фильмы в оригинале?</h1>
     <p class="lead">Три фрагмента из известного фильма — от простого к сложному. Смотри без субтитров и отвечай на вопросы. Пройдёшь все три уровня — значит, пора выключать перевод навсегда.</p>
     <button class="btn" onclick="startLevel(0)">Начать</button>
@@ -127,7 +131,7 @@ function startLevel(i){
     <p class="lead">${L.hint}</p>
     <video src="${L.clip}" controls playsinline></video>
     <div id="qa">
-      <p class="note">Смотри без пауз на вопросах — как в настоящем кино. Видео останется на экране — можно пересматривать.</p>
+      <p class="note">Смотри без пауз на вопросах — как в настоящем кино. Видео останется на экране — можно пересматривать.</p>${L.joke?`<p class="joke">${L.joke}</p>`:''}
       <button class="btn" onclick="renderQ()">К вопросам</button>
     </div>`;
 }
@@ -167,8 +171,8 @@ function renderQ(){
     for(let i=idx.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [idx[i],idx[j]]=[idx[j],idx[i]]; }
     let picked=[];
     box.innerHTML = head +
-      `<div id="ord-list">` + idx.map(i=>`<button class="opt" data-i="${i}"><span class="ord-n" style="display:inline-block;min-width:24px;font-weight:800;color:#FF7A1A"></span>${Q.lines[i]}</button>`).join('') + `</div>
-      <button class="opt" id="ord-reset" style="text-align:center;color:#2440D9;font-weight:700;background:#EEF0FB;border-color:#EEF0FB">Сбросить порядок</button>` + nextBtn;
+      `<div id="ord-list">` + idx.map(i=>`<button class="opt" data-i="${i}"><span class="ord-n" style="display:inline-block;min-width:24px;font-weight:800;color:var(--red-hi)"></span>${Q.lines[i]}</button>`).join('') + `</div>
+      <button class="opt" id="ord-reset" style="text-align:center;color:var(--teal);font-weight:700;background:var(--mist);border-color:var(--mist)">Сбросить порядок</button>` + nextBtn;
     const refresh=()=>{ document.querySelectorAll('#ord-list .opt').forEach(b=>{
         const pos=picked.indexOf(+b.dataset.i);
         b.querySelector('.ord-n').textContent = pos>=0 ? (pos+1)+'.' : '';
@@ -185,7 +189,7 @@ function renderQ(){
     });
   }
   else if(Q.type==='input'){
-    box.innerHTML = head + `<input id="inp" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${Q.ph||'Впиши слово'}" style="width:100%;border:1.5px solid #E2E5F4;border-radius:14px;padding:14px 16px;font-family:'Manrope';font-size:16px;background:#FCFBFF;outline:none">` + nextBtn;
+    box.innerHTML = head + `<input id="inp" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${Q.ph||'Впиши слово'}" style="width:100%;border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;font-family:'Manrope';font-size:16px;background:#FBFCFC;color:var(--text);outline:none">` + nextBtn;
     const inp=document.getElementById('inp');
     inp.addEventListener('input',()=>{ if(inp.value.trim()) enable(); });
     inp.addEventListener('keydown',e=>{ if(e.key==='Enter'&&inp.value.trim()) document.getElementById('next').click(); });
@@ -229,7 +233,7 @@ function result(champion){
     <p class="lead">${text}</p>
     <a class="btn" href="https://chill.education/placement-test/?utm_source=filmtest&utm_medium=referral&utm_campaign=result">Узнать свой уровень английского</a>
     <a class="btn blue" href="https://chill.education/?utm_source=filmtest&utm_medium=referral&utm_campaign=result">Записаться на бесплатный урок</a>
-    <button class="btn" style="background:#EEF0FB;color:#2440D9;box-shadow:none" onclick="intro()">Пройти ещё раз</button>`;
+    <button class="btn ghost" onclick="intro()">Пройти ещё раз</button>`;
 }
 
 intro();
