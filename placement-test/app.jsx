@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 
 /* Заявки уходят в Telegram-группу «Заявки» через бота @chill_education_leads_bot */
-const TG_TOKEN = "7777868493:AAED1sSl-K1M63_h8urrS5F2bR6OvuwvX3A";
-const TG_CHAT_ID = "-1004289091014";
+/* Результаты уходят на сервер школы: он сохраняет заявку в приложение и пересылает в Telegram-чат заявок. Ключа бота на странице нет. */
+const LEAD_URL = "https://nixvpftdqevecjdqyuwv.supabase.co/functions/v1/site-lead";
 
 /* UTM-метки: подхватываем из ссылки или из localStorage (сохранены главной, 7 дней) */
 const UTM_KEYS = ["utm_source","utm_medium","utm_campaign","utm_content","utm_term"];
@@ -54,9 +54,9 @@ async function sendTestResults({ name, contact, level, answers, speaking }){
       "\n\n🗣 Speaking: " + (speaking ? speaking.prompt : "—") + "\n" + spLine +
       "\n\n📋 Ответы:\n" + qLines;
     if(text.length > 4090) text = text.slice(0,4080) + "\n…";
-    await fetch("https://api.telegram.org/bot"+TG_TOKEN+"/sendMessage", {
+    await fetch(LEAD_URL, {
       method:"POST", headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({ chat_id: TG_CHAT_ID, text })
+      body: JSON.stringify({ text, name, phone: contact, src: "Тест уровня" })
     }).catch(()=>{});
     if(speaking && (speaking.audioBlob || speaking.audioUrl)){
       try{
@@ -64,13 +64,12 @@ async function sendTestResults({ name, contact, level, answers, speaking }){
         const m = speaking.mime || blob.type || "";
         const ext = (m.indexOf("mp4")>=0||m.indexOf("m4a")>=0) ? "m4a" : m.indexOf("ogg")>=0 ? "ogg" : m.indexOf("wav")>=0 ? "wav" : "webm";
         const fd = new FormData();
-        fd.append("chat_id", TG_CHAT_ID);
-        fd.append("caption", "🎙 Говорение — " + (name||"ученик") + " · " + level);
+                fd.append("caption", "🎙 Говорение — " + (name||"ученик") + " · " + level);
         fd.append("document", blob, "govorenie-" + ((name||"student").replace(/\s+/g,"_")) + "." + ext);
         /* до 3 попыток — мобильная сеть может оборвать загрузку */
         for(let i=0;i<3;i++){
           try{
-            const r = await fetch("https://api.telegram.org/bot"+TG_TOKEN+"/sendDocument", { method:"POST", body: fd });
+            const r = await fetch(LEAD_URL, { method:"POST", body: fd });
             const j = await r.json().catch(()=>({}));
             if(j && j.ok) break;
           }catch(e){}

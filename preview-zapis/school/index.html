@@ -721,7 +721,7 @@ $('qform').addEventListener('submit',e=>{e.preventDefault();track('submit_form',
 (function(){const f=$('school-lead'); if(!f)return; f.addEventListener('submit',e=>{e.preventDefault();
   const name=(f.elements.namedItem('name').value||'').trim(), phone=(f.elements.namedItem('phone').value||'').trim()+((f.elements.namedItem('messenger')||{}).value?' · '+f.elements.namedItem('messenger').value:'');
   track('school_lead');
-  fetch('https://api.telegram.org/bot7777868493:AAED1sSl-K1M63_h8urrS5F2bR6OvuwvX3A/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:'-1004289091014',text:'🔔 Новая заявка с сайта\n👤 Имя: '+(name||'—')+'\n📞 Телефон: '+phone+'\n📍 Источник: Сайт личных уроков Алекса — блок «Школа»'})}).catch(()=>{});
+  fetch('https://nixvpftdqevecjdqyuwv.supabase.co/functions/v1/site-lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name,phone:phone,src:'Сайт Алекса',text:'🔔 Новая заявка с сайта\n👤 Имя: '+(name||'—')+'\n📞 Телефон: '+phone+'\n📍 Источник: Сайт личных уроков Алекса — блок «Школа»'})}).catch(()=>{});
   f.outerHTML='<div style="display:flex;align-items:center;gap:14px;background:#F4F5FC;border-radius:18px;padding:18px 22px;max-width:560px"><span style="display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:#E9F7EE;color:#1FA85A;font-size:22px;flex-shrink:0">✓</span><div><div class="h-nunito" style="font-weight:800;font-size:17px;color:#1A1E33">Заявка отправлена!</div><div style="font-size:14px;color:#5A5F7D">Преподаватель школы свяжется с тобой в течение дня 🙌</div></div></div>';
 });})();
 

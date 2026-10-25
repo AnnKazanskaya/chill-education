@@ -576,8 +576,9 @@ function renderReview() {
 renderReview();
 
 // ---------- LEAD FORM ----------
-const TG_TOKEN = '7777868493:AAED1sSl-K1M63_h8urrS5F2bR6OvuwvX3A';
-const TG_CHAT_ID = '-1004289091014';
+// Заявки уходят на сервер школы: он сохраняет их в приложение (раздел «Заявки») и присылает в Telegram-чат заявок.
+// Ключа бота на странице больше нет.
+const LEAD_URL = 'https://nixvpftdqevecjdqyuwv.supabase.co/functions/v1/site-lead';
 // UTM-метки: запоминаем при заходе (7 дней), добавляем в каждую заявку
 const UTM_KEYS = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
 (function(){
@@ -602,11 +603,11 @@ function utmLines(){
   }catch(e){}
   return '';
 }
-function sendLeadToTelegram(text){
-  return fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
+function sendLeadToTelegram(text, extra){
+  return fetch(LEAD_URL, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({ chat_id: TG_CHAT_ID, text })
+    body: JSON.stringify(Object.assign({ text: text, src: 'Сайт' }, extra || {}))
   }).catch(() => {});
 }
 document.querySelectorAll('form[data-leadform]').forEach(form => {
@@ -616,7 +617,7 @@ document.querySelectorAll('form[data-leadform]').forEach(form => {
     const phone = (form.elements.namedItem('phone')?.value || '').trim();
     const utm = utmLines();
     const messenger = (form.elements.namedItem('messenger')?.value || '').trim();
-    sendLeadToTelegram('🔔 Новая заявка с сайта\n👤 Имя: ' + (name || '—') + '\n📞 Телефон: ' + phone + (messenger ? '\n💬 Соцсеть: ' + messenger : '') + '\n📍 Источник: ' + (form.dataset.source || 'Главная') + (utm ? '\n' + utm : ''));
+    sendLeadToTelegram('🔔 Новая заявка с сайта\n👤 Имя: ' + (name || '—') + '\n📞 Телефон: ' + phone + (messenger ? '\n💬 Соцсеть: ' + messenger : '') + '\n📍 Источник: ' + (form.dataset.source || 'Главная') + (utm ? '\n' + utm : ''), { name: name, phone: phone });
     form.outerHTML = `
       <div style="display:flex;align-items:center;gap:14px;background:#fff;border-radius:18px;padding:18px 22px;box-shadow:0 12px 30px -16px rgba(36,64,217,.3);max-width:480px">
         <span style="display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:#E9F7EE;color:#1FA85A;font-size:22px;flex-shrink:0">✓</span>
