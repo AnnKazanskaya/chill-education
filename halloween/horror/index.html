@@ -7,21 +7,19 @@
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-WZ42G8JVS3');</script>
 <title>Какой ты персонаж из фильмов ужасов? — хэллоуин-тест Chat &amp; Chill</title>
 <meta name="description" content="Хэллоуинский тест от школы английского Chat & Chill: узнай, какой ты персонаж из культовых фильмов ужасов, и забери подборку английских слов.">
-<link rel="stylesheet" href="../quiz.css">
+<link rel="stylesheet" href="../quiz.css?v=7">
 </head>
 <body>
-<img class="deco" src="../img/hw-ghost.png" alt="" style="top:24%;left:3%;width:76px" onerror="this.remove()">
-<img class="deco" src="../img/hw-pumpkin.png" alt="" style="bottom:12%;right:3%;width:70px;animation-delay:.8s" onerror="this.remove()">
 <div class="wrap">
   <header>
-    <a href="https://chill.education/"><img src="https://chill.education/img/logo.png" alt="Chat and Chill"></a>
-    <a href="https://chill.education/?utm_source=halloween&utm_medium=referral&utm_campaign=horror_quiz">На сайт школы</a>
+    <a class="logo" href="https://chill.education/"><img src="../img/logo-light.webp" alt="Chat and Chill"></a>
+    <a class="to-site" href="https://chill.education/?utm_source=halloween&utm_medium=referral&utm_campaign=horror_quiz">На сайт школы</a>
   </header>
 
   <div class="card" id="intro">
     <span class="kicker">👻&nbsp; Хэллоуин-тест · 2 минуты</span>
     <h1>Какой ты персонаж из фильмов ужасов?</h1>
-    <img class="hero-img" src="../img/cat-vampire.png" alt="" onerror="this.remove()">
+    <img class="hero-img" src="../img/chars/pennywise.webp" alt="">
     <p class="lead">Семь вопросов — и узнаешь, кто ты в хорроре: древний вампир, клоун из водостока или девочка из телевизора. Бонус — английские слова, чтобы пугать красиво. Не бойся, это всего лишь тест… или нет?</p>
     <button class="btn" id="start-btn">Начать, если не страшно</button>
   </div>
@@ -33,14 +31,20 @@
     <div id="q-opts"></div>
   </div>
 
-  <div class="card" id="result" style="display:none">
-    <img class="hero-img" id="res-img" alt="">
-    <span class="res-tag" id="res-tag"></span>
-    <div class="res-name" id="res-name"></div>
-    <p class="res-text" id="res-text"></p>
-    <div class="vocab" id="res-vocab"></div>
-    <a class="btn blue" href="https://chill.education/placement-test/?utm_source=halloween&utm_medium=referral&utm_campaign=horror_quiz">Узнать свой уровень английского</a>
-    <button class="again" id="again">Пройти ещё раз</button>
+  <div id="result" style="display:none">
+    <div class="card res-head">
+      <img id="res-img" alt="">
+      <div class="res-info"><span class="res-tag" id="res-tag"></span><div class="res-name" id="res-name"></div><p class="res-lead" id="res-lead"></p></div>
+    </div>
+    <div class="cta" id="cta"></div>
+    <div class="card res-more">
+      <p class="res-text" id="res-text"></p>
+      <div class="vocab" id="res-vocab"></div>
+    </div>
+    <div class="after">
+      <a class="btn blue" href="https://chill.education/placement-test/?utm_source=halloween&utm_medium=referral&utm_campaign=horror_quiz">Узнать свой уровень английского</a>
+      <button class="again" id="again" style="color:#E4DEFF">Пройти ещё раз</button>
+    </div>
   </div>
 
   <a class="other-quiz" href="../potter/">А кто ты из мира Гарри Поттера? 🧙</a>
@@ -49,6 +53,16 @@
 
 <script>
 const QUIZ = {
+  title: 'Какой ты персонаж из фильмов ужасов',
+  cta: {
+    kicker: '🕯️ Страшнее любого хоррора',
+    title: 'Боишься заговорить по-английски? Это лечится',
+    text: 'Языковой барьер пугает сильнее Пеннивайза. В Chat & Chill его побеждают с первого урока, без стыда за ошибки.',
+    bullets: [['🎃','Первый урок бесплатно и онлайн'],['🧛','Узнаешь свой уровень и план, как заговорить свободно'],['👻','Ошибки не страшны: за них здесь не ругают']],
+    button: 'Записаться на бесплатный урок',
+    pic: '../img/deco-ghost.webp',
+    doneIcon: '🦇', doneTitle: 'Заявка отправлена! Летим к тебе',
+  },
   gaName: 'hw_horror',
   order: ['dracula','pennywise','freddy','sadako','chucky','frankenstein'],
   questions: [
@@ -96,27 +110,28 @@ const QUIZ = {
     ]},
   ],
   results: {
-    dracula: { tag:'Вечная классика', name:'Ты — Дракула!', img:'../img/cat-vampire.png',
+    dracula: { tag:'Вечная классика', name:'Ты — Дракула!', img:'../img/chars/dracula.webp',
       text:'Аристократичный, обаятельный и чуть-чуть драматичный — ты очаровываешь людей быстрее, чем они успевают заметить клыки. Ночь — твоё время, стиль — твоё оружие.',
       vocab:['vampire — вампир','fangs — клыки','charming — обаятельный','immortal — бессмертный','bat — летучая мышь'] },
-    pennywise: { tag:'Все мы тут летаем', name:'Ты — Пеннивайз!', img:'../img/cat-vampire.png',
+    pennywise: { tag:'Все мы тут летаем', name:'Ты — Пеннивайз!', img:'../img/chars/pennywise.webp',
       text:'Ты — душа компании с лёгким привкусом хаоса: шутишь, жонглируешь вниманием и всегда знаешь, чего человек боится… в хорошем смысле. Наверное.',
       vocab:['clown — клоун','balloon — воздушный шар','to float — летать/парить','sewer — водосток','creepy — жуткий'] },
-    freddy: { tag:'Хозяин снов', name:'Ты — Фредди!', img:'../img/cat-vampire.png',
+    freddy: { tag:'Хозяин снов', name:'Ты — Фредди!', img:'../img/chars/freddy.webp',
       text:'Ты приходишь к людям в голову и остаёшься там навсегда — твои шутки вспоминают в три часа ночи. Фирменный свитер, острый язык и полный контроль над ситуацией.',
       vocab:['nightmare — кошмар','dream — сон','to haunt — преследовать','glove — перчатка','to fall asleep — засыпать'] },
-    sadako: { tag:'Выйду через 7 дней', name:'Ты — Садако!', img:'../img/cat-vampire.png',
+    sadako: { tag:'Выйду через 7 дней', name:'Ты — Садако!', img:'../img/chars/sadako.webp',
       text:'Тихий, загадочный и немного драматичный — ты умеешь появляться в самый неожиданный момент и производить незабываемое впечатление. Главное — перезванивай людям вовремя.',
       vocab:['ghost — призрак','curse — проклятие','well — колодец','to crawl — ползти','seven days — семь дней'] },
-    chucky: { tag:'Маленький, но грозный', name:'Ты — Чаки!', img:'../img/cat-vampire.png',
+    chucky: { tag:'Маленький, но грозный', name:'Ты — Чаки!', img:'../img/chars/chucky.webp',
       text:'Недооценивать тебя — главная ошибка окружающих. В маленьком формате — огромный характер, острые шутки и энергия, которой хватит на весь район.',
       vocab:['doll — кукла','tiny — крошечный','mischief — проделки','sharp — острый','don’t underestimate me — не недооценивай меня'] },
-    frankenstein: { tag:'Добряк с грозным лицом', name:'Ты — монстр Франкенштейна!', img:'../img/cat-vampire.png',
+    frankenstein: { tag:'Добряк с грозным лицом', name:'Ты — монстр Франкенштейна!', img:'../img/chars/frankenstein.webp',
       text:'Выглядишь внушительно, а внутри — самое доброе сердце в этом тесте. Тебя сложно узнать с первого взгляда, но кто узнал — тот с тобой навсегда.',
       vocab:['monster — чудовище','gentle — добрый/мягкий','bolt — болт','lightning — молния','don’t judge a book by its cover — не суди по обложке'] },
   },
 };
 </script>
-<script src="../quiz.js?v=2"></script>
+<script src="../night.js?v=2"></script>
+<script src="../quiz.js?v=7"></script>
 </body>
 </html>
