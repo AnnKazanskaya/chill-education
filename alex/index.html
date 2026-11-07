@@ -173,23 +173,43 @@
 
   footer{text-align:center; color:rgba(255,255,255,.35); font-size:12px; margin-top:34px}
 
-  @media (prefers-reduced-motion:reduce){ *{transition:none!important} }
+  .lang{position:absolute; top:14px; right:14px; z-index:3; display:flex; gap:2px; padding:3px; border-radius:999px;
+    background:rgba(0,0,0,.45); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.14)}
+  .lang button{border:none; background:none; color:rgba(255,255,255,.7); font:700 12px/1 Inter,sans-serif; padding:7px 10px; border-radius:999px; cursor:pointer}
+  .lang button.on{background:#fff; color:#111}
+
+  /* окно «YouTube скоро» */
+  .ytm{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.6);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+  .ytm.open{display:flex}
+  .ytm-box{position:relative;width:100%;max-width:360px;background:#222;border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:28px 24px 22px;text-align:center;box-shadow:0 30px 70px rgba(0,0,0,.6);animation:ytm-in .25s ease}
+  @keyframes ytm-in{from{transform:translateY(12px) scale(.97);opacity:0}to{transform:none;opacity:1}}
+  .ytm-icon{display:flex;justify-content:center;margin:2px auto 16px}
+  .ytm-icon svg{width:68px;height:auto;display:block;filter:drop-shadow(0 8px 18px rgba(255,0,0,.35))}
+  .ytm h3{font-size:20px;font-weight:800;margin-bottom:8px}
+  .ytm p{font-size:15px;line-height:1.5;color:var(--muted)}
+  .ytm .go{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:20px;min-height:50px;padding:0 16px;text-align:center;border-radius:14px;background:#2AABEE;color:#fff;font-weight:700;font-size:15px}
+  .ytm .go svg{width:18px;height:18px;fill:#fff}
+  .ytm .x{position:absolute;top:10px;right:10px;width:34px;height:34px;border:none;border-radius:50%;background:rgba(255,255,255,.08);color:#fff;font-size:20px;line-height:1;cursor:pointer}
+
+  @media (prefers-reduced-motion:reduce){ *{transition:none!important} .ytm-box{animation:none} }
 </style>
 </head>
 <body>
 <div class="backdrop" aria-hidden="true"></div>
 
 <main class="page">
-  <div class="hero"><img src="img/hero.jpg" alt="Alex" fetchpriority="high"></div>
+  <div class="hero"><img src="img/hero.jpg" alt="Alex" fetchpriority="high">
+    <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="ru">RU</button><button type="button" data-lang="en">EN</button></div>
+  </div>
 
   <header class="head">
     <h1 class="name">Alex
-      <svg viewBox="0 0 24 24" aria-label="Подтверждено"><path fill="#4A9FF5" d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.818-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.437 2.25c-.415-.165-.866-.25-1.336-.25-2.11 0-3.818 1.79-3.818 4 0 .494.083.964.237 1.4-1.272.65-2.147 2.018-2.147 3.6 0 1.495.782 2.798 1.942 3.486-.02.17-.032.34-.032.514 0 2.21 1.708 4 3.818 4 .47 0 .92-.086 1.335-.25.62 1.334 1.926 2.25 3.437 2.25 1.512 0 2.818-.916 3.437-2.25.415.163.865.248 1.336.248 2.11 0 3.818-1.79 3.818-4 0-.174-.012-.344-.033-.513 1.158-.687 1.943-1.99 1.943-3.484z"/><path fill="#fff" d="M10.54 16.3 6.8 12.57l1.41-1.42 2.33 2.33 5.25-5.25 1.41 1.42z"/></svg>
+      <svg viewBox="0 0 24 24" aria-label="Подтверждено" data-i18n-aria="verified"><path fill="#4A9FF5" d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.818-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.437 2.25c-.415-.165-.866-.25-1.336-.25-2.11 0-3.818 1.79-3.818 4 0 .494.083.964.237 1.4-1.272.65-2.147 2.018-2.147 3.6 0 1.495.782 2.798 1.942 3.486-.02.17-.032.34-.032.514 0 2.21 1.708 4 3.818 4 .47 0 .92-.086 1.335-.25.62 1.334 1.926 2.25 3.437 2.25 1.512 0 2.818-.916 3.437-2.25.415.163.865.248 1.336.248 2.11 0 3.818-1.79 3.818-4 0-.174-.012-.344-.033-.513 1.158-.687 1.943-1.99 1.943-3.484z"/><path fill="#fff" d="M10.54 16.3 6.8 12.57l1.41-1.42 2.33 2.33 5.25-5.25 1.41 1.42z"/></svg>
     </h1>
     <p class="handle">@alexspromotion</p>
   </header>
 
-  <nav class="socials" aria-label="Соцсети">
+  <nav class="socials" aria-label="Соцсети" data-i18n-aria="socials">
     <a class="soc tg" href="https://t.me/talkwithalexx" target="_blank" rel="noopener" aria-label="Telegram">
       <svg viewBox="0 0 24 24"><path d="M21.94 4.3 18.8 19.13c-.24 1.05-.86 1.31-1.74.82l-4.8-3.54-2.32 2.23c-.26.26-.47.47-.96.47l.34-4.88 8.88-8.02c.39-.34-.08-.53-.6-.19L6.62 12.93 1.9 11.45c-1.03-.32-1.05-1.03.21-1.52L20.6 2.8c.86-.32 1.6.19 1.34 1.5z"/></svg>
     </a>
@@ -199,37 +219,37 @@
     <a class="soc ig" href="https://www.instagram.com/alexspromotion" target="_blank" rel="noopener" aria-label="Instagram">
       <svg viewBox="0 0 24 24"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.72 3.72 0 0 1-1.38-.9 3.72 3.72 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16zM12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63a5.9 5.9 0 0 0-2.13 1.38A5.9 5.9 0 0 0 .63 4.14C.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.31.79.72 1.46 1.38 2.13a5.9 5.9 0 0 0 2.13 1.38c.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56a5.9 5.9 0 0 0 2.13-1.38 5.9 5.9 0 0 0 1.38-2.13c.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91a5.9 5.9 0 0 0-1.38-2.13A5.9 5.9 0 0 0 19.86.63C19.1.33 18.22.13 16.95.07 15.67.01 15.26 0 12 0zm0 5.84a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.4-11.85a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88z"/></svg>
     </a>
-    <span class="soc yt" aria-label="YouTube — скоро" style="cursor:default">
-      <svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.12-2.13C19.5 3.56 12 3.56 12 3.56s-7.5 0-9.38.5A3 3 0 0 0 .5 6.2 31.4 31.4 0 0 0 0 12a31.4 31.4 0 0 0 .5 5.8 3 3 0 0 0 2.12 2.13c1.88.5 9.38.5 9.38.5s7.5 0 9.38-.5a3 3 0 0 0 2.12-2.13A31.4 31.4 0 0 0 24 12a31.4 31.4 0 0 0-.5-5.8zM9.6 15.6V8.4l6.24 3.6-6.24 3.6z"/></svg><i class="badge soon">Скоро</i>
+    <span class="soc yt" role="button" tabindex="0" aria-label="YouTube — скоро" data-i18n-aria="ytSoon" data-yt-soon style="cursor:pointer">
+      <svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.12-2.13C19.5 3.56 12 3.56 12 3.56s-7.5 0-9.38.5A3 3 0 0 0 .5 6.2 31.4 31.4 0 0 0 0 12a31.4 31.4 0 0 0 .5 5.8 3 3 0 0 0 2.12 2.13c1.88.5 9.38.5 9.38.5s7.5 0 9.38-.5a3 3 0 0 0 2.12-2.13A31.4 31.4 0 0 0 24 12a31.4 31.4 0 0 0-.5-5.8zM9.6 15.6V8.4l6.24 3.6-6.24 3.6z"/></svg><i class="badge soon" data-i18n="soon">Скоро</i>
     </span>
     <a class="soc tt" href="https://www.tiktok.com/@alexspromotion/" target="_blank" rel="noopener" aria-label="TikTok">
       <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.3 0 .58.04.86.13V9.4a6.34 6.34 0 0 0-.86-.06 6.34 6.34 0 1 0 6.34 6.34V8.69a8.2 8.2 0 0 0 4.77 1.52V6.77c-.34 0-.67-.03-1-.08z"/></svg>
     </a>
-    <a class="soc tg adult" href="https://t.me/tribute/app?startapp=swTl" target="_blank" rel="noopener" aria-label="Приватный Telegram 18+">
+    <a class="soc tg adult" href="https://t.me/tribute/app?startapp=swTl" target="_blank" rel="noopener" aria-label="Приватный Telegram 18+" data-i18n-aria="privateTg">
       <svg viewBox="0 0 24 24"><path d="M21.94 4.3 18.8 19.13c-.24 1.05-.86 1.31-1.74.82l-4.8-3.54-2.32 2.23c-.26.26-.47.47-.96.47l.34-4.88 8.88-8.02c.39-.34-.08-.53-.6-.19L6.62 12.93 1.9 11.45c-1.03-.32-1.05-1.03.21-1.52L20.6 2.8c.86-.32 1.6.19 1.34 1.5z"/></svg><i class="badge">18+</i>
     </a>
   </nav>
 
   <a class="contact" href="https://t.me/alexspromotion" target="_blank" rel="noopener">
     <svg viewBox="0 0 24 24"><path d="M21.94 4.3 18.8 19.13c-.24 1.05-.86 1.31-1.74.82l-4.8-3.54-2.32 2.23c-.26.26-.47.47-.96.47l.34-4.88 8.88-8.02c.39-.34-.08-.53-.6-.19L6.62 12.93 1.9 11.45c-1.03-.32-1.05-1.03.21-1.52L20.6 2.8c.86-.32 1.6.19 1.34 1.5z"/></svg>
-    Написать мне
+    <span data-i18n="contact">Написать мне</span>
   </a>
 
-  <h2 class="section-title">Записаться на уроки</h2>
+  <h2 class="section-title" data-i18n="bookTitle">Записаться на уроки</h2>
   <div class="booking">
     <a class="book" href="https://zapis.chill.education/" target="_blank" rel="noopener">
       <span class="th"><img src="img/avatar.jpg" alt=""></span>
-      <span class="t"><b>Личные уроки</b><span>Английский 1 на 1</span></span>
-      <span class="go">Записаться</span>
+      <span class="t"><b data-i18n="private">Личные уроки</b><span data-i18n="oneOnOne">Английский 1 на 1</span></span>
+      <span class="go" data-i18n="book">Записаться</span>
     </a>
     <a class="book" href="https://chill.education/" target="_blank" rel="noopener">
       <span class="th school"><img src="img/chill-logo.png" alt="Chat &amp; Chill"></span>
-      <span class="t"><b>Уроки в школе</b><span>Chat &amp; Chill</span></span>
-      <span class="go">Записаться</span>
+      <span class="t"><b data-i18n="school">Уроки в школе</b><span>Chat &amp; Chill</span></span>
+      <span class="go" data-i18n="book">Записаться</span>
     </a>
   </div>
 
-  <h2 class="section-title">Больше меня</h2>
+  <h2 class="section-title" data-i18n="more">Больше меня</h2>
   <div class="cards">
     <a class="card half" href="https://www.instagram.com/alexspromotion" target="_blank" rel="noopener">
       <img src="img/lessons.jpg" alt="" loading="lazy"><div class="label"><b>Instagram</b></div>
@@ -237,8 +257,8 @@
     <a class="card half" href="https://www.tiktok.com/@alexspromotion/" target="_blank" rel="noopener">
       <img src="img/g3.jpg" alt="" loading="lazy"><div class="label"><b>TikTok</b></div>
     </a>
-    <div class="card half" style="cursor:default">
-      <img src="img/school.jpg" alt="" loading="lazy"><div class="label"><b>YouTube</b><span>Скоро · канал готовится</span></div>
+    <div class="card half" role="button" tabindex="0" data-yt-soon style="cursor:pointer">
+      <img src="img/school.jpg" alt="" loading="lazy"><div class="label"><b>YouTube</b><span data-i18n="ytCard">Скоро · канал готовится</span></div>
     </div>
     <a class="card half" href="https://x.com/alexspromotion1" target="_blank" rel="noopener">
       <img src="img/g2.jpg" alt="" loading="lazy"><div class="label"><b>X / Twitter</b></div>
@@ -248,16 +268,80 @@
     </a>
   </div>
 
-  <h2 class="section-title">Только для своих</h2>
+  <h2 class="section-title" data-i18n="insiders">Только для своих</h2>
   <div class="cards">
     <a class="card tall private" href="https://t.me/tribute/app?startapp=swTl" target="_blank" rel="noopener">
       <img src="img/private.jpg" alt="" loading="lazy" style="object-position:50% 25%">
       <div class="lock"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6A5 5 0 0 0 7 6v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2zM9 6a3 3 0 0 1 6 0v2H9V6zm4 9.73V18h-2v-2.27a2 2 0 1 1 2 0z"/></svg></div>
-      <div class="label"><b>Приватка</b><span>Закрытый контент</span><em class="pill">Открыть доступ</em></div>
+      <div class="label"><b data-i18n="privTitle">Приватка</b><span data-i18n="privSub">Закрытый контент</span><em class="pill" data-i18n="privBtn">Открыть доступ</em></div>
     </a>
   </div>
 
   <footer>© Alex · @alexspromotion</footer>
 </main>
+
+<div class="ytm" id="yt-soon" role="dialog" aria-modal="true" aria-labelledby="yt-soon-title">
+  <div class="ytm-box">
+    <button class="x" type="button" aria-label="Закрыть" data-i18n-aria="close" data-yt-close>×</button>
+    <div class="ytm-icon"><svg viewBox="0 0 28 20" aria-hidden="true"><rect width="28" height="20" rx="5.6" fill="#FF0000"/><path d="M11.3 5.9v8.2l7.1-4.1z" fill="#fff"/></svg></div>
+    <h3 id="yt-soon-title" data-i18n="ytmTitle">YouTube скоро</h3>
+    <p data-i18n="ytmText">Канал готовится к запуску. Первые видео уже в монтаже 👀 Анонс будет в Telegram</p>
+    <a class="go" href="https://t.me/talkwithalexx" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M21.94 4.3 18.8 19.13c-.24 1.05-.86 1.31-1.74.82l-4.8-3.54-2.32 2.23c-.26.26-.47.47-.96.47l.34-4.88 8.88-8.02c.39-.34-.08-.53-.6-.19L6.62 12.93 1.9 11.45c-1.03-.32-1.05-1.03.21-1.52L20.6 2.8c.86-.32 1.6.19 1.34 1.5z"/></svg>
+      <span data-i18n="ytmBtn">Следить за анонсом в Telegram</span>
+    </a>
+  </div>
+</div>
+<script>
+(function(){
+  const m=document.getElementById('yt-soon');
+  const open=()=>m.classList.add('open');
+  const close=()=>m.classList.remove('open');
+  document.querySelectorAll('[data-yt-soon]').forEach(el=>{
+    el.addEventListener('click',open);
+    el.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(); } });
+  });
+  m.addEventListener('click',e=>{ if(e.target===m||e.target.closest('[data-yt-close]')) close(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') close(); });
+})();
+
+// Язык: в России русский, в остальных странах английский. Страну берём по часовому поясу устройства,
+// а не по IP: так не мешает VPN, которым в России пользуются многие.
+(function(){
+  const EN={verified:'Verified',socials:'Social links',ytSoon:'YouTube — coming soon',soon:'Soon',privateTg:'Private Telegram 18+',
+    contact:'Message me',bookTitle:'Book a lesson',private:'Private lessons',oneOnOne:'1-on-1 English',book:'Book',
+    school:'School lessons',more:'More of me',ytCard:'Coming soon · channel in the works',insiders:'Insiders only',
+    privTitle:'Private',privSub:'Exclusive content',privBtn:'Get access',close:'Close',
+    ytmTitle:'YouTube coming soon',ytmText:'The channel is getting ready to launch. The first videos are already being edited 👀 The announcement will be in Telegram',ytmBtn:'Follow on Telegram'};
+  const RU_ZONES=['Europe/Kaliningrad','Europe/Moscow','Europe/Simferopol','Europe/Kirov','Europe/Volgograd','Europe/Astrakhan','Europe/Saratov','Europe/Ulyanovsk','Europe/Samara',
+    'Asia/Yekaterinburg','Asia/Omsk','Asia/Novosibirsk','Asia/Barnaul','Asia/Tomsk','Asia/Novokuznetsk','Asia/Krasnoyarsk','Asia/Irkutsk','Asia/Chita',
+    'Asia/Yakutsk','Asia/Khandyga','Asia/Vladivostok','Asia/Ust-Nera','Asia/Magadan','Asia/Sakhalin','Asia/Srednekolymsk','Asia/Kamchatka','Asia/Anadyr','W-SU'];
+  const RU={};
+  const texts=document.querySelectorAll('[data-i18n]'), arias=document.querySelectorAll('[data-i18n-aria]');
+  texts.forEach(el=>RU[el.dataset.i18n]=el.textContent);
+  arias.forEach(el=>RU[el.dataset.i18nAria]=el.getAttribute('aria-label'));
+
+  function detect(){
+    const p=new URLSearchParams(location.search).get('lang');
+    if(p==='ru'||p==='en') return p;
+    try{ const saved=localStorage.getItem('alex_lang'); if(saved==='ru'||saved==='en') return saved; }catch(e){}
+    let tz=''; try{ tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''; }catch(e){}
+    if(!tz) return 'ru';
+    return RU_ZONES.includes(tz) ? 'ru' : 'en';
+  }
+  function apply(lang){
+    const d=lang==='en'?EN:RU;
+    texts.forEach(el=>{ if(d[el.dataset.i18n]!=null) el.textContent=d[el.dataset.i18n]; });
+    arias.forEach(el=>{ if(d[el.dataset.i18nAria]!=null) el.setAttribute('aria-label',d[el.dataset.i18nAria]); });
+    document.documentElement.lang=lang;
+    document.querySelectorAll('.lang button').forEach(b=>b.classList.toggle('on',b.dataset.lang===lang));
+  }
+  document.querySelectorAll('.lang button').forEach(b=>b.addEventListener('click',()=>{
+    try{ localStorage.setItem('alex_lang',b.dataset.lang); }catch(e){}
+    apply(b.dataset.lang);
+  }));
+  apply(detect());
+})();
+</script>
 </body>
 </html>
