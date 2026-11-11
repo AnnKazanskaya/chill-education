@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WZ42G8JVS3"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-WZ42G8JVS3');</script>
 <title>Alex · @alexspromotion</title>
 <meta name="description" content="Все соцсети Alex, запись на личные уроки и уроки в школе, приватный канал.">
 <meta name="theme-color" content="#161616">
@@ -340,7 +343,42 @@
     try{ localStorage.setItem('alex_lang',b.dataset.lang); }catch(e){}
     apply(b.dataset.lang);
   }));
-  apply(detect());
+  const first=detect();
+  apply(first);
+  try{ gtag('event','alex_card_view',{language:first}); }catch(e){}
+  document.querySelectorAll('.lang button').forEach(b=>b.addEventListener('click',()=>{
+    try{ gtag('event','alex_card_language_switch',{language:b.dataset.lang}); }catch(e){}
+  }));
+})();
+
+// Учёт нажатий: какая кнопка и в каком блоке визитки
+(function(){
+  function target(el){
+    if(el.matches('[data-yt-soon]')) return 'youtube_soon';
+    if(el.matches('.ytm .go')) return 'youtube_window_telegram';
+    if(el.matches('.contact')) return 'message_me';
+    const h=el.getAttribute('href')||'';
+    if(h.includes('zapis.chill.education')) return 'book_private_lessons';
+    if(h.includes('chill.education')) return 'book_school';
+    if(h.includes('tribute')) return 'private_channel';
+    if(h.includes('t.me')) return 'telegram';
+    if(h.includes('instagram')) return 'instagram';
+    if(h.includes('tiktok')) return 'tiktok';
+    if(h.includes('x.com')) return 'x_twitter';
+    return h;
+  }
+  function place(el){
+    if(el.closest('.socials')) return 'icons';
+    if(el.closest('.booking')) return 'booking';
+    if(el.closest('.ytm')) return 'youtube_window';
+    if(el.matches('.contact')) return 'contact_button';
+    return 'cards';
+  }
+  document.addEventListener('click',e=>{
+    const el=e.target.closest('a[href],[data-yt-soon]');
+    if(!el) return;
+    try{ gtag('event','alex_card_click',{link_target:target(el),link_place:place(el),transport_type:'beacon'}); }catch(err){}
+  });
 })();
 </script>
 </body>
