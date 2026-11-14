@@ -102,15 +102,15 @@
   }
   .book:hover{background:#2b2b2b}
   .book:active{transform:scale(.985)}
-  .book .th{width:52px; height:52px; border-radius:14px; overflow:hidden; flex:none; background:#333}
+  .book .th{width:56px; height:56px; border-radius:14px; overflow:hidden; flex:none; background:#333}
   .book .th img{width:100%; height:100%; object-fit:cover; object-position:50% 20%; display:block}
-  .book .th.school{background:#fff; width:86px}
-  .book .th.school img{object-fit:contain; padding:2px 3px; transform:scale(1.06)}
+  .book .th.school{background:#fff}
+  .book .th.school img{object-fit:contain; padding:0 3px}
   .book .t{flex:1; min-width:0}
   .book .t b{display:block; font-size:16px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
   .book .t span{display:block; font-size:13px; color:var(--muted); margin-top:3px; line-height:1.3}
   .book .go{
-    flex:none; padding:8px 12px; border-radius:999px;
+    flex:none; min-width:104px; box-sizing:border-box; text-align:center; padding:8px 12px; border-radius:999px;
     background:#fff; color:#111; font-size:13px; font-weight:700;
   }
   .book .go.ghost{background:transparent; color:#fff; box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}
@@ -124,7 +124,7 @@
   }
 
   @media (max-width:360px){
-    .book .go{width:34px; height:34px; padding:0; font-size:0; display:grid; place-items:center}
+    .book .go{width:34px; min-width:0; height:34px; padding:0; font-size:0; display:grid; place-items:center}
     .book .go::after{content:"›"; font-size:22px; line-height:1; margin-top:-2px}
   }
 
