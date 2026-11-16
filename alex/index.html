@@ -356,6 +356,17 @@
   }));
 })();
 
+// Ссылка на школу с меткой: в заявке видно, что человек пришёл с визитки и откуда пришёл на визитку
+(function(){
+  try{
+    var from=(new URLSearchParams(location.search).get('utm_source')||'direct').toLowerCase().replace(/[^a-z0-9_-]/g,'');
+    if(from==='ig') from='instagram';
+    document.querySelectorAll('a[href="https://chill.education/"]').forEach(function(a){
+      a.href='https://chill.education/?utm_source=alex_card&utm_medium=referral&utm_campaign=alex_'+from;
+    });
+  }catch(e){}
+})();
+
 // Учёт нажатий: какая кнопка и в каком блоке визитки
 (function(){
   function target(el){

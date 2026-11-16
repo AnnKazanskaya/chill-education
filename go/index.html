@@ -20,8 +20,21 @@
   var base='https://chill.education/';
   try{
     var code=(location.hash||'').replace(/^#/,'');
-    if(!code) code=(location.search||'').replace(/^\?/,'').replace(/=+$/,'');  // вариант с ? — для инстаграма и мессенджеров, которые ломают #
+    /* Разбираем ?-часть: наш код (без «=») отдельно, а метки, которые дописывают
+       Инстаграм и другие приложения (utm_source=ig, fbclid…), отдельно. */
+    var extra={};
+    (location.search||'').replace(/^\?/,'').split('&').forEach(function(p){
+      if(!p) return;
+      var i=p.indexOf('='), k=i<0?p:p.slice(0,i), v=i<0?'':p.slice(i+1);
+      try{ k=decodeURIComponent(k); v=decodeURIComponent(v.replace(/\+/g,' ')); }catch(e){}
+      if(!v && !code && /^[\w:.-]+$/.test(k) && !/^(utm_|fbclid|gclid|yclid|igshid)/.test(k)) code=k;
+      else if(v) extra[k]=v;
+    });
     code=decodeURIComponent(code);
+    if(!code && extra.utm_source){
+      /* Кода нет, но приложение само поставило метки: передаём их дальше как есть */
+      code=(extra.utm_source==='ig'?'ig':extra.utm_source)+'.'+(extra.utm_medium||'social')+'.'+(extra.utm_campaign||'bio');
+    }
     if(code){
       var m=code.match(/^([a-z]+):(.*)$/);
       if(m && PAGES[m[1]]){ base=PAGES[m[1]]; code=m[2]; }
@@ -30,7 +43,7 @@
       var medium='cpc', rest=parts.slice(1);
       if(rest.length>1 && MED.indexOf(rest[0])>=0){ medium=rest[0]; rest=rest.slice(1); }
       var campaign=rest[0]||'unknown';
-      var content=rest[1]||'';
+      var content=rest[1]||extra.utm_content||'';
       var u=base+(base.indexOf('?')>=0?'&':'?')+
         'utm_source='+encodeURIComponent(source)+
         '&utm_medium='+encodeURIComponent(medium)+
