@@ -2,7 +2,7 @@
 const $ = id => document.getElementById(id);
 function track(name, params) { try { gtag('event', name, params || {}); } catch (e) {} }
 
-const LEAD_URL = 'https://nixvpftdqevecjdqyuwv.supabase.co/functions/v1/site-lead';
+const LEAD_URL = 'https://api.chill.education/functions/v1/site-lead';
 const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
 (function () {
   try {
